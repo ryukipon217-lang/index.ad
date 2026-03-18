@@ -18,7 +18,7 @@
     html,body{height:100%;}
     body{font-family:'Noto Sans JP',sans-serif;background:var(--shiro);color:var(--ai);min-height:100vh;}
 
-    /* ログイン */
+    /* ── LOGIN ── */
     .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background:var(--ai);position:relative;overflow:hidden;}
     .login-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 30%,rgba(244,184,203,.1) 0%,transparent 60%),radial-gradient(ellipse 50% 60% at 80% 70%,rgba(123,94,167,.1) 0%,transparent 60%);}
     .login-card{background:rgba(255,255,255,.05);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.1);border-radius:var(--r);padding:48px 40px;width:100%;max-width:380px;text-align:center;position:relative;z-index:1;}
@@ -33,29 +33,29 @@
     .login-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,255,255,.18);}
     .login-error{color:#f4916a;font-size:.78rem;margin-top:10px;min-height:18px;}
 
-    /* ヘッダー */
+    /* ── HEADER ── */
     .season-bar{height:2px;background:linear-gradient(90deg,var(--haru),var(--natsu),var(--aki),var(--fuyu));}
     .header{background:var(--ai);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:100;}
     .header__brand{display:flex;align-items:center;gap:10px;}
     .header__logo{width:30px;height:30px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Zen Old Mincho',serif;font-size:.6rem;color:rgba(255,255,255,.8);font-weight:900;}
     .header__title{font-family:'Zen Old Mincho',serif;font-size:.95rem;color:#fff;letter-spacing:.08em;}
     .header__right{display:flex;align-items:center;gap:8px;}
-    .lang-sel{padding:5px 10px;border-radius:99px;font-size:.72rem;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:rgba(255,255,255,.7);cursor:pointer;outline:none;font-family:'Noto Sans JP',sans-serif;}
-    .lang-sel option{background:#1a2744;color:#fff;}
     .header__logout{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);color:rgba(255,255,255,.6);padding:6px 14px;border-radius:99px;cursor:pointer;font-size:.78rem;font-family:'Noto Sans JP',sans-serif;transition:all .2s;}
     .header__logout:hover{background:rgba(255,255,255,.15);color:#fff;}
 
-    /* レイアウト */
-    .layout{display:grid;grid-template-columns:200px 1fr;min-height:calc(100vh - 58px);}
-    .sidebar{background:#fdfaf5;border-right:1px solid var(--border);padding:16px 0;}
+    /* ── LAYOUT ── */
+    .layout{display:grid;grid-template-columns:210px 1fr;min-height:calc(100vh - 58px);}
+    .sidebar{background:#fdfaf5;border-right:1px solid var(--border);padding:16px 0;position:sticky;top:58px;height:calc(100vh - 58px);overflow-y:auto;}
     .sidebar-section{padding:16px 18px 6px;font-size:.65rem;color:var(--ai-soft);letter-spacing:.22em;font-weight:600;}
-    .sidebar-item{display:block;padding:11px 18px;font-size:.875rem;color:var(--ai-soft);cursor:pointer;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent;transition:all .2s;font-family:'Noto Sans JP',sans-serif;}
+    .sidebar-item{display:flex;align-items:center;gap:8px;padding:11px 18px;font-size:.875rem;color:var(--ai-soft);cursor:pointer;border:none;background:none;width:100%;text-align:left;border-left:2px solid transparent;transition:all .2s;font-family:'Noto Sans JP',sans-serif;position:relative;}
     .sidebar-item:hover{color:var(--ai);background:rgba(42,74,127,.04);}
     .sidebar-item.active{color:var(--ai);border-left-color:var(--ai-mid);background:rgba(42,74,127,.05);font-weight:600;}
+    .sidebar-item .s-icon{font-size:.9rem;flex-shrink:0;}
+    .sidebar-badge{margin-left:auto;background:#f59e0b;color:#fff;border-radius:99px;font-size:.6rem;font-weight:700;padding:1px 6px;min-width:18px;text-align:center;}
     .content{padding:28px;overflow:auto;}
-    .section-title{font-family:'Zen Old Mincho',serif;font-size:1.05rem;font-weight:700;color:var(--ai);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--shiro-2);}
 
-    /* 統計カード */
+    /* ── COMMON ── */
+    .section-title{font-family:'Zen Old Mincho',serif;font-size:1.05rem;font-weight:700;color:var(--ai);margin-bottom:18px;padding-bottom:10px;border-bottom:2px solid var(--shiro-2);}
     .stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-bottom:24px;}
     .stat-card{background:#fff;border-radius:var(--rs);border:1px solid var(--border);padding:18px 14px;text-align:center;box-shadow:var(--shadow);transition:all .2s;position:relative;overflow:hidden;}
     .stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
@@ -81,14 +81,22 @@
     .badge-closed{background:var(--shiro-2);color:var(--ai-soft);}
     .badge-checked{background:rgba(78,114,82,.1);color:var(--matcha);}
     .badge-not-checked{background:var(--shiro-2);color:var(--ai-soft);}
+    .badge-global{background:rgba(42,74,127,.1);color:var(--ai-mid);}
+    .badge-personal{background:rgba(244,184,203,.3);color:#c06080;}
+    .badge-unread{background:#f59e0b;color:#fff;}
     .btn{display:inline-flex;align-items:center;gap:5px;padding:9px 18px;border-radius:99px;font-size:.82rem;font-weight:700;cursor:pointer;border:none;transition:all .25s;font-family:'Noto Sans JP',sans-serif;}
     .btn-ai{background:var(--ai);color:#fff;box-shadow:0 3px 10px rgba(26,39,68,.18);}
     .btn-ai:hover{background:var(--ai-mid);transform:translateY(-1px);}
     .btn-matcha{background:var(--matcha);color:#fff;}
+    .btn-matcha:hover{filter:brightness(1.1);}
     .btn-sakura{background:var(--haru);color:#fff;}
+    .btn-violet{background:var(--natsu);color:#fff;}
+    .btn-violet:hover{filter:brightness(1.1);}
+    .btn-aki{background:var(--aki);color:#fff;}
     .btn-outline{background:transparent;border:1.5px solid var(--border);color:var(--ai-soft);}
     .btn-outline:hover{border-color:var(--ai-mid);color:var(--ai-mid);}
     .btn-sm{padding:5px 12px;font-size:.75rem;}
+    .btn-xs{padding:3px 9px;font-size:.7rem;}
     .btn:disabled{opacity:.45;cursor:not-allowed;transform:none!important;}
     .form-group{margin-bottom:14px;}
     .form-label{display:block;font-size:.78rem;font-weight:600;color:var(--ai-soft);margin-bottom:6px;letter-spacing:.04em;}
@@ -101,11 +109,47 @@
     .alert-info{background:rgba(42,74,127,.07);border-left:3px solid var(--ai-soft);color:var(--ai-mid);}
     .spinner{width:32px;height:32px;border:2px solid var(--shiro-2);border-top-color:var(--ai-mid);border-radius:50%;animation:spin .8s linear infinite;margin:28px auto;}
     @keyframes spin{to{transform:rotate(360deg);}}
+    .toast{position:fixed;bottom:24px;right:24px;z-index:999;max-width:300px;}
+    .tab-section{display:none;}
+    .tab-section.active{display:block;animation:tabIn .3s ease both;}
+    @keyframes tabIn{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
 
-    /* QR詳細 */
-    .detail-panel{background:#fff;border-radius:var(--r);border:1.5px solid var(--ai-pale);padding:22px;display:none;box-shadow:var(--shadow);animation:slideIn .3s ease both;}
+    /* ── MODAL ── */
+    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px;}
+    .modal-overlay.open{display:flex;}
+    .modal-box{background:#fff;border-radius:var(--r);max-width:560px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(26,39,68,.2);max-height:90vh;overflow-y:auto;}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+    .modal-title{font-family:'Zen Old Mincho',serif;font-size:1rem;font-weight:700;color:var(--ai);}
+    .modal-close{background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--ai-soft);padding:0;}
+    .modal-close:hover{color:var(--ai);}
+
+    /* ── DASHBOARD ── */
+    .event-card-list{display:grid;gap:12px;}
+    .event-card-item{background:#fff;border-radius:var(--rs);border:1px solid var(--border);border-left:4px solid;padding:16px 18px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;}
+    .event-card-item:nth-child(4n+1){border-left-color:var(--haru);}
+    .event-card-item:nth-child(4n+2){border-left-color:var(--natsu);}
+    .event-card-item:nth-child(4n+3){border-left-color:var(--aki);}
+    .event-card-item:nth-child(4n){border-left-color:var(--fuyu);}
+    .event-card-name{font-family:'Zen Old Mincho',serif;font-weight:700;color:var(--ai);margin-bottom:5px;}
+    .event-card-meta{font-size:.78rem;color:var(--ai-soft);line-height:1.9;}
+    .event-card-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
+    .chart-wrap{position:relative;height:200px;}
+    .survey-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+    .survey-card{background:#fff;border-radius:var(--rs);border:1px solid var(--border);padding:16px;box-shadow:var(--shadow);}
+    .survey-card h4{font-size:.85rem;font-weight:700;color:var(--ai);margin-bottom:12px;}
+    .comment-list{max-height:200px;overflow-y:auto;}
+    .comment-item{padding:8px 0;border-bottom:1px solid var(--shiro-2);font-size:.8rem;}
+    .comment-item:last-child{border-bottom:none;}
+    .comment-name{font-weight:600;color:var(--ai);}
+    .comment-rating{color:#f59e0b;font-size:.85rem;}
+    .star-filled{color:#f59e0b;}.star-empty{color:#e5e7eb;}
+
+    /* ── QR SCAN ── */
+    .live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(78,114,82,.08);border:1px solid rgba(78,114,82,.2);color:var(--matcha);border-radius:99px;padding:5px 14px;font-size:.72rem;font-weight:600;margin-bottom:14px;}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--matcha);animation:lp 1.5s infinite;}
+    @keyframes lp{0%,100%{opacity:1;}50%{opacity:.3;}}
+    .detail-panel{background:#fff;border-radius:var(--r);border:1.5px solid var(--ai-pale);padding:22px;display:none;box-shadow:var(--shadow);}
     .detail-panel.show{display:block;}
-    @keyframes slideIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
     .detail-panel::before{content:'';display:block;height:3px;margin:-22px -22px 18px;background:linear-gradient(90deg,var(--haru),var(--natsu),var(--aki),var(--fuyu));border-radius:var(--r) var(--r) 0 0;}
     .detail-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--shiro-2);}
     .detail-avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--ai-mid),var(--natsu));display:flex;align-items:center;justify-content:center;font-family:'Zen Old Mincho',serif;font-size:1.3rem;color:#fff;flex-shrink:0;}
@@ -119,61 +163,20 @@
     .history-timeline{margin-top:14px;}
     .history-item-tl{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--shiro-2);}
     .history-item-tl:last-child{border-bottom:none;}
-    .tl-dot{width:8px;height:8px;border-radius:50%;background:var(--ai-mid);margin-top:4px;flex-shrink:0;}
+    .tl-dot-sm{width:8px;height:8px;border-radius:50%;background:var(--ai-mid);margin-top:4px;flex-shrink:0;}
     .tl-body{font-size:.82rem;}
-    .tl-event{font-weight:600;color:var(--ai);}
-    .tl-date{font-size:.72rem;color:var(--ai-soft);}
-    .live-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(78,114,82,.08);border:1px solid rgba(78,114,82,.2);color:var(--matcha);border-radius:99px;padding:5px 14px;font-size:.72rem;font-weight:600;margin-bottom:14px;}
-    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--matcha);animation:lp 1.5s infinite;}
-    @keyframes lp{0%,100%{opacity:1;}50%{opacity:.3;}}
-    .waiting-box{text-align:center;padding:36px 20px;}
-    .waiting-box p{color:var(--ai-soft);font-size:.875rem;line-height:1.8;}
-    .scan-log-table table{font-size:.78rem;}
+    .tl-ev{font-weight:600;color:var(--ai);}
+    .tl-dt{font-size:.72rem;color:var(--ai-soft);}
     @keyframes tableRowIn{from{opacity:0;background:rgba(42,74,127,.08);}to{opacity:1;background:transparent;}}
-    .survey-section{margin-top:20px;}
-    .survey-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
-    .survey-card{background:#fff;border-radius:var(--rs);border:1px solid var(--border);padding:16px;box-shadow:var(--shadow);}
-    .survey-card h4{font-size:.85rem;font-weight:700;color:var(--ai);margin-bottom:12px;}
-    .chart-wrap{position:relative;height:200px;}
-    .avg-display{text-align:center;padding:12px 0;}
-    .avg-num{font-size:3rem;font-weight:800;color:var(--ai);}
-    .avg-stars{font-size:1.4rem;margin:4px 0;}
-    .avg-label{font-size:.75rem;color:var(--ai-soft);}
-    .star-filled{color:#f59e0b;}
-    .star-empty{color:#e5e7eb;}
-    .comment-list{max-height:200px;overflow-y:auto;}
-    .comment-item{padding:8px 0;border-bottom:1px solid var(--shiro-2);font-size:.8rem;}
-    .comment-item:last-child{border-bottom:none;}
-    .comment-name{font-weight:600;color:var(--ai);}
-    .comment-rating{color:#f59e0b;font-size:.85rem;}
-    .comment-text{color:var(--ai-mid);margin-top:2px;line-height:1.5;}
-    .survey-send-card{background:linear-gradient(135deg,rgba(244,184,203,.1),rgba(42,74,127,.06));border:1px solid rgba(244,184,203,.3);border-radius:var(--rs);padding:16px;margin-bottom:16px;}
-    .survey-send-card h4{font-size:.875rem;font-weight:700;color:var(--ai);margin-bottom:8px;}
-    .toast{position:fixed;bottom:24px;right:24px;z-index:999;max-width:300px;}
-    .tab-section{display:none;}
-    .tab-section.active{display:block;animation:tabIn .3s ease both;}
-    @keyframes tabIn{from{opacity:0;transform:translateX(6px);}to{opacity:1;transform:translateX(0);}}
-    .search-bar{display:flex;gap:8px;margin-bottom:14px;}
-    .search-bar input{flex:1;}
-    .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px;}
-    .modal-overlay.open{display:flex;}
-    .modal-box{background:#fff;border-radius:var(--r);max-width:520px;width:100%;padding:28px;box-shadow:0 20px 60px rgba(26,39,68,.2);max-height:90vh;overflow-y:auto;}
-    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
-    .modal-title{font-family:'Zen Old Mincho',serif;font-size:1rem;font-weight:700;color:var(--ai);}
-    .modal-close{background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--ai-soft);}
-    .event-card-list{display:grid;gap:12px;}
-    .event-card-item{background:#fff;border-radius:var(--rs);border:1px solid var(--border);border-left:4px solid;padding:16px 18px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;}
-    .event-card-item:nth-child(4n+1){border-left-color:var(--haru);}
-    .event-card-item:nth-child(4n+2){border-left-color:var(--natsu);}
-    .event-card-item:nth-child(4n+3){border-left-color:var(--aki);}
-    .event-card-item:nth-child(4n){border-left-color:var(--fuyu);}
-    .event-card-name{font-family:'Zen Old Mincho',serif;font-weight:700;color:var(--ai);margin-bottom:5px;}
-    .event-card-meta{font-size:.78rem;color:var(--ai-soft);line-height:1.9;}
-    .event-card-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center;}
 
-    /* ★ メール送信タブ固有スタイル */
+    /* ── MAIL ── */
     .mail-composer{background:#fff;border-radius:var(--r);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow);}
     .mail-composer h3{font-family:'Zen Old Mincho',serif;font-size:.95rem;font-weight:700;color:var(--ai);margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--shiro-2);}
+    .delivery-opts{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;}
+    .delivery-opt{display:flex;align-items:center;gap:8px;padding:10px 16px;border:1.5px solid var(--border);border-radius:var(--rs);cursor:pointer;background:#fff;transition:all .2s;font-size:.85rem;}
+    .delivery-opt:hover{border-color:var(--ai-mid);}
+    .delivery-opt.checked{border-color:var(--ai-mid);background:rgba(42,74,127,.05);}
+    .delivery-opt input{accent-color:var(--ai-mid);}
     .template-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px;}
     .tmpl-btn{padding:11px 14px;border-radius:var(--rs);border:1.5px solid var(--border);background:#fff;cursor:pointer;font-family:'Noto Sans JP',sans-serif;font-size:.8rem;color:var(--ai-soft);text-align:left;transition:all .2s;line-height:1.5;}
     .tmpl-btn:hover,.tmpl-btn.selected{border-color:var(--ai-mid);background:rgba(42,74,127,.04);color:var(--ai);}
@@ -183,31 +186,104 @@
     .lang-tabs{display:flex;gap:2px;flex-wrap:wrap;margin-bottom:8px;}
     .lang-tab-btn{padding:5px 10px;border-radius:99px;border:1.5px solid var(--border);background:transparent;cursor:pointer;font-size:.7rem;font-family:'Noto Sans JP',sans-serif;color:var(--ai-soft);transition:all .15s;}
     .lang-tab-btn:hover,.lang-tab-btn.active{background:var(--ai);color:#fff;border-color:var(--ai);}
+    .preview-box{background:var(--shiro-2);border-radius:var(--rs);padding:14px;font-size:.82rem;color:var(--ai-mid);line-height:1.8;max-height:200px;overflow-y:auto;white-space:pre-wrap;border:1px solid var(--border);}
+    .placeholder-hint{font-size:.72rem;color:var(--ai-soft);margin-top:4px;line-height:1.6;}
     .attach-list{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
     .attach-item{display:flex;align-items:center;justify-content:space-between;background:var(--shiro-2);border-radius:var(--rs);padding:7px 12px;font-size:.8rem;}
     .attach-item-name{font-weight:600;color:var(--ai);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
     .attach-item-size{font-size:.72rem;color:var(--ai-soft);margin-left:8px;flex-shrink:0;}
-    .attach-remove{background:none;border:none;cursor:pointer;color:var(--aki);font-size:1rem;padding:0 4px;flex-shrink:0;}
-    .preview-box{background:var(--shiro-2);border-radius:var(--rs);padding:14px;font-size:.82rem;color:var(--ai-mid);line-height:1.8;max-height:200px;overflow-y:auto;white-space:pre-wrap;border:1px solid var(--border);}
-    .target-summary{background:rgba(42,74,127,.06);border:1px solid rgba(42,74,127,.12);border-radius:var(--rs);padding:10px 14px;font-size:.8rem;color:var(--ai-mid);margin-bottom:12px;display:none;}
+    .attach-remove{background:none;border:none;cursor:pointer;color:var(--aki);font-size:1rem;padding:0 4px;}
     .mail-prog{background:var(--shiro-2);border-radius:99px;height:6px;overflow:hidden;margin-top:8px;display:none;}
     .mail-prog-bar{height:100%;background:linear-gradient(90deg,var(--ai-mid),var(--natsu));transition:width .3s;border-radius:99px;}
-    .placeholder-hint{font-size:.72rem;color:var(--ai-soft);margin-top:4px;line-height:1.6;}
+    .target-summary{background:rgba(42,74,127,.06);border:1px solid rgba(42,74,127,.12);border-radius:var(--rs);padding:10px 14px;font-size:.8rem;color:var(--ai-mid);margin-bottom:12px;display:none;}
+
+    /* ── CUSTOM TEMPLATES ── */
+    .tmpl-mgr-grid{display:grid;gap:12px;margin-bottom:20px;}
+    .tmpl-mgr-card{background:#fff;border-radius:var(--rs);border:1px solid var(--border);padding:16px;box-shadow:var(--shadow);position:relative;}
+    .tmpl-mgr-card-name{font-weight:700;font-size:.9rem;color:var(--ai);margin-bottom:6px;}
+    .tmpl-mgr-card-body{font-size:.82rem;color:var(--ai-soft);line-height:1.7;white-space:pre-wrap;max-height:80px;overflow:hidden;}
+    .tmpl-mgr-card-actions{display:flex;gap:6px;margin-top:10px;}
+    .tmpl-mgr-card-tag{display:inline-block;padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:600;background:var(--shiro-2);color:var(--ai-soft);margin-bottom:4px;}
+
+    /* ── PHOTOS ADMIN ── */
+    .photo-admin-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:16px;}
+    .photo-admin-item{aspect-ratio:1;border-radius:var(--rs);overflow:hidden;position:relative;background:var(--shiro-2);border:1px solid var(--border);}
+    .photo-admin-item img{width:100%;height:100%;object-fit:cover;}
+    .photo-admin-overlay{position:absolute;inset:0;background:rgba(26,39,68,.55);display:none;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:8px;}
+    .photo-admin-item:hover .photo-admin-overlay{display:flex;}
+    .photo-admin-name{font-size:.65rem;color:#fff;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;}
+    .upload-zone{border:2px dashed rgba(42,74,127,.25);border-radius:var(--r);padding:32px;text-align:center;cursor:pointer;transition:all .2s;background:rgba(42,74,127,.02);margin-bottom:16px;}
+    .upload-zone:hover{border-color:var(--ai-mid);background:rgba(42,74,127,.05);}
+    .upload-icon{font-size:2.2rem;margin-bottom:8px;}
+    .upload-text{font-size:.82rem;color:var(--ai-soft);}
+
+    /* ── CHAT ADMIN ── */
+    .chat-thread-list{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:var(--shadow);}
+    .chat-thread-item{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--shiro-2);cursor:pointer;transition:background .15s;position:relative;}
+    .chat-thread-item:last-child{border-bottom:none;}
+    .chat-thread-item:hover{background:rgba(42,74,127,.03);}
+    .chat-thread-item.active{background:rgba(42,74,127,.06);}
+    .thread-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--ai-mid),var(--natsu));display:flex;align-items:center;justify-content:center;font-family:'Zen Old Mincho',serif;font-size:1rem;color:#fff;flex-shrink:0;}
+    .thread-info{flex:1;min-width:0;}
+    .thread-name{font-weight:700;font-size:.88rem;color:var(--ai);}
+    .thread-preview{font-size:.76rem;color:var(--ai-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .thread-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
+    .thread-time{font-size:.68rem;color:var(--ai-soft);}
+    .thread-unread{background:#f59e0b;color:#fff;border-radius:99px;font-size:.6rem;font-weight:700;padding:2px 7px;min-width:20px;text-align:center;}
+    .chat-main-wrap{display:grid;grid-template-columns:280px 1fr;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;background:#fff;box-shadow:var(--shadow);height:520px;}
+    .chat-list-panel{border-right:1px solid var(--border);overflow-y:auto;}
+    .chat-msg-panel{display:flex;flex-direction:column;}
+    .chat-msg-header{padding:14px 18px;border-bottom:1px solid var(--border);background:var(--shiro);display:flex;align-items:center;gap:10px;}
+    .chat-msg-header-name{font-weight:700;font-size:.9rem;color:var(--ai);}
+    .chat-msg-header-email{font-size:.72rem;color:var(--ai-soft);}
+    .chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--shiro);}
+    .chat-bubble{max-width:75%;display:flex;flex-direction:column;gap:3px;}
+    .chat-bubble.admin{align-self:flex-end;align-items:flex-end;}
+    .chat-bubble.user{align-self:flex-start;align-items:flex-start;}
+    .bubble-sender{font-size:.66rem;font-weight:700;color:var(--ai-soft);padding:0 4px;}
+    .bubble-text{padding:10px 14px;border-radius:14px;font-size:.88rem;line-height:1.6;word-break:break-word;}
+    .chat-bubble.admin .bubble-text{background:var(--ai);color:#fff;border-radius:14px 14px 4px 14px;}
+    .chat-bubble.user .bubble-text{background:#fff;color:var(--ai);border:1px solid var(--border);border-radius:14px 14px 14px 4px;}
+    .bubble-meta{font-size:.62rem;color:var(--ai-soft);padding:0 4px;}
+    .chat-reply-row{padding:10px 14px;border-top:1px solid var(--border);display:flex;gap:8px;background:#fff;}
+    .chat-reply-input{flex:1;padding:10px 14px;border:1.5px solid var(--border);border-radius:99px;font-size:.88rem;outline:none;font-family:'Noto Sans JP',sans-serif;background:var(--shiro);transition:border-color .2s;resize:none;}
+    .chat-reply-input:focus{border-color:var(--ai-mid);}
+    .chat-send-btn{padding:10px 18px;border-radius:99px;border:none;background:var(--ai);color:#fff;font-size:.82rem;font-weight:700;cursor:pointer;font-family:'Noto Sans JP',sans-serif;white-space:nowrap;}
+    .chat-send-btn:hover{background:var(--ai-mid);}
+    .chat-empty-panel{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ai-soft);font-size:.85rem;gap:8px;}
+    .chat-empty-panel span{font-size:2.5rem;}
+    .no-thread-selected{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ai-soft);font-size:.85rem;gap:8px;background:var(--shiro);}
+    .no-thread-selected span{font-size:2.5rem;}
+
+    /* ── NEWS ADMIN ── */
+    .news-admin-list{display:flex;flex-direction:column;gap:12px;margin-bottom:20px;}
+    .news-admin-card{background:#fff;border-radius:var(--rs);border:1px solid var(--border);padding:16px 18px;box-shadow:var(--shadow);display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+    .news-admin-card-left{flex:1;min-width:0;}
+    .news-admin-card-title{font-weight:700;font-size:.9rem;color:var(--ai);margin-bottom:4px;}
+    .news-admin-card-body{font-size:.78rem;color:var(--ai-soft);line-height:1.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .news-admin-card-meta{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;align-items:center;}
+    .news-admin-card-actions{display:flex;gap:6px;flex-shrink:0;}
+
+    /* ── SURVEY ── */
+    .survey-send-card{background:linear-gradient(135deg,rgba(244,184,203,.1),rgba(42,74,127,.06));border:1px solid rgba(244,184,203,.3);border-radius:var(--rs);padding:16px;margin-bottom:16px;}
+    .survey-send-card h4{font-size:.875rem;font-weight:700;color:var(--ai);margin-bottom:8px;}
 
     @media(max-width:768px){
       .layout{grid-template-columns:1fr;}
-      .sidebar{display:flex;overflow-x:auto;padding:8px 0;}
-      .sidebar-item{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;}
+      .sidebar{display:flex;overflow-x:auto;height:auto;position:static;padding:8px 0;}
+      .sidebar-item{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;padding:8px 14px;}
       .sidebar-item.active{border-bottom-color:var(--ai-mid);}
       .content{padding:16px;}
-      .survey-grid{grid-template-columns:1fr;}
-      .template-grid{grid-template-columns:1fr 1fr;}
+      .survey-grid,.chat-main-wrap{grid-template-columns:1fr;}
+      .chat-main-wrap{height:auto;}
+      .chat-list-panel{height:200px;}
+      .chat-msg-panel{height:400px;}
     }
   </style>
 </head>
 <body>
 
-<!-- ログイン -->
+<!-- LOGIN -->
 <div id="login-screen">
   <div class="login-wrap">
     <div class="login-card">
@@ -222,7 +298,7 @@
   </div>
 </div>
 
-<!-- 管理画面 -->
+<!-- ADMIN SCREEN -->
 <div id="admin-screen" style="display:none;">
   <div class="season-bar"></div>
   <header class="header">
@@ -231,59 +307,52 @@
       <span class="header__title">connec+a Admin</span>
     </div>
     <div class="header__right">
-      <select class="lang-sel" id="lang-sel" onchange="setLang(this.value)">
-        <option value="ja">日本語</option><option value="en">English</option><option value="zh">中文</option>
-        <option value="ko">한국어</option><option value="es">Español</option><option value="fr">Français</option>
-        <option value="pt">Português</option><option value="id">Indonesia</option><option value="th">ภาษาไทย</option>
-        <option value="vi">Tiếng Việt</option><option value="ar">العربية</option><option value="hi">हिन्दी</option>
-        <option value="de">Deutsch</option><option value="it">Italiano</option><option value="ru">Русский</option>
-      </select>
       <button class="header__logout" onclick="doLogout()">ログアウト</button>
     </div>
   </header>
-
   <div class="layout">
     <aside class="sidebar">
-      <div class="sidebar-section">Menu</div>
-      <button class="sidebar-item active" onclick="switchTab('dashboard')">ダッシュボード</button>
-      <button class="sidebar-item"        onclick="switchTab('events')">イベント管理</button>
-      <button class="sidebar-item"        onclick="switchTab('qrscan')">QR照会</button>
-      <button class="sidebar-item"        onclick="switchTab('registrations')">登録一覧</button>
-      <button class="sidebar-item"        onclick="switchTab('participants')">参加者</button>
-      <button class="sidebar-item"        onclick="switchTab('mail')">メール送信</button>
-      <button class="sidebar-item"        onclick="switchTab('survey')">満足度調査</button>
+      <div class="sidebar-section">MAIN</div>
+      <button class="sidebar-item active" onclick="switchTab('dashboard')"><span class="s-icon">📊</span>ダッシュボード</button>
+      <button class="sidebar-item" onclick="switchTab('events')"><span class="s-icon">📅</span>イベント管理</button>
+      <button class="sidebar-item" onclick="switchTab('qrscan')"><span class="s-icon">🔍</span>QR照会</button>
+      <button class="sidebar-item" onclick="switchTab('registrations')"><span class="s-icon">📋</span>登録一覧</button>
+      <button class="sidebar-item" onclick="switchTab('participants')"><span class="s-icon">👥</span>参加者</button>
+      <div class="sidebar-section">COMMUNICATION</div>
+      <button class="sidebar-item" onclick="switchTab('mail')"><span class="s-icon">✉️</span>メール送信</button>
+      <button class="sidebar-item" onclick="switchTab('news')"><span class="s-icon">📰</span>ニュース管理</button>
+      <button class="sidebar-item" onclick="switchTab('templates')"><span class="s-icon">📝</span>定型文管理</button>
+      <button class="sidebar-item" id="sidebar-chat" onclick="switchTab('chat')"><span class="s-icon">💬</span>チャット<span class="sidebar-badge" id="chat-badge" style="display:none;">0</span></button>
+      <div class="sidebar-section">CONTENT</div>
+      <button class="sidebar-item" onclick="switchTab('photos')"><span class="s-icon">📸</span>写真管理</button>
+      <button class="sidebar-item" onclick="switchTab('survey')"><span class="s-icon">⭐</span>満足度調査</button>
     </aside>
-
     <main class="content">
 
-      <!-- ダッシュボード -->
+      <!-- DASHBOARD -->
       <section id="tab-dashboard" class="tab-section active">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
-          <div class="section-title" style="margin-bottom:0;border:none;">ダッシュボード</div>
+          <div class="section-title" style="margin-bottom:0;border:none;padding:0;">ダッシュボード</div>
           <div style="display:flex;align-items:center;gap:10px;">
-            <span id="dash-last-updated" style="font-size:.72rem;color:var(--ai-soft);"></span>
-            <button class="btn btn-outline btn-sm" onclick="loadDashboard()" id="dash-refresh-btn">更新</button>
-            <label style="display:flex;align-items:center;gap:5px;font-size:.75rem;color:var(--ai-soft);cursor:pointer;">
-              <input type="checkbox" id="dash-auto-refresh" onchange="toggleAutoRefresh(this.checked)"> 自動更新(30秒)
-            </label>
+            <span id="dash-updated" style="font-size:.72rem;color:var(--ai-soft);"></span>
+            <button class="btn btn-outline btn-sm" onclick="loadDashboard()">更新</button>
           </div>
         </div>
         <div id="dashboard-area"><div class="spinner"></div></div>
       </section>
 
-      <!-- イベント管理 -->
+      <!-- EVENTS -->
       <section id="tab-events" class="tab-section">
         <div class="section-title">イベント管理</div>
         <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
-          <button class="btn btn-ai" onclick="openCreateModal()">新規作成</button>
+          <button class="btn btn-ai" onclick="openCreateEventModal()">＋ 新規作成</button>
         </div>
         <div id="events-area"><div class="spinner"></div></div>
       </section>
 
-      <!-- QR照会 -->
+      <!-- QR SCAN -->
       <section id="tab-qrscan" class="tab-section">
         <div class="section-title">QR照会</div>
-        <p style="color:var(--ai-soft);font-size:.82rem;margin-bottom:16px;">QR受付画面でスキャンすると自動で情報が表示されます。</p>
         <div class="live-badge" id="live-badge" style="display:none;"><span class="live-dot"></span>リアルタイム受信中</div>
         <div style="background:#fdfaf5;border:1px solid var(--border);border-radius:var(--rs);padding:14px;margin-bottom:14px;">
           <p style="font-size:.75rem;color:var(--ai-soft);margin-bottom:7px;">チケットIDを入力して照会</p>
@@ -292,30 +361,24 @@
             <button class="btn btn-ai" onclick="lookupQr(document.getElementById('manual-qr-input').value.trim())">照会</button>
           </div>
         </div>
-        <div class="waiting-box" id="waiting-box"><p>QR受付画面でスキャンをお待ちしています<br><span style="font-size:.78rem;">2秒ごとに自動更新中</span></p></div>
+        <div id="qr-waiting" style="text-align:center;padding:36px 20px;color:var(--ai-soft);font-size:.875rem;">QR受付画面でスキャンをお待ちしています<br><span style="font-size:.78rem;">2秒ごとに自動更新中</span></div>
         <div class="detail-panel" id="detail-panel">
           <div class="detail-header">
             <div class="detail-avatar" id="detail-avatar">?</div>
             <div><div class="detail-name" id="detail-name">—</div><div class="detail-rank" id="detail-rank">—</div></div>
           </div>
           <div id="detail-rows"></div>
-          <div style="margin-top:14px;">
-            <div style="font-size:.78rem;font-weight:700;color:var(--ai-soft);letter-spacing:.08em;margin-bottom:8px;">参加履歴</div>
-            <div id="detail-history" class="history-timeline"></div>
-          </div>
+          <div style="margin-top:14px;"><div style="font-size:.78rem;font-weight:700;color:var(--ai-soft);letter-spacing:.08em;margin-bottom:8px;">参加履歴</div><div id="detail-history" class="history-timeline"></div></div>
           <div class="detail-actions" id="detail-actions"></div>
           <div id="detail-alert" style="margin-top:10px;"></div>
         </div>
         <div style="margin-top:24px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-            <div style="font-size:.875rem;font-weight:700;color:var(--ai);">照会ログ</div>
-            <button class="btn btn-outline btn-sm" onclick="loadScanLogs()">更新</button>
-          </div>
-          <div class="scan-log-table" id="scan-log-area"><div class="spinner"></div></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-size:.875rem;font-weight:700;color:var(--ai);">照会ログ</div><button class="btn btn-outline btn-sm" onclick="loadScanLogs()">更新</button></div>
+          <div id="scan-log-area"><div class="spinner"></div></div>
         </div>
       </section>
 
-      <!-- 登録一覧 -->
+      <!-- REGISTRATIONS -->
       <section id="tab-registrations" class="tab-section">
         <div class="section-title">登録一覧</div>
         <div style="display:flex;gap:8px;margin-bottom:14px;">
@@ -325,23 +388,37 @@
         <div id="registrations-area"><div class="spinner"></div></div>
       </section>
 
-      <!-- 参加者 -->
+      <!-- PARTICIPANTS -->
       <section id="tab-participants" class="tab-section">
         <div class="section-title">参加者一覧</div>
-        <div class="search-bar">
-          <input id="search-input" class="form-control" type="text" placeholder="名前・メールで検索">
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <input id="search-input" class="form-control" type="text" placeholder="名前・メールで検索" style="flex:1;">
           <button class="btn btn-ai" onclick="searchParticipants()">検索</button>
         </div>
         <div id="participants-area"><div class="spinner"></div></div>
       </section>
 
-      <!-- ★ メール送信タブ -->
+      <!-- MAIL -->
       <section id="tab-mail" class="tab-section">
         <div class="section-title">メール送信</div>
         <div class="mail-composer">
 
-          <!-- STEP 1: 送信対象 -->
-          <h3>① 送信対象</h3>
+          <!-- STEP 1: 送信方法 -->
+          <h3>① 配信方法（複数選択可）</h3>
+          <div class="delivery-opts">
+            <label class="delivery-opt checked" id="opt-email-wrap">
+              <input type="checkbox" id="opt-email" checked> ✉️ メール送信
+            </label>
+            <label class="delivery-opt" id="opt-news-wrap">
+              <input type="checkbox" id="opt-news"> 📰 Newsに投稿
+            </label>
+            <label class="delivery-opt" id="opt-notif-wrap">
+              <input type="checkbox" id="opt-notif"> 🔔 マイページ通知
+            </label>
+          </div>
+
+          <!-- STEP 2: 送信対象 -->
+          <h3>② 送信対象</h3>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
             <div class="form-group" style="margin:0;">
               <label class="form-label">対象イベント</label>
@@ -365,13 +442,16 @@
           </div>
           <div class="target-summary" id="mail-target-summary"></div>
 
-          <!-- STEP 2: 定型文 -->
-          <h3 style="margin-top:20px;">② テンプレート選択</h3>
-          <div class="template-grid" id="template-grid"></div>
+          <!-- STEP 3: テンプレート -->
+          <h3 style="margin-top:8px;">③ テンプレート</h3>
+          <div id="mail-tmpl-grid" class="template-grid"></div>
+          <div style="margin-bottom:16px;">
+            <button class="btn btn-outline btn-sm" onclick="openCustomTmplPicker()">📝 カスタム定型文から選択</button>
+          </div>
 
-          <!-- STEP 3: 件名・本文 -->
-          <h3 style="margin-top:4px;">③ 件名・本文</h3>
-          <p style="font-size:.75rem;color:var(--ai-soft);margin-bottom:10px;">各言語で内容を編集できます。参加者の設定言語に合わせて自動で送信されます。</p>
+          <!-- STEP 4: 件名・本文 -->
+          <h3>④ 件名・本文</h3>
+          <p style="font-size:.75rem;color:var(--ai-soft);margin-bottom:10px;">各言語で編集できます。参加者の言語設定に合わせて自動送信されます。</p>
           <div class="lang-tabs" id="mail-lang-tabs"></div>
           <div class="form-group">
             <label class="form-label">件名</label>
@@ -380,47 +460,88 @@
           <div class="form-group">
             <label class="form-label">本文（テキスト）</label>
             <textarea id="mail-body" class="form-control" rows="6" style="resize:vertical;" placeholder="本文を入力"></textarea>
-            <div class="placeholder-hint">
-              使えるプレースホルダー：<code>{{name}}</code>（名前）・<code>{{eventName}}</code>・<code>{{date}}</code>・<code>{{location}}</code>・<code>{{price}}</code>・<code>{{paymentStatus}}</code>・<code>{{rank}}</code>・<code>{{qrData}}</code>
-            </div>
+            <div class="placeholder-hint">プレースホルダー: <code>{{name}}</code> <code>{{eventName}}</code> <code>{{date}}</code> <code>{{location}}</code> <code>{{price}}</code> <code>{{qrData}}</code></div>
           </div>
           <div class="form-group">
-            <label class="form-label">本文（HTML）<span style="font-size:.7rem;color:var(--ai-soft);margin-left:6px;">省略可・空なら上記テキストを使用</span></label>
-            <textarea id="mail-body-html" class="form-control" rows="4" style="resize:vertical;font-family:monospace;font-size:.78rem;" placeholder="<p>{{name}} 様</p><p>...</p>"></textarea>
+            <label class="form-label">本文（HTML）<span style="font-size:.7rem;color:var(--ai-soft);margin-left:6px;">省略可</span></label>
+            <textarea id="mail-body-html" class="form-control" rows="3" style="resize:vertical;font-family:monospace;font-size:.78rem;" placeholder="<p>{{name}} 様</p>..."></textarea>
           </div>
-
-          <!-- プレビュー -->
           <div style="margin-bottom:16px;">
-            <button class="btn btn-outline btn-sm" onclick="renderPreview()">プレビュー</button>
+            <button class="btn btn-outline btn-sm" onclick="renderPreview()">👁 プレビュー</button>
             <div id="mail-preview" style="display:none;margin-top:8px;">
-              <div style="font-size:.75rem;font-weight:700;color:var(--ai-soft);margin-bottom:4px;">プレビュー（サンプルデータで置換）</div>
+              <div style="font-size:.75rem;font-weight:700;color:var(--ai-soft);margin-bottom:4px;">プレビュー（サンプルデータ）</div>
               <div class="preview-box" id="mail-preview-content"></div>
             </div>
           </div>
 
-          <!-- STEP 4: 添付ファイル -->
-          <h3>④ 添付ファイル <span style="font-size:.75rem;font-weight:400;color:var(--ai-soft);">（任意・最大5ファイル・各10MB以下）</span></h3>
+          <!-- STEP 5: 添付 -->
+          <h3>⑤ 添付ファイル <span style="font-size:.75rem;font-weight:400;color:var(--ai-soft);">（任意・最大5件・各10MB）</span></h3>
           <div style="margin-bottom:14px;">
             <input type="file" id="mail-attach-input" multiple style="display:none;" onchange="handleAttachments(this)">
             <button class="btn btn-outline btn-sm" onclick="document.getElementById('mail-attach-input').click()">ファイルを選択</button>
             <div class="attach-list" id="attach-list"></div>
           </div>
 
-          <!-- 送信 -->
+          <!-- SEND -->
           <div id="mail-send-alert"></div>
           <div class="mail-prog" id="mail-prog"><div class="mail-prog-bar" id="mail-prog-bar" style="width:0%"></div></div>
           <div style="display:flex;gap:10px;margin-top:4px;flex-wrap:wrap;">
-            <button class="btn btn-ai" style="flex:1;min-width:160px;" onclick="sendMail()" id="mail-send-btn">メール送信</button>
+            <button class="btn btn-ai" style="flex:1;min-width:160px;" onclick="sendMail()" id="mail-send-btn">送信 →</button>
             <button class="btn btn-outline" onclick="clearMailForm()">リセット</button>
           </div>
-          <p style="font-size:.72rem;color:var(--ai-soft);margin-top:8px;line-height:1.6;">
-            ※ 参加者の言語設定（Participantsシートの Lang 列）に合わせて各言語版が送信されます。<br>
-            Lang 列が未設定の場合は日本語で送信されます。
-          </p>
         </div>
       </section>
 
-      <!-- 満足度調査 -->
+      <!-- NEWS ADMIN -->
+      <section id="tab-news" class="tab-section">
+        <div class="section-title">ニュース管理</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+          <button class="btn btn-ai" onclick="openNewsCreateModal()">＋ 新規投稿</button>
+        </div>
+        <div id="news-admin-list"><div class="spinner"></div></div>
+      </section>
+
+      <!-- TEMPLATES -->
+      <section id="tab-templates" class="tab-section">
+        <div class="section-title">定型文管理</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+          <button class="btn btn-ai" onclick="openTmplModal()">＋ 新規作成</button>
+        </div>
+        <div id="tmpl-mgr-area"></div>
+        <p style="font-size:.78rem;color:var(--ai-soft);line-height:1.8;">定型文は「メール送信」タブのテンプレート選択から利用できます。</p>
+      </section>
+
+      <!-- CHAT ADMIN -->
+      <section id="tab-chat" class="tab-section">
+        <div class="section-title">チャット管理</div>
+        <div id="chat-admin-area">
+          <div class="chat-main-wrap">
+            <div class="chat-list-panel" id="chat-thread-list-panel"><div class="spinner"></div></div>
+            <div class="chat-msg-panel" id="chat-msg-panel">
+              <div class="no-thread-selected"><span>💬</span><p>左のユーザーを選択してください</p></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PHOTOS ADMIN -->
+      <section id="tab-photos" class="tab-section">
+        <div class="section-title">写真管理</div>
+        <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;align-items:flex-end;">
+          <div class="form-group" style="margin:0;flex:1;min-width:200px;">
+            <label class="form-label">イベント選択</label>
+            <select id="photo-event-sel" class="form-control" onchange="loadAdminPhotos()"><option value="">イベントを選択</option></select>
+          </div>
+        </div>
+        <div class="upload-zone" onclick="document.getElementById('admin-photo-input').click()">
+          <div class="upload-icon">📷</div>
+          <div class="upload-text">クリックして写真をアップロード（複数可）</div>
+        </div>
+        <input type="file" id="admin-photo-input" accept="image/*" multiple style="display:none;" onchange="handleAdminPhotoUpload(this)">
+        <div id="admin-photo-grid"><div style="text-align:center;padding:20px;color:var(--ai-soft);font-size:.85rem;">イベントを選択してください</div></div>
+      </section>
+
+      <!-- SURVEY -->
       <section id="tab-survey" class="tab-section">
         <div class="section-title">満足度調査</div>
         <div class="survey-send-card">
@@ -434,11 +555,10 @@
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">参加者サイトURL</label>
-              <input id="survey-site-url" class="form-control" type="url" placeholder="https://あなたのgithub.io/event-entry/" value="">
-              <p style="font-size:.72rem;color:var(--ai-soft);margin-top:4px;">メール送信時のリンク先URLを入力してください</p>
+              <input id="survey-site-url" class="form-control" type="url" placeholder="https://..." value="">
             </div>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-ai btn-sm" onclick="sendSurvey(true)">メール+マイページ</button>
+              <button class="btn btn-ai btn-sm" onclick="sendSurvey(true)">メール＋マイページ</button>
               <button class="btn btn-outline btn-sm" onclick="sendSurvey(false)">マイページのみ</button>
             </div>
           </div>
@@ -455,14 +575,11 @@
   </div>
 </div>
 
-<!-- イベント作成・編集モーダル -->
+<!-- EVENT MODAL -->
 <div class="modal-overlay" id="event-modal">
   <div class="modal-box">
-    <div class="modal-header">
-      <div class="modal-title" id="modal-title">イベント作成</div>
-      <button class="modal-close" onclick="closeEventModal()">&times;</button>
-    </div>
-    <div id="modal-alert"></div>
+    <div class="modal-header"><div class="modal-title" id="event-modal-title">イベント作成</div><button class="modal-close" onclick="closeEventModal()">×</button></div>
+    <div id="event-modal-alert"></div>
     <div class="form-group"><label class="form-label">イベント名</label><input id="f-name" class="form-control" type="text"></div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="form-group"><label class="form-label">開催日時</label><input id="f-date" class="form-control" type="datetime-local"></div>
@@ -472,613 +589,866 @@
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
       <div class="form-group"><label class="form-label">参加費（円）</label><input id="f-price" class="form-control" type="number" min="0" value="0"></div>
       <div class="form-group"><label class="form-label">支払い方式</label>
-        <select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay / 現金</option></select>
+        <select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay/現金</option></select>
       </div>
     </div>
-    <div class="form-group" id="modal-status-row" style="display:none;"><label class="form-label">ステータス</label>
+    <div class="form-group" id="event-status-row" style="display:none;"><label class="form-label">ステータス</label>
       <select id="f-status" class="form-control"><option value="OPEN">受付中</option><option value="CLOSED">終了</option></select>
     </div>
     <div style="display:flex;gap:8px;margin-top:4px;">
-      <button class="btn btn-ai" style="flex:1;" onclick="saveEvent()" id="modal-save-btn">保存</button>
+      <button class="btn btn-ai" style="flex:1;" onclick="saveEvent()" id="event-save-btn">保存</button>
       <button class="btn btn-outline" onclick="closeEventModal()">キャンセル</button>
     </div>
+  </div>
+</div>
+
+<!-- NEWS CREATE MODAL -->
+<div class="modal-overlay" id="news-modal">
+  <div class="modal-box">
+    <div class="modal-header"><div class="modal-title" id="news-modal-title">ニュース投稿</div><button class="modal-close" onclick="closeModal('news-modal')">×</button></div>
+    <div id="news-modal-alert"></div>
+    <div class="form-group"><label class="form-label">タイトル</label><input id="news-title-input" class="form-control" type="text" placeholder="お知らせタイトル"></div>
+    <div class="form-group"><label class="form-label">本文</label><textarea id="news-body-input" class="form-control" rows="5" placeholder="本文を入力..." style="resize:vertical;"></textarea></div>
+    <div class="form-group">
+      <label class="form-label">種別</label>
+      <select id="news-type-input" class="form-control" onchange="toggleNewsTarget()">
+        <option value="global">全体向け</option>
+        <option value="personal">特定ユーザー向け</option>
+      </select>
+    </div>
+    <div class="form-group" id="news-target-wrap" style="display:none;">
+      <label class="form-label">送信先メールアドレス</label>
+      <input id="news-target-email" class="form-control" type="email" placeholder="user@example.com">
+      <p style="font-size:.72rem;color:var(--ai-soft);margin-top:4px;">指定したメールアドレスの参加者にのみ表示されます</p>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ai" style="flex:1;" onclick="postNews()" id="news-post-btn">投稿する</button>
+      <button class="btn btn-outline" onclick="closeModal('news-modal')">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM TEMPLATE MODAL -->
+<div class="modal-overlay" id="tmpl-modal">
+  <div class="modal-box">
+    <div class="modal-header"><div class="modal-title" id="tmpl-modal-title">定型文 作成</div><button class="modal-close" onclick="closeModal('tmpl-modal')">×</button></div>
+    <div id="tmpl-modal-alert"></div>
+    <div class="form-group"><label class="form-label">定型文名</label><input id="tmpl-name-input" class="form-control" type="text" placeholder="例：アクセス情報テンプレート"></div>
+    <div class="form-group"><label class="form-label">カテゴリ（任意）</label>
+      <select id="tmpl-cat-input" class="form-control">
+        <option value="">未分類</option><option value="access">アクセス情報</option><option value="time">集合時間案内</option>
+        <option value="caution">注意事項</option><option value="greeting">挨拶文</option><option value="other">その他</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">本文</label><textarea id="tmpl-body-input" class="form-control" rows="6" placeholder="定型文の本文を入力..." style="resize:vertical;"></textarea>
+      <div class="placeholder-hint">プレースホルダー使用可: <code>{{name}}</code> <code>{{eventName}}</code> <code>{{date}}</code> <code>{{location}}</code></div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="btn btn-ai" style="flex:1;" onclick="saveTmpl()" id="tmpl-save-btn">保存</button>
+      <button class="btn btn-outline" onclick="closeModal('tmpl-modal')">キャンセル</button>
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM TEMPLATE PICKER -->
+<div class="modal-overlay" id="tmpl-picker-modal">
+  <div class="modal-box">
+    <div class="modal-header"><div class="modal-title">定型文を選択</div><button class="modal-close" onclick="closeModal('tmpl-picker-modal')">×</button></div>
+    <div id="tmpl-picker-list"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+// ════════════════════════════════════════════════
+// CONFIG
+// ════════════════════════════════════════════════
 const GAS_URL  = 'https://script.google.com/macros/s/AKfycbw94iJOYloTfXOeOONgwyP3MlTXOBolUdSCFO57NyfYDr-0ISYMTLwntsQxinj5c8CsFA/exec';
 const PASSWORD = 'connecta.2026';
 const PARTICIPANT_SITE_URL = 'https://connectaofficial-ctrl.github.io/index.partici/';
 
-// ============================================================
-// ログイン
-// ============================================================
+// ════════════════════════════════════════════════
+// LOGIN
+// ════════════════════════════════════════════════
 function doLogin(){
   if(document.getElementById('pw-input').value===PASSWORD){
     sessionStorage.setItem('admin_auth','1');
     document.getElementById('login-screen').style.display='none';
     document.getElementById('admin-screen').style.display='block';
-    loadDashboard();
-  }else{document.getElementById('login-error').textContent='パスワードが違います';}
+    initAdmin();
+  } else { document.getElementById('login-error').textContent='パスワードが違います'; }
 }
-function doLogout(){sessionStorage.removeItem('admin_auth');location.reload();}
+function doLogout(){ sessionStorage.removeItem('admin_auth'); location.reload(); }
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 if(sessionStorage.getItem('admin_auth')==='1'){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('admin-screen').style.display='block';
-  loadDashboard();
+  initAdmin();
 }
+function initAdmin(){ loadDashboard(); updateChatBadge(); }
 
-// ============================================================
+// ════════════════════════════════════════════════
 // API
-// ============================================================
-async function api(action,params){
+// ════════════════════════════════════════════════
+async function api(action, params){
   params=params||{};
   const res=await fetch(GAS_URL,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({action},params))});
   const json=await res.json();
   if(!json.success)throw new Error(json.error||'Error');
   return json.data;
 }
-function esc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-// ============================================================
-// ユーティリティ
-// ============================================================
+// ════════════════════════════════════════════════
+// localStorage helpers (News / Chat / Photos shared with Participants)
+// ════════════════════════════════════════════════
+function lsGet(k){ try{return JSON.parse(localStorage.getItem(k)||'null');}catch(e){return null;} }
+function lsSet(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+function genId(){ return Date.now()+'_'+Math.random().toString(36).slice(2,7); }
+
+// News
+function getAllNews(){ return lsGet('connecplus_news')||[]; }
+function saveAllNews(items){ lsSet('connecplus_news',items); }
+
+// Chat
+function getAllChats(){ return lsGet('connecplus_chat')||[]; }
+function saveAllChats(msgs){ lsSet('connecplus_chat',msgs); }
+function getParticipantIds(){ return [...new Set(getAllChats().map(m=>m.senderId).filter(id=>id!=='ADMIN'))]; }
+function getThreadMsgs(pid){ return getAllChats().filter(m=>m.senderId===pid||m.receiverId===pid); }
+function markThreadRead(pid){
+  const all=getAllChats();
+  let changed=false;
+  all.forEach(m=>{if(m.senderId===pid&&m.receiverId==='ADMIN'&&!m.isRead){m.isRead=true;changed=true;}});
+  if(changed)saveAllChats(all);
+}
+
+// Photos
+function getPhotos(eventId){ return (lsGet('connecplus_photos')||[]).filter(p=>p.eventId===eventId); }
+function getAllPhotos(){ return lsGet('connecplus_photos')||[]; }
+function addPhoto(eventId,name,dataUrl){ const all=getAllPhotos();all.push({id:Date.now()+'',eventId,name,url:dataUrl,uploadedAt:new Date().toISOString()});lsSet('connecplus_photos',all); }
+function removePhoto(id){ lsSet('connecplus_photos',(getAllPhotos()).filter(p=>String(p.id)!==String(id))); }
+
+// Custom templates
+function getCustomTmpls(){ return lsGet('connecplus_tmpls')||[]; }
+function saveCustomTmpls(t){ lsSet('connecplus_tmpls',t); }
+
+// ════════════════════════════════════════════════
+// UTILITIES
+// ════════════════════════════════════════════════
 function payBadge(s){
   const m={FREE:'badge-free',UNPAID:'badge-unpaid',PAYPAY_PENDING:'badge-paypay_pending',PAYPAY_PAID:'badge-paypay_paid',CASH:'badge-cash'};
   const l={FREE:'無料',UNPAID:'未払い',PAYPAY_PENDING:'PayPay確認待ち',PAYPAY_PAID:'PayPay支払済',CASH:'現金'};
-  return'<span class="badge '+(m[s]||'')+'">'+esc(l[s]||s)+'</span>';
+  return '<span class="badge '+(m[s]||'')+'">'+esc(l[s]||s)+'</span>';
 }
-function isCheckedIn(s){return s===true||s==='TRUE'||s==='true';}
-function checkinBadge(s){return isCheckedIn(s)?'<span class="badge badge-checked">入場済</span>':'<span class="badge badge-not-checked">未入場</span>';}
-function starStr(rating){const r=Math.round(rating);return'<span class="star-filled">'+'★'.repeat(r)+'</span><span class="star-empty">'+'★'.repeat(5-r)+'</span>';}
-function toastFn(type,msg){const el=document.getElementById('toast');el.innerHTML='<div class="alert alert-'+type+'">'+msg+'</div>';setTimeout(()=>{el.innerHTML='';},3000);}
+function isCI(s){ return s===true||s==='TRUE'||s==='true'; }
+function ciBadge(s){ return isCI(s)?'<span class="badge badge-checked">入場済</span>':'<span class="badge badge-not-checked">未入場</span>'; }
+function starStr(r){ const n=Math.round(r); return '<span class="star-filled">'+'★'.repeat(n)+'</span><span class="star-empty">'+'★'.repeat(5-n)+'</span>'; }
+function toast(type,msg){ const el=document.getElementById('toast'); el.innerHTML='<div class="alert alert-'+type+'">'+msg+'</div>'; setTimeout(()=>{el.innerHTML='';},3000); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 
-// ============================================================
-// タブ切り替え
-// ============================================================
+// ════════════════════════════════════════════════
+// TAB SWITCH
+// ════════════════════════════════════════════════
+let currentTab='dashboard';
 function switchTab(tab){
+  currentTab=tab;
   document.querySelectorAll('.tab-section').forEach(el=>el.classList.remove('active'));
   document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('tab-'+tab).classList.add('active');
   document.querySelectorAll('.sidebar-item').forEach(el=>{if(el.getAttribute('onclick')==="switchTab('"+tab+"')")el.classList.add('active');});
   const loaders={
-    dashboard:     loadDashboard,
-    events:        loadEvents,
-    qrscan:        ()=>{startPolling();loadScanLogs();},
-    registrations: ()=>{loadEventFilterOptions();loadRegistrations();},
-    participants:  ()=>searchParticipants(''),
-    mail:          initMailTab,
-    survey:        ()=>{loadSurveyEventOptions();loadSurveyStats();},
+    dashboard:loadDashboard, events:loadEvents,
+    qrscan:()=>{startPolling();loadScanLogs();},
+    registrations:()=>{loadEventFilterOptions();loadRegistrations();},
+    participants:()=>searchParticipants(''),
+    mail:initMailTab, news:loadNewsAdmin,
+    templates:loadTmplMgr, chat:loadChatAdmin,
+    photos:loadPhotoEventOptions, survey:()=>{loadSurveyEventOptions();loadSurveyStats();},
   };
   if(loaders[tab])loaders[tab]();
   if(tab!=='qrscan')stopPolling();
 }
 
-// ============================================================
-// ダッシュボード
-// ============================================================
-let dashAutoRefreshTimer=null, chartInstances={};
-function toggleAutoRefresh(enabled){
-  if(dashAutoRefreshTimer){clearInterval(dashAutoRefreshTimer);dashAutoRefreshTimer=null;}
-  if(enabled){dashAutoRefreshTimer=setInterval(()=>{if(document.getElementById('tab-dashboard').classList.contains('active'))loadDashboard();},30000);}
-}
+// ════════════════════════════════════════════════
+// DASHBOARD
+// ════════════════════════════════════════════════
+let chartInstances={};
 async function loadDashboard(){
-  const area=document.getElementById('dashboard-area');area.innerHTML='<div class="spinner"></div>';
+  const area=document.getElementById('dashboard-area'); area.innerHTML='<div class="spinner"></div>';
   try{
     const stats=await api('getStats');
     let html='<div class="stat-grid">'+
       '<div class="stat-card"><div class="stat-num">'+stats.openEvents+'</div><div class="stat-label">開催中</div></div>'+
       '<div class="stat-card"><div class="stat-num">'+stats.totalParticipants+'</div><div class="stat-label">参加者数</div></div>'+
       '<div class="stat-card"><div class="stat-num">'+stats.totalRegistrations+'</div><div class="stat-label">総登録数</div></div>'+
-      '<div class="stat-card"><div class="stat-num">'+stats.totalEvents+'</div><div class="stat-label">総イベント数</div></div>'+
-      '</div>'+
-      '<div class="section-title" style="font-size:.9rem;margin-top:8px;">イベント別状況</div>'+
-      '<div class="table-wrap"><table><thead><tr><th>イベント名</th><th>日時</th><th>定員</th><th>登録</th><th>入場済</th><th>満足度</th></tr></thead><tbody>';
+      '<div class="stat-card"><div class="stat-num">'+stats.totalEvents+'</div><div class="stat-label">総イベント</div></div>'+
+      '</div><div class="section-title" style="font-size:.9rem;margin-top:8px;">イベント別状況</div>'+
+      '<div class="table-wrap"><table><thead><tr><th>イベント名</th><th>日時</th><th>定員</th><th>登録</th><th>入場</th><th>満足度</th></tr></thead><tbody>';
     (stats.eventStats||[]).forEach(ev=>{
-      const ratingStr=ev.avgRating?starStr(ev.avgRating)+' <span style="font-size:.75rem;color:var(--ai-soft);">'+ev.avgRating+' ('+ev.surveyCount+'件)</span>':'<span style="color:var(--ai-soft);font-size:.75rem;">—</span>';
-      html+='<tr><td><strong>'+esc(ev.EventName)+'</strong></td><td style="font-size:.78rem;">'+esc(ev.Date)+'</td><td>'+esc(ev.Capacity)+'</td><td>'+esc(ev.registrationCount)+'</td><td>'+esc(ev.checkinCount)+'</td><td>'+ratingStr+'</td></tr>';
+      const r=ev.avgRating?starStr(ev.avgRating)+' <span style="font-size:.75rem;color:var(--ai-soft);">'+ev.avgRating+' ('+ev.surveyCount+'件)</span>':'<span style="color:var(--ai-soft);font-size:.75rem;">—</span>';
+      html+='<tr><td><strong>'+esc(ev.EventName)+'</strong></td><td style="font-size:.78rem;">'+esc(ev.Date)+'</td><td>'+esc(ev.Capacity)+'</td><td>'+esc(ev.registrationCount)+'</td><td>'+esc(ev.checkinCount)+'</td><td>'+r+'</td></tr>';
     });
-    html+='</tbody></table></div>'+
-      '<div class="section-title" style="font-size:.9rem;margin-top:24px;">満足度グラフ（全イベント）</div>'+
-      '<div class="survey-grid"><div class="survey-card"><h4>全体の評価分布</h4><div class="chart-wrap"><canvas id="chart-dist-all"></canvas></div></div><div class="survey-card"><h4>イベント別平均満足度</h4><div class="chart-wrap"><canvas id="chart-avg-events"></canvas></div></div></div>';
+    html+='</tbody></table></div>';
+    html+='<div class="section-title" style="font-size:.9rem;margin-top:24px;">満足度グラフ</div><div class="survey-grid"><div class="survey-card"><h4>評価分布（全体）</h4><div class="chart-wrap"><canvas id="c-dist"></canvas></div></div><div class="survey-card"><h4>イベント別平均</h4><div class="chart-wrap"><canvas id="c-avg"></canvas></div></div></div>';
     area.innerHTML=html;
-    await drawDashboardCharts(stats.eventStats||[]);
+    await drawDashCharts(stats.eventStats||[]);
   }catch(err){area.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
-  const updEl=document.getElementById('dash-last-updated');if(updEl)updEl.textContent='最終更新: '+new Date().toLocaleTimeString();
+  const u=document.getElementById('dash-updated'); if(u)u.textContent='更新: '+new Date().toLocaleTimeString();
 }
-async function drawDashboardCharts(eventStats){
+async function drawDashCharts(evStats){
   try{
-    const allSurveyStats=await api('getSurveyStats',{});
-    if(allSurveyStats.count>0){const ctx1=document.getElementById('chart-dist-all');if(ctx1){if(chartInstances['dist-all'])chartInstances['dist-all'].destroy();chartInstances['dist-all']=new Chart(ctx1,{type:'bar',data:{labels:['★1','★2','★3','★4','★5'],datasets:[{label:'回答数',data:allSurveyStats.distribution,backgroundColor:['#f4b8cb','#7b5ea7','#d4511a','#b8d4f0','#1a2744'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});}}
-    const evWithRating=eventStats.filter(ev=>ev.avgRating);
-    if(evWithRating.length>0){const ctx2=document.getElementById('chart-avg-events');if(ctx2){if(chartInstances['avg-events'])chartInstances['avg-events'].destroy();chartInstances['avg-events']=new Chart(ctx2,{type:'bar',data:{labels:evWithRating.map(ev=>ev.EventName.length>10?ev.EventName.slice(0,10)+'…':ev.EventName),datasets:[{label:'平均満足度',data:evWithRating.map(ev=>ev.avgRating),backgroundColor:evWithRating.map((_,i)=>['rgba(244,184,203,.8)','rgba(123,94,167,.8)','rgba(212,81,26,.8)','rgba(26,39,68,.8)'][i%4]),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:5,ticks:{stepSize:1}}}}});}}
-  }catch(e){console.warn('Chart error',e);}
+    const s=await api('getSurveyStats',{});
+    if(s.count>0){ const c=document.getElementById('c-dist'); if(c){if(chartInstances.dist)chartInstances.dist.destroy(); chartInstances.dist=new Chart(c,{type:'bar',data:{labels:['★1','★2','★3','★4','★5'],datasets:[{label:'回答数',data:s.distribution,backgroundColor:['#f4b8cb','#7b5ea7','#d4511a','#b8d4f0','#1a2744'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});}}
+    const ew=evStats.filter(e=>e.avgRating);
+    if(ew.length){ const c=document.getElementById('c-avg'); if(c){if(chartInstances.avg)chartInstances.avg.destroy(); chartInstances.avg=new Chart(c,{type:'bar',data:{labels:ew.map(e=>e.EventName.length>10?e.EventName.slice(0,10)+'…':e.EventName),datasets:[{label:'平均',data:ew.map(e=>e.avgRating),backgroundColor:ew.map((_,i)=>['rgba(244,184,203,.8)','rgba(123,94,167,.8)','rgba(212,81,26,.8)','rgba(26,39,68,.8)'][i%4]),borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:5,ticks:{stepSize:1}}}}});}}
+  }catch(e){console.warn(e);}
 }
 
-// ============================================================
-// イベント管理
-// ============================================================
+// ════════════════════════════════════════════════
+// EVENTS
+// ════════════════════════════════════════════════
 let editingEventId=null;
 async function loadEvents(){
-  const area=document.getElementById('events-area');area.innerHTML='<div class="spinner"></div>';
+  const area=document.getElementById('events-area'); area.innerHTML='<div class="spinner"></div>';
   try{
-    const stats=await api('getStats');const events=stats.eventStats||[];
-    if(!events.length){area.innerHTML='<div class="alert alert-info">イベントはまだありません。</div>';return;}
+    const stats=await api('getStats'); const evs=stats.eventStats||[];
+    if(!evs.length){area.innerHTML='<div class="alert alert-info">イベントはありません</div>';return;}
     let html='<div class="event-card-list">';
-    events.forEach(ev=>{
-      html+='<div class="event-card-item">'+
-        '<div style="flex:1;min-width:200px;"><div class="event-card-name">'+esc(ev.EventName)+'</div>'+
-        '<div class="event-card-meta">'+esc(ev.Date)+'&emsp;'+esc(ev.Location)+'<br>'+(Number(ev.Price)===0?'無料':'¥'+Number(ev.Price).toLocaleString())+'&emsp;登録: '+esc(ev.registrationCount)+' / '+esc(ev.Capacity)+'</div></div>'+
+    evs.forEach(ev=>{
+      html+='<div class="event-card-item"><div style="flex:1;min-width:200px;"><div class="event-card-name">'+esc(ev.EventName)+'</div><div class="event-card-meta">'+esc(ev.Date)+'&emsp;'+esc(ev.Location)+'<br>'+(Number(ev.Price)===0?'無料':'¥'+Number(ev.Price).toLocaleString())+'&emsp;登録: '+esc(ev.registrationCount)+' / '+esc(ev.Capacity)+'</div></div>'+
         '<div class="event-card-actions">'+
         (ev.Status==='OPEN'?'<span class="badge badge-open">受付中</span>':'<span class="badge badge-closed">終了</span>')+
-        '<button class="btn btn-outline btn-sm" onclick=\'openEditModal('+JSON.stringify(ev)+')\'>編集</button>'+
-        (ev.Status==='OPEN'?'<button class="btn btn-sm" style="background:rgba(212,81,26,.1);color:var(--aki);border:none;" onclick="toggleEventStatus(\''+esc(ev.EventID)+'\',\'CLOSED\')">終了</button>':'<button class="btn btn-sm" style="background:rgba(78,114,82,.1);color:var(--matcha);border:none;" onclick="toggleEventStatus(\''+esc(ev.EventID)+'\',\'OPEN\')">再開</button>')+
+        '<button class="btn btn-outline btn-sm" onclick=\'openEditEventModal('+JSON.stringify(ev)+')\'>編集</button>'+
+        (ev.Status==='OPEN'?'<button class="btn btn-sm" style="background:rgba(212,81,26,.1);color:var(--aki);border:none;padding:5px 10px;border-radius:99px;cursor:pointer;font-family:inherit;font-size:.75rem;font-weight:700;" onclick="toggleEvStatus(\''+esc(ev.EventID)+'\',\'CLOSED\')">終了</button>':'<button class="btn btn-sm" style="background:rgba(78,114,82,.1);color:var(--matcha);border:none;padding:5px 10px;border-radius:99px;cursor:pointer;font-family:inherit;font-size:.75rem;font-weight:700;" onclick="toggleEvStatus(\''+esc(ev.EventID)+'\',\'OPEN\')">再開</button>')+
         '</div></div>';
     });
-    html+='</div>';area.innerHTML=html;
+    html+='</div>'; area.innerHTML=html;
   }catch(err){area.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
 }
-function openCreateModal(){editingEventId=null;document.getElementById('modal-title').textContent='イベント作成';['f-name','f-location'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-date').value='';document.getElementById('f-price').value='0';document.getElementById('f-capacity').value='50';document.getElementById('f-paytype').value='FREE';document.getElementById('modal-status-row').style.display='none';document.getElementById('modal-alert').innerHTML='';document.getElementById('event-modal').classList.add('open');}
-function openEditModal(ev){editingEventId=ev.EventID;document.getElementById('modal-title').textContent='イベント編集';document.getElementById('f-name').value=ev.EventName||'';document.getElementById('f-date').value=(ev.Date||'').replace(' ','T');document.getElementById('f-location').value=ev.Location||'';document.getElementById('f-price').value=ev.Price||0;document.getElementById('f-capacity').value=ev.Capacity||50;document.getElementById('f-paytype').value=ev.PaymentType||'FREE';document.getElementById('f-status').value=ev.Status||'OPEN';document.getElementById('modal-status-row').style.display='block';document.getElementById('modal-alert').innerHTML='';document.getElementById('event-modal').classList.add('open');}
-function closeEventModal(){document.getElementById('event-modal').classList.remove('open');}
+function openCreateEventModal(){ editingEventId=null; document.getElementById('event-modal-title').textContent='イベント作成'; ['f-name','f-location'].forEach(id=>document.getElementById(id).value=''); document.getElementById('f-date').value=''; document.getElementById('f-price').value='0'; document.getElementById('f-capacity').value='50'; document.getElementById('f-paytype').value='FREE'; document.getElementById('event-status-row').style.display='none'; document.getElementById('event-modal-alert').innerHTML=''; document.getElementById('event-modal').classList.add('open'); }
+function openEditEventModal(ev){ editingEventId=ev.EventID; document.getElementById('event-modal-title').textContent='イベント編集'; document.getElementById('f-name').value=ev.EventName||''; document.getElementById('f-date').value=(ev.Date||'').replace(' ','T'); document.getElementById('f-location').value=ev.Location||''; document.getElementById('f-price').value=ev.Price||0; document.getElementById('f-capacity').value=ev.Capacity||50; document.getElementById('f-paytype').value=ev.PaymentType||'FREE'; document.getElementById('f-status').value=ev.Status||'OPEN'; document.getElementById('event-status-row').style.display='block'; document.getElementById('event-modal-alert').innerHTML=''; document.getElementById('event-modal').classList.add('open'); }
+function closeEventModal(){ document.getElementById('event-modal').classList.remove('open'); }
 document.getElementById('event-modal').addEventListener('click',e=>{if(e.target===document.getElementById('event-modal'))closeEventModal();});
 async function saveEvent(){
-  const nameEl=document.getElementById('f-name'),dateEl=document.getElementById('f-date'),locEl=document.getElementById('f-location'),alertEl=document.getElementById('modal-alert');
-  alertEl.innerHTML='';
-  if(!nameEl.value.trim()||!dateEl.value||!locEl.value.trim()){alertEl.innerHTML='<div class="alert alert-danger">イベント名・日時・会場は必須です。</div>';return;}
-  const btn=document.getElementById('modal-save-btn');btn.disabled=true;btn.textContent='...';
+  const alertEl=document.getElementById('event-modal-alert'); alertEl.innerHTML='';
+  const name=document.getElementById('f-name').value.trim(), date=document.getElementById('f-date').value, loc=document.getElementById('f-location').value.trim();
+  if(!name||!date||!loc){alertEl.innerHTML='<div class="alert alert-danger">イベント名・日時・会場は必須です</div>';return;}
+  const btn=document.getElementById('event-save-btn'); btn.disabled=true; btn.textContent='...';
   try{
-    if(editingEventId){await api('updateEvent',{event:{EventID:editingEventId,EventName:nameEl.value.trim(),Date:dateEl.value.replace('T',' '),Location:locEl.value.trim(),Price:Number(document.getElementById('f-price').value)||0,PaymentType:document.getElementById('f-paytype').value,Capacity:Number(document.getElementById('f-capacity').value)||50,Status:document.getElementById('f-status').value}});toastFn('success','イベントを更新しました');}
-    else{await api('createEvent',{event:{eventName:nameEl.value.trim(),date:dateEl.value.replace('T',' '),location:locEl.value.trim(),price:Number(document.getElementById('f-price').value)||0,paymentType:document.getElementById('f-paytype').value,capacity:Number(document.getElementById('f-capacity').value)||50}});toastFn('success','イベントを作成しました');}
-    closeEventModal();loadEvents();loadDashboard();
+    if(editingEventId){ await api('updateEvent',{event:{EventID:editingEventId,EventName:name,Date:date.replace('T',' '),Location:loc,Price:Number(document.getElementById('f-price').value)||0,PaymentType:document.getElementById('f-paytype').value,Capacity:Number(document.getElementById('f-capacity').value)||50,Status:document.getElementById('f-status').value}}); toast('success','イベントを更新しました'); }
+    else{ await api('createEvent',{event:{eventName:name,date:date.replace('T',' '),location:loc,price:Number(document.getElementById('f-price').value)||0,paymentType:document.getElementById('f-paytype').value,capacity:Number(document.getElementById('f-capacity').value)||50}}); toast('success','イベントを作成しました'); }
+    closeEventModal(); loadEvents(); loadDashboard();
   }catch(err){alertEl.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
-  btn.disabled=false;btn.textContent='保存';
+  btn.disabled=false; btn.textContent='保存';
 }
-async function toggleEventStatus(eventId,status){
-  try{await api('updateEvent',{event:{EventID:eventId,Status:status}});toastFn('success',status==='CLOSED'?'終了しました':'再開しました');loadEvents();loadDashboard();}
-  catch(err){toastFn('danger',err.message);}
-}
+async function toggleEvStatus(id,status){ try{await api('updateEvent',{event:{EventID:id,Status:status}});toast('success',status==='CLOSED'?'終了しました':'再開しました');loadEvents();loadDashboard();}catch(err){toast('danger',err.message);} }
 
-// ============================================================
-// QR照会
-// ============================================================
-let pollingTimer=null,lastScannedQr=null,pollingStartedAt=0;
-function startPolling(){
-  stopPolling();pollingStartedAt=Date.now();lastScannedQr=null;
-  document.getElementById('live-badge').style.display='inline-flex';
-  document.getElementById('waiting-box').style.display='block';
-  document.getElementById('waiting-box').innerHTML='<p>QR受付画面でスキャンをお待ちしています<br><span style="font-size:.78rem;">2秒ごとに自動更新中</span></p>';
-  document.getElementById('detail-panel').classList.remove('show');
-  loadScanLogsOnce();
-  pollingTimer=setInterval(pollLastScan,2000);
-  setTimeout(pollLastScan,1000);
-}
-function stopPolling(){if(pollingTimer){clearInterval(pollingTimer);pollingTimer=null;}document.getElementById('live-badge').style.display='none';}
-async function pollLastScan(){
-  try{const data=await api('getLastScan');if(!data||!data.qr)return;if(data.time<pollingStartedAt)return;if(data.qr===lastScannedQr)return;lastScannedQr=data.qr;await lookupQr(data.qr);}catch(e){}
-}
+// ════════════════════════════════════════════════
+// QR SCAN
+// ════════════════════════════════════════════════
+let pollingTimer=null, lastQr=null, pollingStart=0;
+function startPolling(){ stopPolling(); pollingStart=Date.now(); lastQr=null; document.getElementById('live-badge').style.display='inline-flex'; loadScanLogsOnce(); pollingTimer=setInterval(pollScan,2000); setTimeout(pollScan,800); }
+function stopPolling(){ if(pollingTimer){clearInterval(pollingTimer);pollingTimer=null;} document.getElementById('live-badge').style.display='none'; }
+async function pollScan(){ try{const d=await api('getLastScan');if(!d||!d.qr)return;if(d.time<pollingStart)return;if(d.qr===lastQr)return;lastQr=d.qr;await lookupQr(d.qr);}catch(e){} }
 async function lookupQr(qrData){
-  if(!qrData)return;
-  document.getElementById('waiting-box').style.display='none';document.getElementById('detail-panel').classList.remove('show');
+  if(!qrData)return; document.getElementById('qr-waiting').style.display='none'; document.getElementById('detail-panel').classList.remove('show');
   try{
-    const data=await api('getRegistrationDetail',{qrData});showDetail(data);
-    api('saveScanLog',{eventId:data.registration?data.registration.EventID:'',participantId:data.participant?data.participant.ParticipantID:'',participantName:data.participant?data.participant.Name:'不明',qrData,logAction:'LOOKUP'}).catch(()=>{});
-    prependLogRow({ScannedAt:new Date().toLocaleTimeString(),ParticipantName:data.participant?data.participant.Name:'—',EventID:data.registration?data.registration.EventID:'—',Action:'LOOKUP'});
-  }catch(err){document.getElementById('waiting-box').style.display='block';document.getElementById('waiting-box').innerHTML='<p>'+esc(err.message)+'</p>';}
+    const d=await api('getRegistrationDetail',{qrData}); showDetail(d);
+    api('saveScanLog',{eventId:d.registration?.EventID||'',participantId:d.participant?.ParticipantID||'',participantName:d.participant?.Name||'不明',qrData,logAction:'LOOKUP'}).catch(()=>{});
+    prependLog({ScannedAt:new Date().toLocaleTimeString(),ParticipantName:d.participant?.Name||'—',EventID:d.registration?.EventID||'—',Action:'LOOKUP'});
+  }catch(err){document.getElementById('qr-waiting').style.display='block';document.getElementById('qr-waiting').innerHTML='<p style="color:var(--aki);">'+esc(err.message)+'</p>';}
 }
 function showDetail(data){
-  const{registration:reg,participant,event:ev,qrData,history}=data;
-  const panel=document.getElementById('detail-panel');panel.classList.add('show');
-  const name=participant?participant.Name:'不明',rank=participant?participant.Rank:'—';
+  const{registration:reg,participant:p,event:ev,history}=data;
+  const panel=document.getElementById('detail-panel'); panel.classList.add('show');
+  const name=p?p.Name:'不明', rank=p?p.Rank:'—';
   document.getElementById('detail-avatar').textContent=name.charAt(0);
   document.getElementById('detail-name').textContent=name;
   document.getElementById('detail-rank').textContent=rank+' ランク';
   document.getElementById('detail-rows').innerHTML=
-    '<div class="detail-row"><span class="detail-key">メール</span><span class="detail-val">'+esc(participant?participant.Email:'—')+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">メール</span><span class="detail-val">'+esc(p?p.Email:'—')+'</span></div>'+
     '<div class="detail-row"><span class="detail-key">イベント</span><span class="detail-val">'+esc(ev?ev.EventName:reg.EventID)+'</span></div>'+
     '<div class="detail-row"><span class="detail-key">支払い</span><span class="detail-val" id="dp">'+payBadge(reg.PaymentStatus)+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">入場</span><span class="detail-val" id="dc">'+checkinBadge(reg.CheckinStatus)+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">参加回数</span><span class="detail-val">'+esc(participant?participant.TotalEvents:'—')+'</span></div>'+
-    '<div class="detail-row"><span class="detail-key">照会時刻</span><span class="detail-val">'+new Date().toLocaleTimeString()+'</span></div>';
+    '<div class="detail-row"><span class="detail-key">入場</span><span class="detail-val" id="dc">'+ciBadge(reg.CheckinStatus)+'</span></div>'+
+    '<div class="detail-row"><span class="detail-key">参加回数</span><span class="detail-val">'+esc(p?p.TotalEvents:'—')+'</span></div>';
   const histEl=document.getElementById('detail-history');
-  histEl.innerHTML=history&&history.length?history.map(h=>'<div class="history-item-tl"><div class="tl-dot"></div><div class="tl-body"><div class="tl-event">'+esc(h.eventName)+'</div><div class="tl-date">'+esc(h.date)+'</div></div></div>').join(''):'<p style="font-size:.78rem;color:var(--ai-soft);">参加履歴はありません</p>';
-  const actEl=document.getElementById('detail-actions');actEl.innerHTML='';
-  if(!isCheckedIn(reg.CheckinStatus)){
-    const btn=document.createElement('button');btn.className='btn btn-matcha';btn.textContent='チェックイン';
+  histEl.innerHTML=history&&history.length?history.map(h=>'<div class="history-item-tl"><div class="tl-dot-sm"></div><div class="tl-body"><div class="tl-ev">'+esc(h.eventName)+'</div><div class="tl-dt">'+esc(h.date)+'</div></div></div>').join(''):'<p style="font-size:.78rem;color:var(--ai-soft);">履歴なし</p>';
+  const actEl=document.getElementById('detail-actions'); actEl.innerHTML='';
+  if(!isCI(reg.CheckinStatus)){
+    const btn=document.createElement('button'); btn.className='btn btn-matcha'; btn.textContent='チェックイン';
     btn.addEventListener('click',async()=>{btn.disabled=true;btn.textContent='...';
-      try{const r=await api('checkin',{qrData});document.getElementById('dc').innerHTML=checkinBadge(true);document.getElementById('detail-alert').innerHTML='<div class="alert alert-success">'+esc(r.name)+' さんのチェックインが完了しました</div>';btn.textContent='チェックイン済み';
-        api('saveScanLog',{eventId:reg.EventID,participantId:reg.ParticipantID,participantName:participant?participant.Name:'',qrData,logAction:'CHECKIN'}).catch(()=>{});
-        prependLogRow({ScannedAt:new Date().toLocaleTimeString(),ParticipantName:r.name||'—',EventID:reg.EventID||'—',Action:'CHECKIN'});toastFn('success',r.name+' チェックイン完了');
+      try{const r=await api('checkin',{qrData:data.qrData});document.getElementById('dc').innerHTML=ciBadge(true);document.getElementById('detail-alert').innerHTML='<div class="alert alert-success">'+esc(r.name)+' さん チェックイン完了！</div>';btn.textContent='済';
+        api('saveScanLog',{eventId:reg.EventID,participantId:reg.ParticipantID,participantName:p?p.Name:'',qrData:data.qrData,logAction:'CHECKIN'}).catch(()=>{});
+        prependLog({ScannedAt:new Date().toLocaleTimeString(),ParticipantName:r.name||'—',EventID:reg.EventID||'—',Action:'CHECKIN'}); toast('success',r.name+' チェックイン完了');
       }catch(err){btn.disabled=false;btn.textContent='チェックイン';document.getElementById('detail-alert').innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
-    });
-    actEl.appendChild(btn);
-  }else{const s=document.createElement('span');s.style='color:var(--matcha);font-weight:700;align-self:center;font-size:.875rem;';s.textContent='入場済みです';actEl.appendChild(s);}
-  const sel=document.createElement('select');sel.className='form-control';sel.style='max-width:200px;';
+    }); actEl.appendChild(btn);
+  } else { const s=document.createElement('span'); s.style='color:var(--matcha);font-weight:700;align-self:center;font-size:.875rem;'; s.textContent='入場済みです'; actEl.appendChild(s); }
+  const sel=document.createElement('select'); sel.className='form-control'; sel.style='max-width:200px;';
   sel.innerHTML='<option value="">支払い変更…</option><option value="FREE">無料</option><option value="UNPAID">未払い</option><option value="PAYPAY_PENDING">PayPay確認待ち</option><option value="PAYPAY_PAID">PayPay支払済</option><option value="CASH">現金</option>';
-  sel.addEventListener('change',async()=>{if(!sel.value)return;try{await api('updatePaymentStatus',{registrationId:reg.RegistrationID,status:sel.value});document.getElementById('dp').innerHTML=payBadge(sel.value);toastFn('success','支払い更新');sel.value='';}catch(err){toastFn('danger',err.message);}});
-  actEl.appendChild(sel);document.getElementById('detail-alert').innerHTML='';
+  sel.addEventListener('change',async()=>{if(!sel.value)return;try{await api('updatePaymentStatus',{registrationId:reg.RegistrationID,status:sel.value});document.getElementById('dp').innerHTML=payBadge(sel.value);toast('success','支払い更新');sel.value='';}catch(err){toast('danger',err.message);}});
+  actEl.appendChild(sel); document.getElementById('detail-alert').innerHTML='';
 }
 async function loadScanLogsOnce(){
-  const area=document.getElementById('scan-log-area');if(!area)return;
+  const area=document.getElementById('scan-log-area'); if(!area)return;
   try{
     const logs=await api('getScanLogs',{});
     let html='<div class="table-wrap"><table id="scan-log-tbl"><thead><tr><th>時刻</th><th>参加者名</th><th>イベントID</th><th>アクション</th></tr></thead><tbody id="scan-log-tbody">';
-    (logs||[]).slice(0,100).forEach(l=>{html+=makeLogRow(l);});
-    html+='</tbody></table></div>';area.innerHTML=html;
+    (logs||[]).slice(0,100).forEach(l=>{html+=makeLogRow(l);}); html+='</tbody></table></div>'; area.innerHTML=html;
   }catch(e){area.innerHTML='<div class="table-wrap"><table id="scan-log-tbl"><thead><tr><th>時刻</th><th>参加者名</th><th>イベントID</th><th>アクション</th></tr></thead><tbody id="scan-log-tbody"></tbody></table></div>';}
 }
-function formatLogAction(action){const map={CHECKIN:'<span style="color:var(--matcha);font-weight:700;">チェックイン</span>',LOOKUP:'<span style="color:var(--ai-soft);">照会</span>',PAYMENT_ISSUE:'<span style="color:var(--aki);font-weight:700;">支払未確認</span>',ALREADY_IN:'<span style="color:var(--ai-soft);">入場済み</span>',NOT_FOUND:'<span style="color:var(--aki);">未登録</span>',ERROR:'<span style="color:var(--aki);">エラー</span>'};return map[action]||'<span style="color:var(--ai-soft);">'+esc(action||'—')+'</span>';}
-function makeLogRow(l){return'<tr><td style="font-size:.75rem;white-space:nowrap;">'+esc(l.ScannedAt)+'</td><td>'+esc(l.ParticipantName||'—')+'</td><td style="font-size:.72rem;color:var(--ai-soft);">'+esc(l.EventID||'—')+'</td><td>'+formatLogAction(l.Action)+'</td></tr>';}
-function prependLogRow(l){
-  let tbody=document.getElementById('scan-log-tbody');
-  if(!tbody){const area=document.getElementById('scan-log-area');if(!area)return;area.innerHTML='<div class="table-wrap"><table id="scan-log-tbl"><thead><tr><th>時刻</th><th>参加者名</th><th>イベントID</th><th>アクション</th></tr></thead><tbody id="scan-log-tbody"></tbody></table></div>';tbody=document.getElementById('scan-log-tbody');}
-  const tr=document.createElement('tr');tr.innerHTML=makeLogRow(l).replace(/^<tr>/,'').replace(/<\/tr>$/,'');tr.style.animation='tableRowIn .3s ease both';tbody.insertBefore(tr,tbody.firstChild);
-}
+function makeLogRow(l){ const m={CHECKIN:'<span style="color:var(--matcha);font-weight:700;">チェックイン</span>',LOOKUP:'<span style="color:var(--ai-soft);">照会</span>',ALREADY_IN:'<span style="color:var(--ai-soft);">入場済</span>',NOT_FOUND:'<span style="color:var(--aki);">未登録</span>'}; return '<tr><td style="font-size:.75rem;white-space:nowrap;">'+esc(l.ScannedAt)+'</td><td>'+esc(l.ParticipantName||'—')+'</td><td style="font-size:.72rem;color:var(--ai-soft);">'+esc(l.EventID||'—')+'</td><td>'+(m[l.Action]||esc(l.Action||'—'))+'</td></tr>'; }
+function prependLog(l){let tb=document.getElementById('scan-log-tbody');if(!tb){loadScanLogsOnce();return;}const tr=document.createElement('tr');tr.innerHTML=makeLogRow(l).replace(/^<tr>/,'').replace(/<\/tr>$/,'');tr.style.animation='tableRowIn .3s ease both';tb.insertBefore(tr,tb.firstChild);}
 async function loadScanLogs(){await loadScanLogsOnce();}
+document.getElementById('manual-qr-input').addEventListener('keydown',e=>{if(e.key==='Enter')lookupQr(document.getElementById('manual-qr-input').value.trim());});
 
-// ============================================================
-// 登録一覧
-// ============================================================
+// ════════════════════════════════════════════════
+// REGISTRATIONS
+// ════════════════════════════════════════════════
 async function loadEventFilterOptions(){
-  try{const events=await api('getEvents');const sel=document.getElementById('reg-event-filter');sel.innerHTML='<option value="">全イベント</option>';events.forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});}catch(e){}
+  try{const evs=await api('getEvents');const sel=document.getElementById('reg-event-filter');sel.innerHTML='<option value="">全イベント</option>';evs.forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});}catch(e){}
 }
 async function loadRegistrations(){
-  const area=document.getElementById('registrations-area'),eventId=document.getElementById('reg-event-filter').value;
+  const area=document.getElementById('registrations-area'),eid=document.getElementById('reg-event-filter').value;
   area.innerHTML='<div class="spinner"></div>';
   try{
-    const regs=await api('getAllRegistrations',{eventId:eventId||undefined});
-    if(!regs||!regs.length){area.innerHTML='<div class="alert alert-info">データがありません。</div>';return;}
+    const regs=await api('getAllRegistrations',{eventId:eid||undefined});
+    if(!regs||!regs.length){area.innerHTML='<div class="alert alert-info">データがありません</div>';return;}
     let html='<div class="table-wrap"><table><thead><tr><th>参加者ID</th><th>イベントID</th><th>支払い</th><th>入場</th><th>登録日</th><th>変更</th></tr></thead><tbody>';
-    regs.forEach(r=>{html+='<tr><td style="font-size:.7rem;font-family:monospace;color:var(--ai-soft);">'+esc(r.ParticipantID)+'</td><td style="font-size:.7rem;color:var(--ai-soft);">'+esc(r.EventID)+'</td><td>'+payBadge(r.PaymentStatus)+'</td><td>'+checkinBadge(r.CheckinStatus)+'</td><td style="font-size:.75rem;">'+esc(r.Created?String(r.Created).slice(0,10):'')+'</td><td><select class="status-sel" onchange="updatePayment(\''+esc(r.RegistrationID)+'\',this.value)"><option value="">変更…</option><option value="FREE">無料</option><option value="UNPAID">未払い</option><option value="PAYPAY_PENDING">PayPay確認待ち</option><option value="PAYPAY_PAID">PayPay支払済</option><option value="CASH">現金</option></select></td></tr>';});
-    html+='</tbody></table></div>';area.innerHTML=html;
+    regs.forEach(r=>{html+='<tr><td style="font-size:.7rem;font-family:monospace;color:var(--ai-soft);">'+esc(r.ParticipantID)+'</td><td style="font-size:.7rem;color:var(--ai-soft);">'+esc(r.EventID)+'</td><td>'+payBadge(r.PaymentStatus)+'</td><td>'+ciBadge(r.CheckinStatus)+'</td><td style="font-size:.75rem;">'+esc(r.Created?String(r.Created).slice(0,10):'')+'</td><td><select class="status-sel" onchange="updatePayment(\''+esc(r.RegistrationID)+'\',this.value)"><option value="">変更…</option><option value="FREE">無料</option><option value="UNPAID">未払い</option><option value="PAYPAY_PENDING">PayPay確認待ち</option><option value="PAYPAY_PAID">PayPay支払済</option><option value="CASH">現金</option></select></td></tr>';});
+    html+='</tbody></table></div>'; area.innerHTML=html;
   }catch(err){area.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
 }
-async function updatePayment(registrationId,status){if(!status)return;try{await api('updatePaymentStatus',{registrationId,status});toastFn('success','支払い更新');loadRegistrations();}catch(err){toastFn('danger',err.message);}}
+async function updatePayment(id,status){if(!status)return;try{await api('updatePaymentStatus',{registrationId:id,status});toast('success','支払い更新');loadRegistrations();}catch(err){toast('danger',err.message);}}
 
-// ============================================================
-// 参加者
-// ============================================================
-async function searchParticipants(query){
-  const area=document.getElementById('participants-area'),q=query!==undefined?query:(document.getElementById('search-input').value||'');
+// ════════════════════════════════════════════════
+// PARTICIPANTS
+// ════════════════════════════════════════════════
+async function searchParticipants(q){
+  const area=document.getElementById('participants-area');
+  q=q!==undefined?q:(document.getElementById('search-input').value||'');
   area.innerHTML='<div class="spinner"></div>';
   try{
     const list=await api('getParticipants',{query:q});
-    if(!list||!list.length){area.innerHTML='<div class="alert alert-info">参加者が見つかりません。</div>';return;}
+    if(!list||!list.length){area.innerHTML='<div class="alert alert-info">参加者が見つかりません</div>';return;}
     let html='<div class="table-wrap"><table><thead><tr><th>名前</th><th>メール</th><th>ランク</th><th>参加回数</th><th>登録日</th></tr></thead><tbody>';
     list.forEach(p=>{html+='<tr><td><strong>'+esc(p.Name)+'</strong></td><td style="font-size:.8rem;">'+esc(p.Email)+'</td><td>'+esc(p.Rank)+'</td><td>'+esc(p.TotalEvents||0)+'</td><td style="font-size:.75rem;">'+esc(p.Created?String(p.Created).slice(0,10):'')+'</td></tr>';});
-    html+='</tbody></table></div>';area.innerHTML=html;
+    html+='</tbody></table></div>'; area.innerHTML=html;
   }catch(err){area.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
 }
 document.getElementById('search-input').addEventListener('keydown',e=>{if(e.key==='Enter')searchParticipants();});
-document.getElementById('manual-qr-input').addEventListener('keydown',e=>{if(e.key==='Enter')lookupQr(document.getElementById('manual-qr-input').value.trim());});
 
-// ============================================================
-// ★ メール送信タブ
-// ============================================================
-const LANGS=['ja','en','zh','ko','es','fr','pt','id','th','vi','ar','hi','de','it','ru'];
-const LANG_NAMES={ja:'日本語',en:'English',zh:'中文',ko:'한국어',es:'Español',fr:'Français',pt:'Português',id:'Bahasa',th:'ไทย',vi:'Tiếng Việt',ar:'العربية',hi:'हिन्दी',de:'Deutsch',it:'Italiano',ru:'Русский'};
-
-// 定型文テンプレート（多言語）
-const MAIL_TEMPLATES = [
-  {
-    key:'reminder',
-    name:{ja:'イベントリマインダー',en:'Event Reminder',zh:'活动提醒',ko:'이벤트 리마인더',es:'Recordatorio de evento',fr:"Rappel d'événement",pt:'Lembrete do evento',id:'Pengingat acara',th:'การแจ้งเตือนกิจกรรม',vi:'Nhắc nhở sự kiện',ar:'تذكير بالفعالية',hi:'कार्यक्रम अनुस्मारक',de:'Veranstaltungserinnerung',it:"Promemoria dell'evento",ru:'Напоминание о мероприятии'},
-    desc:{ja:'開催前日に参加者へ送るリマインダー',en:'Day-before reminder to participants'},
-    subject:{
-      ja:'【connec+a】明日開催！{{eventName}} のご案内',
-      en:'[connec+a] Tomorrow: {{eventName}} - Reminder',
-      zh:'【connec+a】明天举行！{{eventName}} 提醒',
-      ko:'【connec+a】내일 개최! {{eventName}} 안내',
-      es:'[connec+a] ¡Mañana! {{eventName}} - Recordatorio',
-      fr:"[connec+a] Demain : {{eventName}} - Rappel",
-      pt:'[connec+a] Amanhã: {{eventName}} - Lembrete',
-      id:'[connec+a] Besok: {{eventName}} - Pengingat',
-      th:'[connec+a] พรุ่งนี้: {{eventName}} - การแจ้งเตือน',
-      vi:'[connec+a] Ngày mai: {{eventName}} - Nhắc nhở',
-      ar:'[connec+a] غداً: {{eventName}} - تذكير',
-      hi:'[connec+a] कल: {{eventName}} - अनुस्मारक',
-      de:'[connec+a] Morgen: {{eventName}} - Erinnerung',
-      it:'[connec+a] Domani: {{eventName}} - Promemoria',
-      ru:'[connec+a] Завтра: {{eventName}} - Напоминание',
-    },
-    body:{
-      ja:'{{name}} 様\n\n明日、{{eventName}} が開催されます。\n\n📅 日時：{{date}}\n📍 場所：{{location}}\n💴 参加費：{{price}}\n\nQRチケット（入場時にご提示ください）：\n{{qrData}}\n\nお越しをお待ちしております。\n\nconnec+a 運営チーム',
-      en:'Dear {{name}},\n\nThis is a reminder that {{eventName}} is taking place tomorrow.\n\n📅 Date: {{date}}\n📍 Location: {{location}}\n💴 Price: {{price}}\n\nYour QR Ticket: {{qrData}}\n\nWe look forward to seeing you!\n\nconnec+a Team',
-      zh:'亲爱的 {{name}}，\n\n提醒您，{{eventName}} 将于明天举行。\n\n📅 时间：{{date}}\n📍 地点：{{location}}\n💴 费用：{{price}}\n\nQR票券：{{qrData}}\n\n期待您的到来！\n\nconnec+a 团队',
-      ko:'{{name}} 님,\n\n내일 {{eventName}}이 개최됩니다.\n\n📅 일시：{{date}}\n📍 장소：{{location}}\n💴 참가비：{{price}}\n\nQR 티켓：{{qrData}}\n\n뵙기를 기대합니다!\n\nconnec+a 팀',
-      es:'Estimado/a {{name}},\n\nLe recordamos que {{eventName}} se celebra mañana.\n\n📅 Fecha: {{date}}\n📍 Lugar: {{location}}\n💴 Precio: {{price}}\n\nTicket QR: {{qrData}}\n\n¡Le esperamos!\n\nEquipo connec+a',
-      fr:'Cher/Chère {{name}},\n\nRappel : {{eventName}} a lieu demain.\n\n📅 Date : {{date}}\n📍 Lieu : {{location}}\n💴 Prix : {{price}}\n\nTicket QR : {{qrData}}\n\nÀ demain !\n\nÉquipe connec+a',
-      pt:'Caro(a) {{name}},\n\nLembrete: {{eventName}} acontece amanhã.\n\n📅 Data: {{date}}\n📍 Local: {{location}}\n💴 Preço: {{price}}\n\nTicket QR: {{qrData}}\n\nAté amanhã!\n\nEquipe connec+a',
-      id:'Yth. {{name}},\n\nPengingat: {{eventName}} berlangsung besok.\n\n📅 Tanggal: {{date}}\n📍 Tempat: {{location}}\n💴 Harga: {{price}}\n\nTiket QR: {{qrData}}\n\nSampai jumpa!\n\nTim connec+a',
-      th:'เรียน {{name}},\n\nขอแจ้งเตือนว่า {{eventName}} จะจัดขึ้นในวันพรุ่งนี้\n\n📅 วันที่: {{date}}\n📍 สถานที่: {{location}}\n💴 ราคา: {{price}}\n\nตั๋ว QR: {{qrData}}\n\nพบกันพรุ่งนี้!\n\nทีม connec+a',
-      vi:'Kính gửi {{name}},\n\nNhắc nhở: {{eventName}} sẽ diễn ra vào ngày mai.\n\n📅 Ngày: {{date}}\n📍 Địa điểm: {{location}}\n💴 Giá: {{price}}\n\nVé QR: {{qrData}}\n\nHẹn gặp bạn!\n\nĐội connec+a',
-      ar:'عزيزي/عزيزتي {{name}}،\n\nتذكير: {{eventName}} يُقام غداً.\n\n📅 التاريخ: {{date}}\n📍 المكان: {{location}}\n💴 السعر: {{price}}\n\nتذكرة QR: {{qrData}}\n\nنتطلع لرؤيتك!\n\nفريق connec+a',
-      hi:'प्रिय {{name}},\n\nयाद दिलाना: {{eventName}} कल होगा।\n\n📅 दिनांक: {{date}}\n📍 स्थान: {{location}}\n💴 मूल्य: {{price}}\n\nQR टिकट: {{qrData}}\n\nमिलते हैं!\n\nconnec+a टीम',
-      de:'Liebe/r {{name}},\n\nErinnerung: {{eventName}} findet morgen statt.\n\n📅 Datum: {{date}}\n📍 Ort: {{location}}\n💴 Preis: {{price}}\n\nQR-Ticket: {{qrData}}\n\nWir freuen uns auf Sie!\n\nTeam connec+a',
-      it:'Caro/a {{name}},\n\nRicorda: {{eventName}} si svolge domani.\n\n📅 Data: {{date}}\n📍 Luogo: {{location}}\n💴 Prezzo: {{price}}\n\nTicket QR: {{qrData}}\n\nA domani!\n\nTeam connec+a',
-      ru:'Уважаемый/ая {{name}},\n\nНапоминаем: {{eventName}} состоится завтра.\n\n📅 Дата: {{date}}\n📍 Место: {{location}}\n💴 Стоимость: {{price}}\n\nQR-билет: {{qrData}}\n\nДо встречи!\n\nКоманда connec+a',
-    },
-  },
-  {
-    key:'payment_request',
-    name:{ja:'支払いのご案内',en:'Payment Request',zh:'付款通知',ko:'결제 안내',es:'Solicitud de pago',fr:'Demande de paiement',pt:'Solicitação de pagamento',id:'Permintaan pembayaran',th:'การแจ้งชำระเงิน',vi:'Yêu cầu thanh toán',ar:'طلب الدفع',hi:'भुगतान अनुरोध',de:'Zahlungsaufforderung',it:'Richiesta di pagamento',ru:'Запрос оплаты'},
-    desc:{ja:'PayPay・現金支払い案内',en:'PayPay / Cash payment instructions'},
-    subject:{
-      ja:'【connec+a】{{eventName}} 参加費お支払いのお願い',
-      en:'[connec+a] {{eventName}} - Payment Required',
-      zh:'【connec+a】{{eventName}} 请付款',
-      ko:'【connec+a】{{eventName}} 참가비 결제 안내',
-      es:'[connec+a] {{eventName}} - Pago requerido',
-      fr:'[connec+a] {{eventName}} - Paiement requis',
-      pt:'[connec+a] {{eventName}} - Pagamento necessário',
-      id:'[connec+a] {{eventName}} - Pembayaran diperlukan',
-      th:'[connec+a] {{eventName}} - ต้องชำระเงิน',
-      vi:'[connec+a] {{eventName}} - Cần thanh toán',
-      ar:'[connec+a] {{eventName}} - مطلوب الدفع',
-      hi:'[connec+a] {{eventName}} - भुगतान आवश्यक',
-      de:'[connec+a] {{eventName}} - Zahlung erforderlich',
-      it:'[connec+a] {{eventName}} - Pagamento richiesto',
-      ru:'[connec+a] {{eventName}} - Требуется оплата',
-    },
-    body:{
-      ja:'{{name}} 様\n\n{{eventName}} にお申し込みいただきありがとうございます。\n\n参加費（{{price}}）のお支払いがまだ確認できておりません。\n\n📅 日時：{{date}}\n📍 場所：{{location}}\n\nご来場の際は当日受付にてお支払いいただくか、事前にご連絡ください。\n\nご不明な点はお気軽にお問い合わせください。\n\nconnec+a 運営チーム',
-      en:'Dear {{name}},\n\nThank you for registering for {{eventName}}.\n\nWe have not yet confirmed your payment ({{price}}).\n\n📅 Date: {{date}}\n📍 Location: {{location}}\n\nPlease pay at the reception desk on the day, or contact us if you have any questions.\n\nconnec+a Team',
-      zh:'亲爱的 {{name}}，\n\n感谢您报名参加 {{eventName}}。\n\n我们尚未确认您的付款（{{price}}）。\n\n📅 时间：{{date}}\n📍 地点：{{location}}\n\n请在活动当天在受付处付款，或提前联系我们。\n\nconnec+a 团队',
-      ko:'{{name}} 님,\n\n{{eventName}} 에 등록해 주셔서 감사합니다.\n\n참가비（{{price}}）가 아직 확인되지 않았습니다.\n\n📅 일시：{{date}}\n📍 장소：{{location}}\n\n당일 접수처에서 결제해 주시거나, 문의해 주세요.\n\nconnec+a 팀',
-      es:'Estimado/a {{name}},\n\nGracias por registrarse en {{eventName}}.\n\nAún no hemos confirmado su pago ({{price}}).\n\n📅 Fecha: {{date}}\n📍 Lugar: {{location}}\n\nPor favor pague en la recepción el día del evento.\n\nEquipo connec+a',
-      fr:'Cher/Chère {{name}},\n\nMerci de vous être inscrit(e) à {{eventName}}.\n\nNous n\'avons pas encore confirmé votre paiement ({{price}}).\n\n📅 Date : {{date}}\n📍 Lieu : {{location}}\n\nVeuillez payer à la réception le jour de l\'événement.\n\nÉquipe connec+a',
-      pt:'Caro(a) {{name}},\n\nObrigado por se inscrever em {{eventName}}.\n\nAinda não confirmamos seu pagamento ({{price}}).\n\n📅 Data: {{date}}\n📍 Local: {{location}}\n\nPor favor pague na recepção no dia do evento.\n\nEquipe connec+a',
-      id:'Yth. {{name}},\n\nTerima kasih telah mendaftar untuk {{eventName}}.\n\nKami belum mengonfirmasi pembayaran Anda ({{price}}).\n\n📅 Tanggal: {{date}}\n📍 Tempat: {{location}}\n\nHarap bayar di meja resepsi pada hari acara.\n\nTim connec+a',
-      th:'เรียน {{name}},\n\nขอบคุณที่ลงทะเบียน {{eventName}}\n\nเรายังไม่ได้รับการยืนยันการชำระเงิน ({{price}}) ของคุณ\n\n📅 วันที่: {{date}}\n📍 สถานที่: {{location}}\n\nกรุณาชำระเงินที่เคาน์เตอร์ในวันงาน\n\nทีม connec+a',
-      vi:'Kính gửi {{name}},\n\nCảm ơn bạn đã đăng ký {{eventName}}.\n\nChúng tôi chưa xác nhận thanh toán của bạn ({{price}}).\n\n📅 Ngày: {{date}}\n📍 Địa điểm: {{location}}\n\nVui lòng thanh toán tại quầy lễ tân vào ngày diễn ra.\n\nĐội connec+a',
-      ar:'عزيزي/عزيزتي {{name}}،\n\nشكراً لتسجيلك في {{eventName}}.\n\nلم نؤكد دفعتك ({{price}}) بعد.\n\n📅 التاريخ: {{date}}\n📍 المكان: {{location}}\n\nيرجى الدفع في مكتب الاستقبال يوم الفعالية.\n\nفريق connec+a',
-      hi:'प्रिय {{name}},\n\n{{eventName}} के लिए पंजीकरण के लिए धन्यवाद।\n\nहमने आपका भुगतान ({{price}}) अभी तक नहीं देखा।\n\n📅 दिनांक: {{date}}\n📍 स्थान: {{location}}\n\nकृपया आयोजन के दिन रिसेप्शन पर भुगतान करें।\n\nconnec+a टीम',
-      de:'Liebe/r {{name}},\n\nVielen Dank für Ihre Anmeldung zu {{eventName}}.\n\nIhre Zahlung ({{price}}) wurde noch nicht bestätigt.\n\n📅 Datum: {{date}}\n📍 Ort: {{location}}\n\nBitte zahlen Sie an der Rezeption am Veranstaltungstag.\n\nTeam connec+a',
-      it:'Caro/a {{name}},\n\nGrazie per esserti iscritto/a a {{eventName}}.\n\nNon abbiamo ancora confermato il tuo pagamento ({{price}}).\n\n📅 Data: {{date}}\n📍 Luogo: {{location}}\n\nPer favore paga alla reception il giorno dell\'evento.\n\nTeam connec+a',
-      ru:'Уважаемый/ая {{name}},\n\nСпасибо за регистрацию на {{eventName}}.\n\nМы ещё не подтвердили ваш платёж ({{price}}).\n\n📅 Дата: {{date}}\n📍 Место: {{location}}\n\nПожалуйста, оплатите на стойке регистрации в день мероприятия.\n\nКоманда connec+a',
-    },
-  },
-  {
-    key:'thank_you',
-    name:{ja:'参加御礼',en:'Thank You',zh:'感谢参与',ko:'참가 감사',es:'Gracias por asistir',fr:'Merci de votre participation',pt:'Obrigado pela participação',id:'Terima kasih telah hadir',th:'ขอบคุณที่เข้าร่วม',vi:'Cảm ơn đã tham dự',ar:'شكراً على مشاركتك',hi:'भाग लेने के लिए धन्यवाद',de:'Danke für Ihre Teilnahme',it:'Grazie per la partecipazione',ru:'Спасибо за участие'},
-    desc:{ja:'イベント後の御礼・フォローアップ',en:'Post-event thank you and follow-up'},
-    subject:{
-      ja:'【connec+a】{{eventName}} にご参加いただきありがとうございました',
-      en:'[connec+a] Thank you for attending {{eventName}}',
-      zh:'【connec+a】感谢您参加 {{eventName}}',
-      ko:'【connec+a】{{eventName}} 에 참가해 주셔서 감사합니다',
-      es:'[connec+a] Gracias por asistir a {{eventName}}',
-      fr:'[connec+a] Merci d\'avoir participé à {{eventName}}',
-      pt:'[connec+a] Obrigado por participar de {{eventName}}',
-      id:'[connec+a] Terima kasih telah menghadiri {{eventName}}',
-      th:'[connec+a] ขอบคุณที่เข้าร่วม {{eventName}}',
-      vi:'[connec+a] Cảm ơn đã tham dự {{eventName}}',
-      ar:'[connec+a] شكراً على حضورك {{eventName}}',
-      hi:'[connec+a] {{eventName}} में भाग लेने के लिए धन्यवाद',
-      de:'[connec+a] Danke für Ihre Teilnahme an {{eventName}}',
-      it:'[connec+a] Grazie per aver partecipato a {{eventName}}',
-      ru:'[connec+a] Спасибо за участие в {{eventName}}',
-    },
-    body:{
-      ja:'{{name}} 様\n\n{{eventName}} にご参加いただきまして誠にありがとうございました。\n\n📅 {{date}}\n📍 {{location}}\n\nまたのご参加をお待ちしております。\n今後ともconnec+aをよろしくお願いいたします。\n\nconnec+a 運営チーム',
-      en:'Dear {{name}},\n\nThank you so much for attending {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nWe hope to see you at our next event!\n\nconnec+a Team',
-      zh:'亲爱的 {{name}}，\n\n非常感谢您参加 {{eventName}}！\n\n📅 {{date}}\n📍 {{location}}\n\n期待在下次活动中再见！\n\nconnec+a 团队',
-      ko:'{{name}} 님,\n\n{{eventName}} 에 참가해 주셔서 진심으로 감사합니다!\n\n📅 {{date}}\n📍 {{location}}\n\n다음 이벤트에서 또 뵙기를 기대합니다!\n\nconnec+a 팀',
-      es:'Estimado/a {{name}},\n\n¡Muchas gracias por asistir a {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\n¡Esperamos verle en el próximo evento!\n\nEquipo connec+a',
-      fr:'Cher/Chère {{name}},\n\nMerci beaucoup d\'avoir participé à {{eventName}} !\n\n📅 {{date}}\n📍 {{location}}\n\nNous espérons vous revoir au prochain événement !\n\nÉquipe connec+a',
-      pt:'Caro(a) {{name}},\n\nMuito obrigado por participar de {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nEsperamos vê-lo(a) no próximo evento!\n\nEquipe connec+a',
-      id:'Yth. {{name}},\n\nTerima kasih telah menghadiri {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nSampai jumpa di acara berikutnya!\n\nTim connec+a',
-      th:'เรียน {{name}},\n\nขอบคุณมากที่เข้าร่วม {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nหวังว่าจะได้พบกันในงานครั้งหน้า!\n\nทีม connec+a',
-      vi:'Kính gửi {{name}},\n\nCảm ơn rất nhiều vì đã tham dự {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nHẹn gặp lại ở sự kiện tiếp theo!\n\nĐội connec+a',
-      ar:'عزيزي/عزيزتي {{name}}،\n\nشكراً جزيلاً على حضورك {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nنأمل رؤيتك في الفعالية القادمة!\n\nفريق connec+a',
-      hi:'प्रिय {{name}},\n\n{{eventName}} में भाग लेने के लिए बहुत-बहुत धन्यवाद!\n\n📅 {{date}}\n📍 {{location}}\n\nअगले कार्यक्रम में मिलने की उम्मीद है!\n\nconnec+a टीम',
-      de:'Liebe/r {{name}},\n\nVielen herzlichen Dank für Ihre Teilnahme an {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nWir hoffen, Sie beim nächsten Event wiederzusehen!\n\nTeam connec+a',
-      it:'Caro/a {{name}},\n\nGrazie mille per aver partecipato a {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nSperiamo di rivederti al prossimo evento!\n\nTeam connec+a',
-      ru:'Уважаемый/ая {{name}},\n\nОгромное спасибо за участие в {{eventName}}!\n\n📅 {{date}}\n📍 {{location}}\n\nНадеемся увидеть вас на следующем мероприятии!\n\nКоманда connec+a',
-    },
-  },
-  {
-    key:'custom',
-    name:{ja:'カスタム',en:'Custom',zh:'自定义',ko:'직접 작성',es:'Personalizado',fr:'Personnalisé',pt:'Personalizado',id:'Kustom',th:'กำหนดเอง',vi:'Tùy chỉnh',ar:'مخصص',hi:'कस्टम',de:'Benutzerdefiniert',it:'Personalizzato',ru:'Пользовательский'},
-    desc:{ja:'自由入力',en:'Write your own'},
-    subject:{ja:'',en:'',zh:'',ko:'',es:'',fr:'',pt:'',id:'',th:'',vi:'',ar:'',hi:'',de:'',it:'',ru:''},
-    body:{ja:'',en:'',zh:'',ko:'',es:'',fr:'',pt:'',id:'',th:'',vi:'',ar:'',hi:'',de:'',it:'',ru:''},
-  },
-];
-
-// メール用状態
-let mailSubjectMap={}, mailBodyMap={}, mailBodyHtmlMap={}, mailAttachments=[], selectedTemplate=null, currentMailLang='ja';
-
-function initMailTab(){
-  // イベントセレクタ読み込み
-  loadMailEventOptions();
-  // 言語タブ生成
-  const tabsEl=document.getElementById('mail-lang-tabs');
-  tabsEl.innerHTML=LANGS.map(l=>'<button class="lang-tab-btn'+(l==='ja'?' active':'')+'" onclick="switchMailLang(\''+l+'\')" id="mlt-'+l+'">'+LANG_NAMES[l]+'</button>').join('');
-  // テンプレートグリッド生成
-  const grid=document.getElementById('template-grid');
-  grid.innerHTML=MAIL_TEMPLATES.map(t=>'<button class="tmpl-btn" id="tmpl-'+t.key+'" onclick="selectTemplate(\''+t.key+'\')"><div class="tmpl-name">'+esc(t.name['ja'])+'</div><div class="tmpl-desc">'+esc((t.desc&&t.desc['ja'])||'')+'</div></button>').join('');
-  // 初期化
-  mailSubjectMap={}; mailBodyMap={}; mailBodyHtmlMap={}; mailAttachments=[]; selectedTemplate=null;
-  LANGS.forEach(l=>{mailSubjectMap[l]='';mailBodyMap[l]='';mailBodyHtmlMap[l]='';});
-  renderMailLang('ja');
-  document.getElementById('attach-list').innerHTML='';
-  document.getElementById('mail-send-alert').innerHTML='';
-  document.getElementById('mail-target-summary').style.display='none';
+// ════════════════════════════════════════════════
+// NEWS ADMIN
+// ════════════════════════════════════════════════
+function loadNewsAdmin(){
+  const el=document.getElementById('news-admin-list');
+  const items=getAllNews().sort((a,b)=>new Date(b.createdAt)-new Date(a.createdAt));
+  if(!items.length){el.innerHTML='<div class="alert alert-info">投稿はありません</div>';return;}
+  el.innerHTML='<div class="news-admin-list">'+items.map(n=>{
+    const date=new Date(n.createdAt).toLocaleDateString('ja-JP',{year:'numeric',month:'short',day:'numeric'});
+    const typeBadge=n.userId?'<span class="badge badge-personal">個別</span>':'<span class="badge badge-global">全体</span>';
+    return `<div class="news-admin-card">
+      <div class="news-admin-card-left">
+        <div class="news-admin-card-title">${esc(n.title)}</div>
+        <div class="news-admin-card-body">${esc(n.body)}</div>
+        <div class="news-admin-card-meta">${typeBadge}<span style="font-size:.72rem;color:var(--ai-soft);">${date}</span></div>
+      </div>
+      <div class="news-admin-card-actions">
+        <button class="btn btn-outline btn-sm" onclick="openEditNewsModal('${esc(n.id)}')">編集</button>
+        <button class="btn btn-xs" style="background:rgba(212,81,26,.1);color:var(--aki);border:none;border-radius:99px;cursor:pointer;font-family:inherit;font-weight:700;" onclick="deleteNews('${esc(n.id)}')">削除</button>
+      </div>
+    </div>`;
+  }).join('')+'</div>';
 }
-async function loadMailEventOptions(){
+
+let editingNewsId=null;
+function openNewsCreateModal(){
+  editingNewsId=null;
+  document.getElementById('news-modal-title').textContent='ニュース投稿';
+  document.getElementById('news-title-input').value='';
+  document.getElementById('news-body-input').value='';
+  document.getElementById('news-type-input').value='global';
+  document.getElementById('news-target-wrap').style.display='none';
+  document.getElementById('news-target-email').value='';
+  document.getElementById('news-modal-alert').innerHTML='';
+  document.getElementById('news-modal').classList.add('open');
+}
+function openEditNewsModal(id){
+  const n=getAllNews().find(x=>x.id===id); if(!n)return;
+  editingNewsId=id;
+  document.getElementById('news-modal-title').textContent='ニュース編集';
+  document.getElementById('news-title-input').value=n.title||'';
+  document.getElementById('news-body-input').value=n.body||'';
+  document.getElementById('news-type-input').value=n.userId?'personal':'global';
+  document.getElementById('news-target-email').value=n.targetEmail||'';
+  toggleNewsTarget();
+  document.getElementById('news-modal-alert').innerHTML='';
+  document.getElementById('news-modal').classList.add('open');
+}
+function toggleNewsTarget(){
+  const v=document.getElementById('news-type-input').value;
+  document.getElementById('news-target-wrap').style.display=v==='personal'?'block':'none';
+}
+async function postNews(){
+  const alertEl=document.getElementById('news-modal-alert'); alertEl.innerHTML='';
+  const title=document.getElementById('news-title-input').value.trim();
+  const body=document.getElementById('news-body-input').value.trim();
+  const type=document.getElementById('news-type-input').value;
+  const targetEmail=document.getElementById('news-target-email').value.trim();
+  if(!title){alertEl.innerHTML='<div class="alert alert-danger">タイトルを入力してください</div>';return;}
+  if(!body){alertEl.innerHTML='<div class="alert alert-danger">本文を入力してください</div>';return;}
+  if(type==='personal'&&!targetEmail){alertEl.innerHTML='<div class="alert alert-danger">送信先メールアドレスを入力してください</div>';return;}
+  const btn=document.getElementById('news-post-btn'); btn.disabled=true; btn.textContent='...';
+  try{
+    // Resolve userId from email if personal
+    let userId=null;
+    if(type==='personal'&&targetEmail){
+      try{const ps=await api('getParticipants',{query:targetEmail});const p=ps.find(x=>x.Email===targetEmail);userId=p?p.ParticipantID:null;}catch(e){}
+    }
+    const all=getAllNews();
+    if(editingNewsId){
+      const idx=all.findIndex(n=>n.id===editingNewsId);
+      if(idx>-1){all[idx]={...all[idx],title,body,type,userId,targetEmail:type==='personal'?targetEmail:'',updatedAt:new Date().toISOString()};}
+    } else {
+      all.push({id:genId(),title,body,type,userId,targetEmail:type==='personal'?targetEmail:'',createdAt:new Date().toISOString()});
+    }
+    saveAllNews(all);
+    toast('success',editingNewsId?'ニュースを更新しました':'ニュースを投稿しました');
+    closeModal('news-modal');
+    loadNewsAdmin();
+  }catch(err){alertEl.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
+  btn.disabled=false; btn.textContent='投稿する';
+}
+function deleteNews(id){
+  if(!confirm('このニュースを削除しますか？'))return;
+  saveAllNews(getAllNews().filter(n=>n.id!==id));
+  loadNewsAdmin(); toast('success','削除しました');
+}
+document.getElementById('news-modal').addEventListener('click',e=>{if(e.target===document.getElementById('news-modal'))closeModal('news-modal');});
+
+// ════════════════════════════════════════════════
+// CUSTOM TEMPLATES
+// ════════════════════════════════════════════════
+let editingTmplId=null;
+const CAT_LABELS={access:'アクセス情報',time:'集合時間案内',caution:'注意事項',greeting:'挨拶文',other:'その他','':'未分類'};
+
+function loadTmplMgr(){
+  const el=document.getElementById('tmpl-mgr-area');
+  const tmpls=getCustomTmpls();
+  if(!tmpls.length){el.innerHTML='<div class="alert alert-info" style="margin-bottom:16px;">定型文はまだありません。「新規作成」ボタンから追加してください。</div>';return;}
+  el.innerHTML='<div class="tmpl-mgr-grid">'+tmpls.map(t=>`
+    <div class="tmpl-mgr-card">
+      ${t.category?`<div class="tmpl-mgr-card-tag">${esc(CAT_LABELS[t.category]||t.category)}</div>`:''}
+      <div class="tmpl-mgr-card-name">${esc(t.name)}</div>
+      <div class="tmpl-mgr-card-body">${esc(t.body)}</div>
+      <div class="tmpl-mgr-card-actions">
+        <button class="btn btn-outline btn-sm" onclick="openTmplModal('${esc(t.id)}')">編集</button>
+        <button class="btn btn-xs" style="background:rgba(212,81,26,.1);color:var(--aki);border:none;border-radius:99px;cursor:pointer;font-family:inherit;font-weight:700;" onclick="deleteTmpl('${esc(t.id)}')">削除</button>
+      </div>
+    </div>`).join('')+'</div>';
+}
+
+function openTmplModal(id){
+  editingTmplId=id||null;
+  const t=id?getCustomTmpls().find(x=>x.id===id):null;
+  document.getElementById('tmpl-modal-title').textContent=t?'定型文 編集':'定型文 作成';
+  document.getElementById('tmpl-name-input').value=t?t.name:'';
+  document.getElementById('tmpl-cat-input').value=t?t.category||'':'';
+  document.getElementById('tmpl-body-input').value=t?t.body:'';
+  document.getElementById('tmpl-modal-alert').innerHTML='';
+  document.getElementById('tmpl-modal').classList.add('open');
+}
+function saveTmpl(){
+  const alertEl=document.getElementById('tmpl-modal-alert'); alertEl.innerHTML='';
+  const name=document.getElementById('tmpl-name-input').value.trim();
+  const body=document.getElementById('tmpl-body-input').value.trim();
+  const cat=document.getElementById('tmpl-cat-input').value;
+  if(!name||!body){alertEl.innerHTML='<div class="alert alert-danger">名前と本文を入力してください</div>';return;}
+  const all=getCustomTmpls();
+  if(editingTmplId){const idx=all.findIndex(t=>t.id===editingTmplId);if(idx>-1)all[idx]={...all[idx],name,body,category:cat};}
+  else{all.push({id:genId(),name,body,category:cat,createdAt:new Date().toISOString()});}
+  saveCustomTmpls(all); closeModal('tmpl-modal'); loadTmplMgr();
+  toast('success',editingTmplId?'更新しました':'作成しました');
+}
+function deleteTmpl(id){if(!confirm('削除しますか？'))return;saveCustomTmpls(getCustomTmpls().filter(t=>t.id!==id));loadTmplMgr();toast('success','削除しました');}
+[document.getElementById('tmpl-modal'),document.getElementById('tmpl-picker-modal')].forEach(el=>{if(el)el.addEventListener('click',e=>{if(e.target===el)el.classList.remove('open');});});
+
+function openCustomTmplPicker(){
+  const el=document.getElementById('tmpl-picker-list');
+  const tmpls=getCustomTmpls();
+  if(!tmpls.length){el.innerHTML='<div class="alert alert-info">定型文がありません。「定型文管理」タブから作成してください。</div>';document.getElementById('tmpl-picker-modal').classList.add('open');return;}
+  el.innerHTML=tmpls.map(t=>`<div style="padding:12px 0;border-bottom:1px solid var(--shiro-2);cursor:pointer;" onclick="insertCustomTmpl('${esc(t.id)}')">
+    <div style="font-weight:700;font-size:.9rem;color:var(--ai);margin-bottom:4px;">${esc(t.name)}</div>
+    <div style="font-size:.8rem;color:var(--ai-soft);line-height:1.7;">${esc(t.body.slice(0,100))}${t.body.length>100?'…':''}</div>
+  </div>`).join('');
+  document.getElementById('tmpl-picker-modal').classList.add('open');
+}
+function insertCustomTmpl(id){
+  const t=getCustomTmpls().find(x=>x.id===id);if(!t)return;
+  const bodyEl=document.getElementById('mail-body');
+  bodyEl.value=(bodyEl.value?bodyEl.value+'\n\n':'')+t.body;
+  closeModal('tmpl-picker-modal');
+  toast('success','"'+t.name+'" を挿入しました');
+}
+
+// ════════════════════════════════════════════════
+// CHAT ADMIN
+// ════════════════════════════════════════════════
+let activeChatPid=null;
+
+function updateChatBadge(){
+  const msgs=getAllChats();
+  const unread=msgs.filter(m=>m.receiverId==='ADMIN'&&!m.isRead).length;
+  const badge=document.getElementById('chat-badge');
+  if(badge){badge.style.display=unread>0?'inline-block':'none';badge.textContent=unread;}
+}
+
+async function loadChatAdmin(){
+  const listPanel=document.getElementById('chat-thread-list-panel');
+  const allMsgs=getAllChats();
+  const pids=getParticipantIds();
+  if(!pids.length){
+    listPanel.innerHTML='<div style="padding:24px 16px;text-align:center;color:var(--ai-soft);font-size:.85rem;">まだメッセージがありません</div>';
+    return;
+  }
+  // try to get participant names
+  let participantMap={};
+  try{const ps=await api('getParticipants',{query:''});ps.forEach(p=>{participantMap[p.ParticipantID]=p;});}catch(e){}
+  const threads=pids.map(pid=>{
+    const msgs=allMsgs.filter(m=>m.senderId===pid||m.receiverId===pid).sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+    const last=msgs[msgs.length-1];
+    const unread=msgs.filter(m=>m.senderId===pid&&m.receiverId==='ADMIN'&&!m.isRead).length;
+    const p=participantMap[pid];
+    return{pid,name:p?p.Name:msgs[0]?.senderName||pid,email:p?p.Email:'',last,unread,msgs};
+  }).sort((a,b)=>new Date(b.last?.createdAt||0)-new Date(a.last?.createdAt||0));
+  listPanel.innerHTML=threads.map(th=>{
+    const time=th.last?new Date(th.last.createdAt).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'}):'';
+    return `<div class="chat-thread-item${th.pid===activeChatPid?' active':''}" onclick="selectChatThread('${esc(th.pid)}','${esc(th.name)}','${esc(th.email)}')">
+      <div class="thread-avatar">${(th.name||'?').charAt(0)}</div>
+      <div class="thread-info">
+        <div class="thread-name">${esc(th.name)}</div>
+        <div class="thread-preview">${th.last?esc((th.last.senderId===th.pid?'':'あなた: ')+th.last.text.slice(0,40)):''}</div>
+      </div>
+      <div class="thread-meta">
+        <span class="thread-time">${time}</span>
+        ${th.unread>0?`<span class="thread-unread">${th.unread}</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+  if(activeChatPid) selectChatThread(activeChatPid,'','');
+}
+
+function selectChatThread(pid, name, email){
+  activeChatPid=pid;
+  markThreadRead(pid);
+  updateChatBadge();
+  // refresh list to clear badge
+  document.querySelectorAll('.chat-thread-item').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('onclick')?.includes(pid));
+    const badge=el.querySelector('.thread-unread');
+    if(el.classList.contains('active')&&badge) badge.remove();
+  });
+  const msgs=getThreadMsgs(pid).sort((a,b)=>new Date(a.createdAt)-new Date(b.createdAt));
+  const panel=document.getElementById('chat-msg-panel');
+  // get name from thread list data or stored
+  const nameFromStore = msgs.find(m=>m.senderId===pid)?.senderName||name||pid;
+  panel.innerHTML=`
+    <div class="chat-msg-header">
+      <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--ai-mid),var(--natsu));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:.9rem;flex-shrink:0;">${(nameFromStore||'?').charAt(0)}</div>
+      <div><div class="chat-msg-header-name">${esc(nameFromStore)}</div>${email?`<div class="chat-msg-header-email">${esc(email)}</div>`:''}</div>
+    </div>
+    <div class="chat-messages" id="admin-chat-msgs">
+      ${msgs.length?msgs.map(m=>renderAdminBubble(m,pid)).join(''):'<div class="chat-empty-panel"><span>💬</span><p>メッセージがありません</p></div>'}
+    </div>
+    <div class="chat-reply-row">
+      <textarea class="chat-reply-input" id="admin-reply-input" placeholder="返信を入力..." rows="1" onkeydown="handleAdminReplyKey(event,'${esc(pid)}','${esc(nameFromStore)}')"></textarea>
+      <button class="chat-send-btn" onclick="sendAdminReply('${esc(pid)}','${esc(nameFromStore)}')">送信</button>
+    </div>`;
+  setTimeout(()=>{const c=document.getElementById('admin-chat-msgs');if(c)c.scrollTop=c.scrollHeight;},100);
+}
+
+function renderAdminBubble(m, pid){
+  const isAdmin=m.senderId==='ADMIN';
+  const time=new Date(m.createdAt).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
+  const date=new Date(m.createdAt).toLocaleDateString('ja-JP',{month:'short',day:'numeric'});
+  return `<div class="chat-bubble ${isAdmin?'admin':'user'}">
+    ${!isAdmin?`<div class="bubble-sender">${esc(m.senderName||pid)}</div>`:''}
+    <div class="bubble-text">${esc(m.text)}</div>
+    <div class="bubble-meta">${date} ${time}${isAdmin&&m.isRead?' ✓✓':''}</div>
+  </div>`;
+}
+
+function handleAdminReplyKey(e,pid,name){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendAdminReply(pid,name);}}
+
+function sendAdminReply(pid,name){
+  const input=document.getElementById('admin-reply-input');
+  const text=(input.value||'').trim(); if(!text)return;
+  const all=getAllChats();
+  const msg={
+    id:genId(),
+    senderId:'ADMIN',receiverId:pid,
+    senderName:'connec+a 運営',text,
+    createdAt:new Date().toISOString(),isRead:false
+  };
+  all.push(msg); saveAllChats(all);
+  input.value='';
+  // append bubble
+  const cm=document.getElementById('admin-chat-msgs');
+  const empty=cm?.querySelector('.chat-empty-panel');
+  if(empty) empty.remove();
+  if(cm){
+    const div=document.createElement('div');
+    div.innerHTML=renderAdminBubble(msg,pid);
+    cm.appendChild(div.firstElementChild);
+    cm.scrollTop=cm.scrollHeight;
+  }
+  // update thread preview
+  loadChatAdmin();
+}
+
+// ════════════════════════════════════════════════
+// PHOTOS ADMIN
+// ════════════════════════════════════════════════
+async function loadPhotoEventOptions(){
   try{
     const stats=await api('getStats');const evs=stats.eventStats||[];
-    const sel=document.getElementById('mail-event-sel');
-    sel.innerHTML='<option value="">すべてのイベント</option>';
+    const sel=document.getElementById('photo-event-sel');
+    sel.innerHTML='<option value="">イベントを選択</option>';
     evs.forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});
   }catch(e){}
-}
-function selectTemplate(key){
-  selectedTemplate=key;
-  document.querySelectorAll('.tmpl-btn').forEach(b=>b.classList.remove('selected'));
-  const btnEl=document.getElementById('tmpl-'+key);if(btnEl)btnEl.classList.add('selected');
-  const tmpl=MAIL_TEMPLATES.find(t=>t.key===key);if(!tmpl)return;
-  LANGS.forEach(l=>{mailSubjectMap[l]=tmpl.subject[l]||'';mailBodyMap[l]=tmpl.body[l]||'';mailBodyHtmlMap[l]='';});
-  renderMailLang(currentMailLang);
-}
-function switchMailLang(lang){
-  // 現在の入力を保存
-  saveCurrentMailLang();
-  currentMailLang=lang;
-  document.querySelectorAll('.lang-tab-btn').forEach(b=>b.classList.remove('active'));
-  const tab=document.getElementById('mlt-'+lang);if(tab)tab.classList.add('active');
-  renderMailLang(lang);
-}
-function saveCurrentMailLang(){
-  mailSubjectMap[currentMailLang]=document.getElementById('mail-subject').value;
-  mailBodyMap[currentMailLang]=document.getElementById('mail-body').value;
-  mailBodyHtmlMap[currentMailLang]=document.getElementById('mail-body-html').value;
-}
-function renderMailLang(lang){
-  document.getElementById('mail-subject').value=mailSubjectMap[lang]||'';
-  document.getElementById('mail-body').value=mailBodyMap[lang]||'';
-  document.getElementById('mail-body-html').value=mailBodyHtmlMap[lang]||'';
+  loadAdminPhotos();
 }
 
-function renderPreview(){
-  saveCurrentMailLang();
-  const sampleVars={name:'山田 太郎',eventName:'サンプルイベント',date:'2026-06-01 14:00',location:'東京会場',price:'無料',paymentStatus:'無料',rank:'Silver',qrData:'ABC123|EVT_001'};
-  let body=mailBodyMap[currentMailLang]||'';
-  Object.keys(sampleVars).forEach(k=>{body=body.split('{{'+k+'}}').join(sampleVars[k]);});
-  const previewEl=document.getElementById('mail-preview'),contentEl=document.getElementById('mail-preview-content');
-  contentEl.textContent=body; previewEl.style.display='block';
+function loadAdminPhotos(){
+  const eventId=document.getElementById('photo-event-sel').value;
+  const el=document.getElementById('admin-photo-grid');
+  if(!eventId){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--ai-soft);font-size:.85rem;">イベントを選択してください</div>';return;}
+  const photos=getPhotos(eventId);
+  if(!photos.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--ai-soft);font-size:.85rem;">まだ写真はありません</div>';return;}
+  el.innerHTML='<div class="photo-admin-grid">'+photos.map(p=>`
+    <div class="photo-admin-item">
+      <img src="${p.url}" alt="${esc(p.name)}" loading="lazy">
+      <div class="photo-admin-overlay">
+        <div class="photo-admin-name">${esc(p.name)}</div>
+        <button class="btn btn-xs btn-aki" onclick="adminDeletePhoto('${esc(String(p.id))}','${esc(eventId)}')" style="background:rgba(212,81,26,.85);color:#fff;border:none;border-radius:99px;cursor:pointer;font-family:inherit;font-weight:700;padding:4px 10px;font-size:.7rem;">削除</button>
+      </div>
+    </div>`).join('')+'</div>';
 }
 
-// ターゲットサマリー
-function updateMailTargetSummary(){
-  const targetType=document.getElementById('mail-target-type').value;
-  document.getElementById('mail-specific-wrap').style.display=targetType==='specific'?'block':'none';
-  const summEl=document.getElementById('mail-target-summary');summEl.style.display='none';
-}
-
-// 添付ファイル
-function handleAttachments(input){
+function handleAdminPhotoUpload(input){
+  const eventId=document.getElementById('photo-event-sel').value;
+  if(!eventId){toast('danger','先にイベントを選択してください');return;}
   const files=Array.from(input.files||[]);
-  const MAX_FILES=5,MAX_SIZE=10*1024*1024;
+  let done=0;
   files.forEach(file=>{
-    if(mailAttachments.length>=MAX_FILES){toastFn('danger','添付ファイルは最大5件まで');return;}
-    if(file.size>MAX_SIZE){toastFn('danger',file.name+' は10MB以上のため添付できません');return;}
+    if(file.size>10*1024*1024){toast('danger',file.name+' は10MBを超えています');return;}
     const reader=new FileReader();
-    reader.onload=e=>{
-      const base64=e.target.result.split(',')[1];
-      mailAttachments.push({name:file.name,mimeType:file.type||'application/octet-stream',base64,size:file.size});
-      renderAttachList();
-    };
+    reader.onload=e=>{addPhoto(eventId,file.name,e.target.result);done++;if(done===files.length){loadAdminPhotos();toast('success',done+'枚アップロードしました');}};
     reader.readAsDataURL(file);
   });
   input.value='';
 }
-function renderAttachList(){
-  const el=document.getElementById('attach-list');
-  el.innerHTML=mailAttachments.map((a,i)=>'<div class="attach-item"><span class="attach-item-name">'+esc(a.name)+'</span><span class="attach-item-size">'+(a.size/1024).toFixed(1)+'KB</span><button class="attach-remove" onclick="removeAttach('+i+')" title="削除">×</button></div>').join('');
-}
-function removeAttach(i){mailAttachments.splice(i,1);renderAttachList();}
 
-// 送信
+function adminDeletePhoto(id,eventId){
+  if(!confirm('この写真を削除しますか？'))return;
+  removePhoto(id); loadAdminPhotos(); toast('success','削除しました');
+}
+
+// ════════════════════════════════════════════════
+// MAIL SEND
+// ════════════════════════════════════════════════
+const LANGS=['ja','en','zh','ko','es','fr','pt','id','th','vi','ar','hi','de','it','ru'];
+const LANG_NAMES={ja:'日本語',en:'English',zh:'中文',ko:'한국어',es:'Español',fr:'Français',pt:'Português',id:'Bahasa',th:'ไทย',vi:'Tiếng Việt',ar:'العربية',hi:'हिन्दी',de:'Deutsch',it:'Italiano',ru:'Русский'};
+
+const MAIL_TEMPLATES=[
+  {key:'reminder',name:'イベントリマインダー',desc:'開催前日のリマインダー',
+   subject:{ja:'【connec+a】明日開催！{{eventName}}',en:'[connec+a] Tomorrow: {{eventName}}'},
+   body:{ja:'{{name}} 様\n\n明日、{{eventName}} が開催されます。\n📅 日時：{{date}}\n📍 場所：{{location}}\n\nQRチケット：{{qrData}}\n\nお越しをお待ちしております。\nconnec+a 運営チーム',en:'Dear {{name}},\n\nReminder: {{eventName}} is tomorrow.\n📅 {{date}}\n📍 {{location}}\n\nQR: {{qrData}}\n\nSee you there!\nconnec+a Team'}},
+  {key:'payment',name:'支払いのご案内',desc:'PayPay・現金支払い案内',
+   subject:{ja:'【connec+a】{{eventName}} 参加費のお支払いについて',en:'[connec+a] {{eventName}} - Payment'},
+   body:{ja:'{{name}} 様\n\n{{eventName}} の参加費（{{price}}）のお支払いがまだ確認できておりません。\n\nご来場の際にお支払いいただくか、事前にご連絡ください。\n\nconnec+a 運営チーム',en:'Dear {{name}},\n\nYour payment ({{price}}) for {{eventName}} has not been confirmed.\n\nPlease pay at the event or contact us.\n\nconnec+a Team'}},
+  {key:'thankyou',name:'参加御礼',desc:'イベント後の御礼メール',
+   subject:{ja:'【connec+a】{{eventName}} にご参加ありがとうございました',en:'[connec+a] Thank you for attending {{eventName}}'},
+   body:{ja:'{{name}} 様\n\n{{eventName}} にご参加いただきありがとうございました。\n\nまたのご参加をお待ちしております。\nconnec+a 運営チーム',en:'Dear {{name}},\n\nThank you for attending {{eventName}}!\n\nHope to see you again!\nconnec+a Team'}},
+  {key:'custom',name:'カスタム',desc:'自由入力',subject:{ja:'',en:''},body:{ja:'',en:''}},
+];
+
+let mailSubMap={}, mailBodyMap={}, mailBodyHtmlMap={}, mailAttachments=[], selectedMailTmpl=null, currentMailLang='ja';
+
+function initMailTab(){
+  loadMailEventOptions();
+  const tabsEl=document.getElementById('mail-lang-tabs');
+  tabsEl.innerHTML=LANGS.map(l=>'<button class="lang-tab-btn'+(l==='ja'?' active':'')+'" onclick="switchMailLang(\''+l+'\')" id="mlt-'+l+'">'+LANG_NAMES[l]+'</button>').join('');
+  const grid=document.getElementById('mail-tmpl-grid');
+  grid.innerHTML=MAIL_TEMPLATES.map(t=>'<button class="tmpl-btn" id="mtmpl-'+t.key+'" onclick="selectMailTmpl(\''+t.key+'\')"><div class="tmpl-name">'+esc(t.name)+'</div><div class="tmpl-desc">'+esc(t.desc)+'</div></button>').join('');
+  mailSubMap={}; mailBodyMap={}; mailBodyHtmlMap={}; mailAttachments=[]; selectedMailTmpl=null;
+  LANGS.forEach(l=>{mailSubMap[l]='';mailBodyMap[l]='';mailBodyHtmlMap[l]='';});
+  renderMailLang('ja');
+  document.getElementById('attach-list').innerHTML='';
+  document.getElementById('mail-send-alert').innerHTML='';
+  document.getElementById('mail-target-summary').style.display='none';
+  // delivery option toggles
+  ['opt-email-wrap','opt-news-wrap','opt-notif-wrap'].forEach(id=>{
+    const el=document.getElementById(id);
+    const cb=el.querySelector('input');
+    cb.addEventListener('change',()=>el.classList.toggle('checked',cb.checked));
+  });
+}
+async function loadMailEventOptions(){
+  try{const stats=await api('getStats');const sel=document.getElementById('mail-event-sel');sel.innerHTML='<option value="">すべてのイベント</option>';(stats.eventStats||[]).forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});}catch(e){}
+}
+function selectMailTmpl(key){
+  selectedMailTmpl=key;
+  document.querySelectorAll('.tmpl-btn[id^="mtmpl-"]').forEach(b=>b.classList.remove('selected'));
+  document.getElementById('mtmpl-'+key)?.classList.add('selected');
+  const t=MAIL_TEMPLATES.find(x=>x.key===key); if(!t)return;
+  LANGS.forEach(l=>{mailSubMap[l]=t.subject[l]||t.subject['ja']||'';mailBodyMap[l]=t.body[l]||t.body['ja']||'';mailBodyHtmlMap[l]='';});
+  renderMailLang(currentMailLang);
+}
+function switchMailLang(lang){ saveCurrentMailLang(); currentMailLang=lang; document.querySelectorAll('.lang-tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById('mlt-'+lang)?.classList.add('active'); renderMailLang(lang); }
+function saveCurrentMailLang(){ mailSubMap[currentMailLang]=document.getElementById('mail-subject').value; mailBodyMap[currentMailLang]=document.getElementById('mail-body').value; mailBodyHtmlMap[currentMailLang]=document.getElementById('mail-body-html').value; }
+function renderMailLang(lang){ document.getElementById('mail-subject').value=mailSubMap[lang]||''; document.getElementById('mail-body').value=mailBodyMap[lang]||''; document.getElementById('mail-body-html').value=mailBodyHtmlMap[lang]||''; }
+function updateMailTargetSummary(){ document.getElementById('mail-specific-wrap').style.display=document.getElementById('mail-target-type').value==='specific'?'block':'none'; }
+function renderPreview(){
+  saveCurrentMailLang();
+  const vars={name:'山田 太郎',eventName:'サンプルイベント',date:'2026-06-01 14:00',location:'東京会場',price:'無料',qrData:'ABC123|EVT_001'};
+  let body=mailBodyMap[currentMailLang]||'';
+  Object.keys(vars).forEach(k=>{body=body.split('{{'+k+'}}').join(vars[k]);});
+  document.getElementById('mail-preview-content').textContent=body;
+  document.getElementById('mail-preview').style.display='block';
+}
+function handleAttachments(input){
+  const files=Array.from(input.files||[]);
+  files.forEach(file=>{
+    if(mailAttachments.length>=5){toast('danger','添付は最大5件');return;}
+    if(file.size>10*1024*1024){toast('danger',file.name+' は10MB超');return;}
+    const reader=new FileReader();
+    reader.onload=e=>{mailAttachments.push({name:file.name,mimeType:file.type||'application/octet-stream',base64:e.target.result.split(',')[1],size:file.size});renderAttachList();};
+    reader.readAsDataURL(file);
+  });
+  input.value='';
+}
+function renderAttachList(){ document.getElementById('attach-list').innerHTML=mailAttachments.map((a,i)=>'<div class="attach-item"><span class="attach-item-name">'+esc(a.name)+'</span><span class="attach-item-size">'+(a.size/1024).toFixed(1)+'KB</span><button class="attach-remove" onclick="mailAttachments.splice('+i+',1);renderAttachList()">×</button></div>').join(''); }
+function clearMailForm(){ mailSubMap={}; mailBodyMap={}; mailBodyHtmlMap={}; LANGS.forEach(l=>{mailSubMap[l]='';mailBodyMap[l]='';mailBodyHtmlMap[l]='';});mailAttachments=[];selectedMailTmpl=null;document.querySelectorAll('.tmpl-btn[id^="mtmpl-"]').forEach(b=>b.classList.remove('selected'));renderMailLang(currentMailLang);document.getElementById('attach-list').innerHTML='';document.getElementById('mail-send-alert').innerHTML='';document.getElementById('mail-preview').style.display='none';}
+
 async function sendMail(){
   saveCurrentMailLang();
-  const alertEl=document.getElementById('mail-send-alert');alertEl.innerHTML='';
+  const alertEl=document.getElementById('mail-send-alert'); alertEl.innerHTML='';
+  const optEmail=document.getElementById('opt-email').checked;
+  const optNews=document.getElementById('opt-news').checked;
+  const optNotif=document.getElementById('opt-notif').checked;
+  if(!optEmail&&!optNews&&!optNotif){alertEl.innerHTML='<div class="alert alert-danger">配信方法を1つ以上選択してください</div>';return;}
+  if(!(mailSubMap['ja']||mailSubMap['en'])){alertEl.innerHTML='<div class="alert alert-danger">件名と本文を入力してください（日本語か英語は必須）</div>';return;}
   const eventId=document.getElementById('mail-event-sel').value;
   const targetType=document.getElementById('mail-target-type').value;
-
-  // 全言語の件名・本文を確認（少なくともja or enが必要）
-  const hasContent=mailSubjectMap['ja']||mailSubjectMap['en'];
-  if(!hasContent){alertEl.innerHTML='<div class="alert alert-danger">件名と本文を入力してください（最低でも日本語か英語）</div>';return;}
-
   let specificEmails=[];
   if(targetType==='specific'){
-    const raw=document.getElementById('mail-specific-emails').value;
-    specificEmails=raw.split(/[,\n]/).map(e=>e.trim()).filter(e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
+    specificEmails=document.getElementById('mail-specific-emails').value.split(/[,\n]/).map(e=>e.trim()).filter(e=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
     if(!specificEmails.length){alertEl.innerHTML='<div class="alert alert-danger">有効なメールアドレスを入力してください</div>';return;}
   }
-
-  const btn=document.getElementById('mail-send-btn');btn.disabled=true;btn.textContent='送信中...';
+  const btn=document.getElementById('mail-send-btn'); btn.disabled=true; btn.textContent='送信中...';
   const prog=document.getElementById('mail-prog'),bar=document.getElementById('mail-prog-bar');
-  prog.style.display='block';bar.style.width='30%';
-
+  prog.style.display='block'; bar.style.width='20%';
+  let results=[];
   try{
-    const result=await api('sendMailToParticipants',{
-      eventId:eventId||undefined,
-      targetType,
-      specificEmails,
-      subject:mailSubjectMap,
-      bodyText:mailBodyMap,
-      bodyHtml:mailBodyHtmlMap,
-      attachments:mailAttachments,
-      senderName:'connec+a 運営チーム',
-    });
+    // 1. Email
+    if(optEmail){
+      bar.style.width='40%';
+      const r=await api('sendMailToParticipants',{eventId:eventId||undefined,targetType,specificEmails,subject:mailSubMap,bodyText:mailBodyMap,bodyHtml:mailBodyHtmlMap,attachments:mailAttachments,senderName:'connec+a 運営チーム'});
+      results.push('メール '+r.sent+'件送信'+(r.errors>0?' ('+r.errors+'件エラー)':''));
+    }
+    bar.style.width='70%';
+    // 2. News投稿
+    if(optNews){
+      const all=getAllNews();
+      const subject=mailSubMap['ja']||mailSubMap['en']||'お知らせ';
+      const body=mailBodyMap['ja']||mailBodyMap['en']||'';
+      if(targetType==='specific'&&specificEmails.length){
+        // post as personal for each email
+        for(const email of specificEmails){
+          try{const ps=await api('getParticipants',{query:email});const p=ps.find(x=>x.Email===email);const uid=p?p.ParticipantID:null;all.push({id:genId(),title:subject,body,type:'personal',userId:uid,targetEmail:email,createdAt:new Date().toISOString()});}catch(e){}
+        }
+      } else {
+        all.push({id:genId(),title:subject,body,type:'global',userId:null,targetEmail:'',createdAt:new Date().toISOString()});
+      }
+      saveAllNews(all);
+      results.push('News投稿 完了');
+    }
+    bar.style.width='90%';
+    // 3. マイページ通知（personal newsとして保存）
+    if(optNotif&&targetType==='specific'&&specificEmails.length){
+      const all=getAllNews();
+      const subject=mailSubMap['ja']||mailSubMap['en']||'通知';
+      const body=mailBodyMap['ja']||mailBodyMap['en']||'';
+      for(const email of specificEmails){
+        try{const ps=await api('getParticipants',{query:email});const p=ps.find(x=>x.Email===email);if(p){all.push({id:genId(),title:subject,body,type:'personal',userId:p.ParticipantID,targetEmail:email,createdAt:new Date().toISOString()});}}catch(e){}
+      }
+      saveAllNews(all);
+      results.push('マイページ通知 送信完了');
+    } else if(optNotif&&targetType!=='specific'){
+      const all=getAllNews();
+      const subject=mailSubMap['ja']||mailSubMap['en']||'通知';
+      const body=mailBodyMap['ja']||mailBodyMap['en']||'';
+      all.push({id:genId(),title:subject,body,type:'global',userId:null,targetEmail:'',createdAt:new Date().toISOString()});
+      saveAllNews(all);
+      results.push('マイページ通知（全体）追加完了');
+    }
     bar.style.width='100%';
-    alertEl.innerHTML='<div class="alert alert-success">'+result.sent+'件送信完了'+(result.errors>0?' ('+result.errors+'件エラー)':'')+' / 対象 '+result.total+' 件</div>';
-    toastFn('success',result.sent+'件送信しました');
+    alertEl.innerHTML='<div class="alert alert-success">✓ '+results.join(' / ')+'</div>';
+    toast('success','配信完了');
   }catch(err){alertEl.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
-  btn.disabled=false;btn.textContent='メール送信';
+  btn.disabled=false; btn.textContent='送信 →';
   setTimeout(()=>{prog.style.display='none';bar.style.width='0%';},2000);
 }
 
-function clearMailForm(){
-  mailSubjectMap={}; mailBodyMap={}; mailBodyHtmlMap={};
-  LANGS.forEach(l=>{mailSubjectMap[l]='';mailBodyMap[l]='';mailBodyHtmlMap[l]='';});
-  mailAttachments=[]; selectedTemplate=null;
-  document.querySelectorAll('.tmpl-btn').forEach(b=>b.classList.remove('selected'));
-  renderMailLang(currentMailLang);
-  document.getElementById('attach-list').innerHTML='';
-  document.getElementById('mail-send-alert').innerHTML='';
-  document.getElementById('mail-preview').style.display='none';
-}
-
-// ============================================================
-// 満足度調査
-// ============================================================
+// ════════════════════════════════════════════════
+// SURVEY
+// ════════════════════════════════════════════════
 async function loadSurveyEventOptions(){
   try{
-    const stats=await api('getStats');const allEvs=stats.eventStats||[];
+    const stats=await api('getStats');const evs=stats.eventStats||[];
     [document.getElementById('survey-event-sel'),document.getElementById('survey-view-event')].forEach(sel=>{
-      if(!sel)return;const cur=sel.value;
+      if(!sel)return; const cur=sel.value;
       sel.innerHTML=sel.id==='survey-view-event'?'<option value="">全イベント</option>':'<option value="">イベントを選択</option>';
-      allEvs.forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});
+      evs.forEach(ev=>{const o=document.createElement('option');o.value=ev.EventID;o.textContent=ev.EventName;sel.appendChild(o);});
       sel.value=cur;
     });
   }catch(e){}
 }
 async function sendSurvey(withEmail){
-  const eventId=document.getElementById('survey-event-sel').value,alertEl=document.getElementById('survey-send-alert');
-  alertEl.innerHTML='';if(!eventId){alertEl.innerHTML='<div class="alert alert-danger">イベントを選択してください</div>';return;}
-  try{const siteUrl=document.getElementById('survey-site-url').value.trim()||PARTICIPANT_SITE_URL;const result=await api('sendSurvey',{eventId,sendEmail:withEmail,siteUrl});alertEl.innerHTML='<div class="alert alert-success">'+result.sent+'件送信しました（対象: '+result.total+'件）</div>';toastFn('success','満足度調査を送信しました');}
+  const eventId=document.getElementById('survey-event-sel').value;
+  const alertEl=document.getElementById('survey-send-alert'); alertEl.innerHTML='';
+  if(!eventId){alertEl.innerHTML='<div class="alert alert-danger">イベントを選択してください</div>';return;}
+  try{const url=document.getElementById('survey-site-url').value.trim()||PARTICIPANT_SITE_URL;const r=await api('sendSurvey',{eventId,sendEmail:withEmail,siteUrl:url});alertEl.innerHTML='<div class="alert alert-success">'+r.sent+'件送信しました（対象: '+r.total+'件）</div>';toast('success','満足度調査を送信しました');}
   catch(err){alertEl.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
 }
 async function loadSurveyStats(){
-  const area=document.getElementById('survey-stats-area'),eventId=document.getElementById('survey-view-event').value;
+  const area=document.getElementById('survey-stats-area'),eid=document.getElementById('survey-view-event').value;
   area.innerHTML='<div class="spinner"></div>';
   try{
-    const[stats,surveys]=await Promise.all([api('getSurveyStats',{eventId:eventId||undefined}),api('getSurveys',{eventId:eventId||undefined})]);
-    if(stats.count===0){area.innerHTML='<div class="alert alert-info">まだ回答がありません。</div>';return;}
+    const[stats,surveys]=await Promise.all([api('getSurveyStats',{eventId:eid||undefined}),api('getSurveys',{eventId:eid||undefined})]);
+    if(stats.count===0){area.innerHTML='<div class="alert alert-info">まだ回答がありません</div>';return;}
+    const avgNum=Math.round(stats.avg*10)/10;
+    const avgStars='<span class="star-filled">'+'★'.repeat(Math.round(avgNum))+'</span><span class="star-empty">'+'★'.repeat(5-Math.round(avgNum))+'</span>';
     let html='<div class="survey-grid">'+
-      '<div class="survey-card"><h4>全体集計</h4><div class="avg-display"><div class="avg-num">'+stats.avg+'</div><div class="avg-stars">'+starStr(stats.avg)+'</div><div class="avg-label">平均満足度（'+stats.count+'件）</div></div><div class="chart-wrap" style="height:160px;"><canvas id="chart-dist-survey"></canvas></div></div>'+
+      '<div class="survey-card"><h4>全体集計</h4><div style="text-align:center;padding:12px 0;"><div style="font-size:3rem;font-weight:800;color:var(--ai);line-height:1;">'+avgNum+'</div><div style="font-size:1.4rem;margin:4px 0;">'+avgStars+'</div><div style="font-size:.75rem;color:var(--ai-soft);">平均満足度（'+stats.count+'件）</div></div><div class="chart-wrap" style="height:160px;"><canvas id="c-survey-dist"></canvas></div></div>'+
       '<div class="survey-card"><h4>個人別回答</h4><div class="comment-list">';
-    surveys.forEach(s=>{html+='<div class="comment-item"><div style="display:flex;justify-content:space-between;"><span class="comment-name">'+esc(s.ParticipantName)+'</span><span class="comment-rating">'+starStr(s.Rating)+' '+s.Rating+'</span></div>'+(s.Comment?'<div class="comment-text">'+esc(s.Comment)+'</div>':'')+'<div style="font-size:.7rem;color:var(--ai-soft);">'+esc(s.AnsweredAt)+'</div></div>';});
-    html+='</div></div></div>';
-    area.innerHTML=html;
-    const ctx=document.getElementById('chart-dist-survey');
-    if(ctx){if(chartInstances['dist-survey'])chartInstances['dist-survey'].destroy();chartInstances['dist-survey']=new Chart(ctx,{type:'bar',data:{labels:['★1','★2','★3','★4','★5'],datasets:[{label:'回答数',data:stats.distribution,backgroundColor:['#f4b8cb','#7b5ea7','#d4511a','#b8d4f0','#1a2744'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});}
+    surveys.forEach(s=>{html+='<div class="comment-item"><div style="display:flex;justify-content:space-between;"><span class="comment-name">'+esc(s.ParticipantName)+'</span><span class="comment-rating">'+starStr(s.Rating)+' '+s.Rating+'</span></div>'+(s.Comment?'<div style="font-size:.78rem;color:var(--ai-soft);margin-top:2px;line-height:1.5;">'+esc(s.Comment)+'</div>':'')+'<div style="font-size:.7rem;color:var(--ai-soft);">'+esc(s.AnsweredAt)+'</div></div>';});
+    html+='</div></div></div>'; area.innerHTML=html;
+    const ctx=document.getElementById('c-survey-dist');
+    if(ctx){if(chartInstances.svDist)chartInstances.svDist.destroy();chartInstances.svDist=new Chart(ctx,{type:'bar',data:{labels:['★1','★2','★3','★4','★5'],datasets:[{label:'回答数',data:stats.distribution,backgroundColor:['#f4b8cb','#7b5ea7','#d4511a','#b8d4f0','#1a2744'],borderRadius:6}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{stepSize:1}}}}});}
   }catch(err){area.innerHTML='<div class="alert alert-danger">'+esc(err.message)+'</div>';}
 }
 
-// ============================================================
-// lang
-// ============================================================
-let lang=localStorage.getItem('lang')||'ja';
-function setLang(l){lang=l;localStorage.setItem('lang',l);}
-document.getElementById('lang-sel').value=lang;
-window.addEventListener('DOMContentLoaded',()=>{const el=document.getElementById('survey-site-url');if(el&&!el.value)el.value=PARTICIPANT_SITE_URL;});
+// ════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════
+// Delivery option toggle events (also on init)
+document.querySelectorAll('.delivery-opt').forEach(el=>{
+  const cb=el.querySelector('input[type="checkbox"]');
+  if(cb) cb.addEventListener('change',()=>el.classList.toggle('checked',cb.checked));
+});
 </script>
 </body>
 </html>
