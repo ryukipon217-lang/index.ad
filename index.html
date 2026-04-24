@@ -396,6 +396,23 @@ tr:hover td{background:rgba(0,133,124,.02);}
 .draft-item-time{font-size:.68rem;color:var(--ink4);}
 .draft-item-actions{display:flex;gap:4px;flex-shrink:0;}
 
+/* === [7d-2] チャットUI拡張 === */
+.chat-input-area{border-top:1px solid var(--border);background:var(--white);}
+.chat-reply-images{display:flex;gap:6px;flex-wrap:wrap;padding:8px 14px;background:var(--bg);border-bottom:1px solid var(--border);}
+.chat-reply-img-item{position:relative;width:60px;height:60px;border-radius:6px;overflow:hidden;border:1px solid var(--border);background:var(--white);}
+.chat-reply-img-item img{width:100%;height:100%;object-fit:cover;}
+.chat-reply-img-remove{position:absolute;top:2px;right:2px;width:18px;height:18px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;cursor:pointer;font-size:.7rem;line-height:1;padding:0;display:flex;align-items:center;justify-content:center;}
+.chat-reply-img-remove:hover{background:var(--red);}
+.chat-reply-img-size{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.6);color:#fff;font-size:.6rem;padding:1px 3px;text-align:center;}
+.chat-toolbar{display:flex;gap:4px;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--bg);}
+.chat-tool-btn{padding:4px 10px;border:none;background:var(--white);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:.82rem;color:var(--ink2);transition:all .15s;}
+.chat-tool-btn:hover{background:var(--teal-light);color:var(--teal);border-color:var(--teal);}
+.chat-input-row textarea.chat-input{resize:none;min-height:38px;max-height:120px;font-family:var(--font);padding:8px 12px;line-height:1.4;}
+.chat-tmpl-item{padding:10px 12px;border:1px solid var(--border);border-radius:var(--rs);margin-bottom:6px;cursor:pointer;transition:all .15s;background:var(--white);}
+.chat-tmpl-item:hover{border-color:var(--teal);background:var(--teal-light);}
+.chat-tmpl-name{font-weight:700;font-size:.86rem;color:var(--ink);margin-bottom:4px;}
+.chat-tmpl-preview{font-size:.74rem;color:var(--ink3);line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
 /* === [7c-2] ニュースUI拡張 === */
 .news-cat-option{display:inline-flex;align-items:center;gap:4px;cursor:pointer;}
 .news-cat-option input[type="radio"]{margin:0;}
@@ -953,7 +970,13 @@ tr:hover td{background:rgba(0,133,124,.02);}
 
       <!-- CHAT -->
       <div id="pg-chat" class="page">
-        <div class="page-header"><div class="page-title">チャット</div><button class="btn btn-outline btn-sm" onclick="loadChatAdmin()">更新</button></div>
+        <div class="page-header">
+          <div class="page-title">チャット</div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-primary btn-sm" onclick="openBulkChatModal()">📢 一斉送信</button>
+            <button class="btn btn-outline btn-sm" onclick="loadChatAdmin()">更新</button>
+          </div>
+        </div>
         <div class="chat-layout"><div class="chat-list" id="chat-list-panel"></div><div class="chat-panel" id="chat-panel"><div style="flex:1;display:flex;align-items:center;justify-content:center;color:var(--ink4);">ユーザーを選択</div></div></div>
       </div>
 
@@ -1098,7 +1121,8 @@ tr:hover td{background:rgba(0,133,124,.02);}
           <div class="form-group"><label class="form-label">参加費</label><input id="f-price" class="form-control" type="number" value="0"></div>
         </div>
         <div class="form-row-2">
-          <div class="form-group"><label class="form-label">支払い方式</label><select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay/現金</option></select></div>
+          <!-- [7e] 旧「支払い方式」UI削除: 新しい「受付可能な支払い方法」(paymentMethods)に統合 -->
+          <!-- <div class="form-group"><label class="form-label">支払い方式</label><select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay/現金</option></select></div> -->
           <div class="form-group"><label class="form-label">担当部署</label><select id="f-dept" class="form-control"><option value="">未指定</option></select></div>
         </div>
         <div class="form-group"><label class="form-label">説明</label><textarea id="f-desc" class="form-control" rows="2"></textarea></div>
@@ -1577,6 +1601,98 @@ tr:hover td{background:rgba(0,133,124,.02);}
   </div>
 </div>
 
+<!-- [7d-2] チャット一斉送信モーダル -->
+<div class="modal-bg" id="bulk-chat-modal" onclick="if(event.target===this)closeModal('bulk-chat-modal')">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-head">
+      <div class="modal-title">📢 チャット一斉送信</div>
+      <button class="modal-close" onclick="closeModal('bulk-chat-modal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="bulk-chat-alert"></div>
+
+      <!-- 対象絞込 -->
+      <details class="form-advanced" open>
+        <summary>配信対象の絞込（未選択＝全参加者）</summary>
+        <div style="margin-top:10px;padding:10px;background:var(--bg);border-radius:var(--rs);">
+          <div class="form-group">
+            <label class="form-label">特定イベントの参加者に限定</label>
+            <div id="bulk-chat-ev-chips" class="mail-ev-chips"></div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">ランク</label>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;">
+              <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer;"><input type="checkbox" class="bulk-chat-rank-cb" value="New"> New</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer;"><input type="checkbox" class="bulk-chat-rank-cb" value="Bronze"> Bronze</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer;"><input type="checkbox" class="bulk-chat-rank-cb" value="Silver"> Silver</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer;"><input type="checkbox" class="bulk-chat-rank-cb" value="Gold"> Gold</label>
+              <label style="display:flex;align-items:center;gap:4px;font-size:.82rem;cursor:pointer;"><input type="checkbox" class="bulk-chat-rank-cb" value="Platinum"> Platinum</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">参加回数</label>
+            <div style="display:flex;gap:10px;align-items:center;">
+              <select id="bulk-chat-events-op" class="form-control" style="max-width:100px;">
+                <option value="">指定なし</option>
+                <option value="gte">○回以上</option>
+                <option value="lte">○回以下</option>
+                <option value="eq">ちょうど○回</option>
+              </select>
+              <input id="bulk-chat-events-num" class="form-control" type="number" min="0" style="max-width:100px;" placeholder="回数">
+            </div>
+          </div>
+          <div id="bulk-chat-recipient-preview" style="padding:6px 10px;background:var(--white);border:1px solid var(--border);border-radius:var(--rs);font-size:.78rem;color:var(--ink2);">
+            対象: <span id="bulk-chat-recipient-count">計算中...</span>
+          </div>
+        </div>
+      </details>
+
+      <!-- 変数ピッカー -->
+      <div class="form-group">
+        <label class="form-label">変数を挿入</label>
+        <div id="bulk-chat-var-picker"></div>
+      </div>
+
+      <!-- メッセージ -->
+      <div class="form-group">
+        <label class="form-label">メッセージ <span style="color:var(--red);">*</span></label>
+        <textarea id="bulk-chat-text" class="form-control" rows="5" placeholder="メッセージを入力..."></textarea>
+      </div>
+
+      <!-- 画像 -->
+      <div class="form-group">
+        <label class="form-label">画像添付（最大3枚）</label>
+        <div id="bulk-chat-images-list" class="sub-list"></div>
+        <div class="sub-add-row">
+          <input class="form-control" id="new-bulk-chat-img-url" placeholder="https://..." style="flex:1;">
+          <button class="btn btn-outline btn-sm" type="button" onclick="addBulkChatImage()">URLで追加</button>
+          <button class="btn btn-outline btn-sm" type="button" onclick="pickBulkChatImageFile()">📁 ファイルから</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('bulk-chat-modal')">キャンセル</button>
+      <button class="btn btn-primary" onclick="sendBulkChat()" id="bulk-chat-send-btn">一斉送信</button>
+    </div>
+  </div>
+</div>
+
+<!-- [7d-2] チャットテンプレピッカーモーダル -->
+<div class="modal-bg" id="chat-tmpl-picker-modal" onclick="if(event.target===this)closeModal('chat-tmpl-picker-modal')">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-head">
+      <div class="modal-title">📋 テンプレートを選択</div>
+      <button class="modal-close" onclick="closeModal('chat-tmpl-picker-modal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div id="chat-tmpl-picker-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" onclick="closeModal('chat-tmpl-picker-modal')">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <!-- Template Modal -->
 <div class="modal-bg" id="tmpl-modal" onclick="if(event.target===this)closeModal('tmpl-modal')"><div class="modal"><div class="modal-head"><div class="modal-title" id="tmpl-modal-title">定型文 作成</div><button class="modal-close" onclick="closeModal('tmpl-modal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="modal-body">
   <div id="tmpl-modal-alert"></div>
@@ -2016,7 +2132,7 @@ function collectEventFormData(){
     location: document.getElementById('f-location')?.value || '',
     price: document.getElementById('f-price')?.value || '0',
     capacity: document.getElementById('f-capacity')?.value || '50',
-    paytype: document.getElementById('f-paytype')?.value || 'FREE',
+    paytype: 'FREE', // [7e] 旧UI削除、後方互換で固定値
     dept: document.getElementById('f-dept')?.value || '',
     desc: document.getElementById('f-desc')?.value || '',
     lat: document.getElementById('ev-lat')?.value || '',
@@ -2051,7 +2167,7 @@ function restoreEventFormData(data){
   set('f-location', data.location);
   set('f-price', data.price || '0');
   set('f-capacity', data.capacity || '50');
-  set('f-paytype', data.paytype || 'FREE');
+  // [7e] 旧 set('f-paytype', ...) 削除: UI 廃止
   if(data.dept){
     var deptSel = document.getElementById('f-dept');
     if(deptSel) deptSel.value = data.dept;
@@ -2860,7 +2976,7 @@ function applyDuplicationData(ev){
   document.getElementById('f-location').value = evClone.Location || '';
   document.getElementById('f-price').value = evClone.Price || 0;
   document.getElementById('f-capacity').value = evClone.Capacity || 50;
-  document.getElementById('f-paytype').value = evClone.PaymentType || 'FREE';
+  // [7e] 旧 document.getElementById('f-paytype').value = ... 削除: UI 廃止
   document.getElementById('f-desc').value = evClone.Description || '';
   document.getElementById('ev-lat').value = evClone.Lat || '';
   document.getElementById('ev-lng').value = evClone.Lng || '';
@@ -2925,7 +3041,7 @@ async function loadEvents(){
 // [F4] 旧タブ構造は廃止。後方互換のため関数は残すが何もしない(no-op)。
 // 既存の openCreateEventModal / openEditEv などから呼ばれているが、新UIでは不要。
 function switchEvTab(t,btn){/* no-op: 5セクション縦スクロール構造に変更済み */}
-function openCreateEventModal(){editEvId=null;evCQ=[];evRefs=['SNS','友人紹介','Web検索','チラシ','その他'];selectedPrefs=[];evStations=[];evSchedule=[];evBringItems=[];evPosters=[];evStaff=[];evFaq=[];evCustomOrg=null;currentDraftId=null;document.getElementById('ev-modal-title').textContent='イベント作成';['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return','ev-dresscode'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-date').value='';document.getElementById('f-price').value='0';document.getElementById('f-capacity').value='50';document.getElementById('f-paytype').value='FREE';document.getElementById('ev-status-row').style.display='none';document.querySelectorAll('.ev-restrict-cb').forEach(function(cb){cb.checked=false;});document.getElementById('restrict-region-wrap').style.display='none';setPaymentMethodsToForm({});var _coe=document.getElementById('custom-org-enable');if(_coe){_coe.checked=false;var _cof=document.getElementById('custom-org-fields');if(_cof)_cof.style.display='none';}populateDeptSelect('f-dept');renderRefTags();renderCQList();renderStations();renderSchedule();renderBringItems();renderPosters();renderStaffList();renderFaqList();document.getElementById('ev-access-note').value='';document.getElementById('ev-map').innerHTML='会場を検索';switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';var dsEl=document.getElementById('draft-status');if(dsEl)dsEl.textContent='';var dbBtn=document.getElementById('ev-draft-btn');if(dbBtn)dbBtn.style.display='';document.getElementById('ev-modal').classList.add('open');resetEvModalScroll();initStepNav();initDraftAutoSave();initPreviewAutoRefresh();showDraftNoticeIfAny();}
+function openCreateEventModal(){editEvId=null;evCQ=[];evRefs=['SNS','友人紹介','Web検索','チラシ','その他'];selectedPrefs=[];evStations=[];evSchedule=[];evBringItems=[];evPosters=[];evStaff=[];evFaq=[];evCustomOrg=null;currentDraftId=null;document.getElementById('ev-modal-title').textContent='イベント作成';['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return','ev-dresscode'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-date').value='';document.getElementById('f-price').value='0';document.getElementById('f-capacity').value='50';document.getElementById('ev-status-row').style.display='none';document.querySelectorAll('.ev-restrict-cb').forEach(function(cb){cb.checked=false;});document.getElementById('restrict-region-wrap').style.display='none';setPaymentMethodsToForm({});var _coe=document.getElementById('custom-org-enable');if(_coe){_coe.checked=false;var _cof=document.getElementById('custom-org-fields');if(_cof)_cof.style.display='none';}populateDeptSelect('f-dept');renderRefTags();renderCQList();renderStations();renderSchedule();renderBringItems();renderPosters();renderStaffList();renderFaqList();document.getElementById('ev-access-note').value='';document.getElementById('ev-map').innerHTML='会場を検索';switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';var dsEl=document.getElementById('draft-status');if(dsEl)dsEl.textContent='';var dbBtn=document.getElementById('ev-draft-btn');if(dbBtn)dbBtn.style.display='';document.getElementById('ev-modal').classList.add('open');resetEvModalScroll();initStepNav();initDraftAutoSave();initPreviewAutoRefresh();showDraftNoticeIfAny();}
 function openEditEv(ev){editEvId=ev.EventID;document.getElementById('ev-modal-title').textContent='イベント編集';
   // Clear all fields first
   ['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return','ev-access-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
@@ -2936,7 +3052,7 @@ function openEditEv(ev){editEvId=ev.EventID;document.getElementById('ev-modal-ti
   document.getElementById('f-location').value=ev.Location||'';
   document.getElementById('f-price').value=ev.Price||0;
   document.getElementById('f-capacity').value=ev.Capacity||50;
-  document.getElementById('f-paytype').value=ev.PaymentType||'FREE';
+  // [7e] 旧 f-paytype 復元削除: UI 廃止
   document.getElementById('f-desc').value=ev.Description||'';
   document.getElementById('f-status').value=ev.Status||'OPEN';
   document.getElementById('ev-status-row').style.display='block';
@@ -2995,7 +3111,7 @@ if(!name||!date){
   if(target){target.focus();try{target.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
   return;
 }
-const btn=document.getElementById('ev-save-btn');btn.disabled=true;btn.textContent='...';const d={eventName:name,date:date.replace('T',' '),location:document.getElementById('f-location').value.trim(),price:Number(document.getElementById('f-price').value)||0,paymentType:document.getElementById('f-paytype').value,capacity:Number(document.getElementById('f-capacity').value)||50,description:document.getElementById('f-desc')?.value?.trim()||'',lat:document.getElementById('ev-lat').value.trim(),lng:document.getElementById('ev-lng').value.trim(),customQuestions:evCQ,referralOptions:evRefs,msgFirst:document.getElementById('ev-msg-first').value.trim(),msgReturn:document.getElementById('ev-msg-return').value.trim(),restriction:getSelectedRestrictions(),restrictionRegions:selectedPrefs,nearestStations:evStations,accessNote:document.getElementById('ev-access-note')?.value?.trim()||'',schedule:evSchedule,bringItems:evBringItems,dresscode:document.getElementById('ev-dresscode')?.value?.trim()||'',paymentMethods:getPaymentMethodsFromForm(),posters:evPosters,staff:evStaff,faq:evFaq,customOrg:collectCustomOrgFromForm()};try{if(editEvId){d.eventId=editEvId;d.Status=document.getElementById('f-status').value;await api('updateEvent',{event:d});}else{const c=await api('createEvent',{event:d});const nid=c?.EventID||c?.eventId||'EVT_'+Date.now();const sch=getSch();sch.push({id:genId(),title:name,date:date.slice(0,10),time:date.slice(11,16)||'',category:'event',assignee:'',memo:d.location});saveSch(sch);}clearCurrentDraft();closeModal('ev-modal');loadEvents();loadDashboard();toast('ok','保存しました');}catch(err){al.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}btn.disabled=false;btn.textContent='保存';}
+const btn=document.getElementById('ev-save-btn');btn.disabled=true;btn.textContent='...';const d={eventName:name,date:date.replace('T',' '),location:document.getElementById('f-location').value.trim(),price:Number(document.getElementById('f-price').value)||0,paymentType:'FREE',capacity:Number(document.getElementById('f-capacity').value)||50,description:document.getElementById('f-desc')?.value?.trim()||'',lat:document.getElementById('ev-lat').value.trim(),lng:document.getElementById('ev-lng').value.trim(),customQuestions:evCQ,referralOptions:evRefs,msgFirst:document.getElementById('ev-msg-first').value.trim(),msgReturn:document.getElementById('ev-msg-return').value.trim(),restriction:getSelectedRestrictions(),restrictionRegions:selectedPrefs,nearestStations:evStations,accessNote:document.getElementById('ev-access-note')?.value?.trim()||'',schedule:evSchedule,bringItems:evBringItems,dresscode:document.getElementById('ev-dresscode')?.value?.trim()||'',paymentMethods:getPaymentMethodsFromForm(),posters:evPosters,staff:evStaff,faq:evFaq,customOrg:collectCustomOrgFromForm()};try{if(editEvId){d.eventId=editEvId;d.Status=document.getElementById('f-status').value;await api('updateEvent',{event:d});}else{const c=await api('createEvent',{event:d});const nid=c?.EventID||c?.eventId||'EVT_'+Date.now();const sch=getSch();sch.push({id:genId(),title:name,date:date.slice(0,10),time:date.slice(11,16)||'',category:'event',assignee:'',memo:d.location});saveSch(sch);}clearCurrentDraft();closeModal('ev-modal');loadEvents();loadDashboard();toast('ok','保存しました');}catch(err){al.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}btn.disabled=false;btn.textContent='保存';}
 
 // [F1 複製機能] 既存イベントを元に新規作成モーダルを開き、全フィールドを事前入力する。
 // 日時は元イベント +7日、イベント名末尾に「(コピー)」を付加。元イベントへの影響なし(editEvId を null のままにするため、保存時は createEvent が呼ばれる)。
@@ -3013,7 +3129,7 @@ function duplicateEvent(ev){
   document.getElementById('f-location').value = ev.Location || '';
   document.getElementById('f-price').value = ev.Price || 0;
   document.getElementById('f-capacity').value = ev.Capacity || 50;
-  document.getElementById('f-paytype').value = ev.PaymentType || 'FREE';
+  // [7e] 旧 f-paytype 復元削除: UI 廃止
   document.getElementById('f-desc').value = ev.Description || '';
   document.getElementById('ev-lat').value = ev.Lat || '';
   document.getElementById('ev-lng').value = ev.Lng || '';
@@ -5144,10 +5260,25 @@ async function openThread(pid){
           '</div>';
         }).join('') : '<div style="text-align:center;padding:40px;color:var(--ink4);">メッセージなし</div>') +
       '</div>' +
-      '<div class="chat-input-row">' +
-        '<input class="chat-input" id="chat-reply" placeholder="返信..." onkeydown="if(event.key===\'Enter\')sendReply(\'' + esc(pid) + '\')">' +
-        '<button class="btn btn-primary btn-sm" onclick="sendReply(\'' + esc(pid) + '\')">送信</button>' +
+      '<div class="chat-input-area">' +
+        '<div id="chat-reply-images" class="chat-reply-images"></div>' +
+        '<div class="chat-toolbar">' +
+          '<button class="chat-tool-btn" type="button" onclick="openChatTemplatePicker(\'' + esc(pid) + '\')" title="テンプレ">📋</button>' +
+          '<button class="chat-tool-btn" type="button" onclick="toggleChatVarPicker()" title="変数を挿入">{ }</button>' +
+          '<button class="chat-tool-btn" type="button" onclick="pickChatImageFile()" title="画像を添付">📎</button>' +
+        '</div>' +
+        '<div id="chat-var-picker-wrap" style="display:none;padding:6px 14px;border-top:1px solid var(--border);background:var(--bg);">' +
+          '<div id="chat-var-picker"></div>' +
+        '</div>' +
+        '<div class="chat-input-row">' +
+          '<textarea class="chat-input" id="chat-reply" placeholder="返信... (Shift+Enterで改行)" rows="1" onkeydown="chatReplyKeydown(event,\'' + esc(pid) + '\')"></textarea>' +
+          '<button class="btn btn-primary btn-sm" onclick="sendReply(\'' + esc(pid) + '\')">送信</button>' +
+        '</div>' +
       '</div>';
+
+    // 入力エリア初期化
+    chatReplyImages = [];
+    renderChatReplyImages();
 
     // メッセージ表示領域を下までスクロール
     setTimeout(function(){
@@ -5168,7 +5299,8 @@ async function openThread(pid){
 async function sendReply(pid){
   const inp = document.getElementById('chat-reply');
   const text = (inp.value || '').trim();
-  if(!text) return;
+  // テキストなし & 画像なし → 送信しない
+  if(!text && (!chatReplyImages || !chatReplyImages.length)) return;
   // 対応する名前を取得
   var th = chatThreadsCache.find(function(x){ return x.pid === pid; });
   var receiverName = th ? th.name : pid;
@@ -5180,13 +5312,19 @@ async function sendReply(pid){
       senderName: 'connec+a 運営',
       receiverId: pid,
       receiverName: receiverName,
-      text: text
+      text: text,
+      images: (chatReplyImages || []).slice()
     });
     inp.value = '';
+    chatReplyImages = [];
     // スレッド再読込 + スクロール
     openThread(pid);
   } catch(err){
-    toast('err', '送信失敗: ' + err.message);
+    var msg = err.message;
+    if(msg === 'IMAGES_TOO_LARGE'){
+      msg = '画像サイズが大きすぎます。画像を減らすかトリミング範囲を狭めてください(合計45KB以内)';
+    }
+    toast('err', '送信失敗: ' + msg);
   } finally {
     inp.disabled = false;
     setTimeout(function(){
@@ -5194,6 +5332,384 @@ async function sendReply(pid){
       if(el) el.focus();
     }, 100);
   }
+}
+
+// Enter送信、Shift+Enterで改行
+function chatReplyKeydown(event, pid){
+  if(event.key === 'Enter' && !event.shiftKey){
+    event.preventDefault();
+    sendReply(pid);
+  }
+}
+
+// ===== [7d-2] チャット機能拡張: 画像・テンプレ・変数 =====
+var chatReplyImages = [];
+var chatCurrentPid = null; // 現在アクティブなスレッドID(テンプレ挿入用)
+
+// 入力欄に添付中の画像を表示
+function renderChatReplyImages(){
+  var el = document.getElementById('chat-reply-images');
+  if(!el) return;
+  if(!chatReplyImages || !chatReplyImages.length){
+    el.innerHTML = '';
+    el.style.display = 'none';
+    return;
+  }
+  el.style.display = 'flex';
+  el.innerHTML = chatReplyImages.map(function(url, i){
+    var isBase64 = /^data:image\//.test(url);
+    var sizeInfo = isBase64 ? ' (' + Math.round(url.length / 1024) + 'KB)' : '';
+    return '<div class="chat-reply-img-item">' +
+      '<img src="' + esc(url) + '" alt="" onerror="this.style.opacity=.3;">' +
+      '<button type="button" class="chat-reply-img-remove" onclick="removeChatReplyImage(' + i + ')" title="削除">×</button>' +
+      (sizeInfo ? '<span class="chat-reply-img-size">' + sizeInfo + '</span>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function removeChatReplyImage(i){
+  if(i < 0 || i >= chatReplyImages.length) return;
+  chatReplyImages.splice(i, 1);
+  renderChatReplyImages();
+}
+
+// 画像ファイル選択 + Cropper
+function pickChatImageFile(){
+  if(chatReplyImages.length >= 3){
+    toast('err', '画像は最大3枚までです');
+    return;
+  }
+  _pickImageFile(function(dataUrl){
+    openCropModal(dataUrl, {
+      title: 'チャット画像をトリミング',
+      maxW: 1200,
+      maxH: 1200,
+      quality: 0.85,
+      onApply: function(base64){
+        chatReplyImages.push(base64);
+        renderChatReplyImages();
+        toast('ok', '画像を追加しました');
+      }
+    });
+  });
+}
+
+// 変数ピッカーの表示/非表示トグル
+function toggleChatVarPicker(){
+  var wrap = document.getElementById('chat-var-picker-wrap');
+  if(!wrap) return;
+  var shown = wrap.style.display !== 'none';
+  if(shown){
+    wrap.style.display = 'none';
+  } else {
+    wrap.style.display = 'block';
+    renderVarPicker('chat-var-picker', 'chat-reply', 'chat');
+  }
+}
+
+// テンプレート選択ピッカー(簡易モーダル)
+function openChatTemplatePicker(pid){
+  chatCurrentPid = pid;
+  var tmpls = getTmpls();
+  if(!tmpls.length){
+    toast('err', 'テンプレートが登録されていません。「定型文」ページで作成してください。');
+    return;
+  }
+  // 簡易的なピッカー: confirmではなくモーダル風
+  var listHtml = tmpls.map(function(t, i){
+    var preview = (t.body || '').slice(0, 80) + ((t.body || '').length > 80 ? '...' : '');
+    return '<div class="chat-tmpl-item" onclick="applyChatTemplate(' + i + ')">' +
+      '<div class="chat-tmpl-name">' + esc(t.name) + '</div>' +
+      '<div class="chat-tmpl-preview">' + esc(preview) + '</div>' +
+    '</div>';
+  }).join('');
+  document.getElementById('chat-tmpl-picker-list').innerHTML = listHtml;
+  document.getElementById('chat-tmpl-picker-modal').classList.add('open');
+}
+
+function applyChatTemplate(index){
+  var tmpls = getTmpls();
+  var t = tmpls[index];
+  if(!t) return;
+  var inp = document.getElementById('chat-reply');
+  if(inp){
+    // カーソル位置に挿入(または末尾に追加)
+    var cur = inp.value;
+    inp.value = cur ? (cur + '\n' + (t.body || '')) : (t.body || '');
+    inp.focus();
+    // textareaのサイズに合わせる
+    autoResizeChatInput(inp);
+  }
+  closeModal('chat-tmpl-picker-modal');
+  toast('ok', 'テンプレを挿入しました');
+}
+
+function autoResizeChatInput(el){
+  if(!el) return;
+  el.style.height = 'auto';
+  var newHeight = Math.min(el.scrollHeight, 120);
+  el.style.height = newHeight + 'px';
+}
+
+// ===== [7d-2] 一斉送信 =====
+var bulkChatImages = [];
+var bulkChatSelectedEventIds = [];
+
+function openBulkChatModal(){
+  var modal = document.getElementById('bulk-chat-modal');
+  if(modal) modal.classList.add('open');
+
+  try {
+    document.getElementById('bulk-chat-text').value = '';
+    document.querySelectorAll('.bulk-chat-rank-cb').forEach(function(cb){ cb.checked = false; });
+    document.getElementById('bulk-chat-events-op').value = '';
+    document.getElementById('bulk-chat-events-num').value = '';
+    bulkChatImages = [];
+    bulkChatSelectedEventIds = [];
+    renderBulkChatImages();
+    renderBulkChatEventChips();
+    document.getElementById('bulk-chat-alert').innerHTML = '';
+    updateBulkChatRecipientPreview();
+    // 変数ピッカー描画(chatスコープ)
+    renderVarPicker('bulk-chat-var-picker', 'bulk-chat-text', 'chat');
+
+    // フィルタ変更時に対象数を更新
+    ['bulk-chat-events-op', 'bulk-chat-events-num'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(el){
+        el.oninput = updateBulkChatRecipientPreview;
+        el.onchange = updateBulkChatRecipientPreview;
+      }
+    });
+    document.querySelectorAll('.bulk-chat-rank-cb').forEach(function(cb){
+      cb.onchange = updateBulkChatRecipientPreview;
+    });
+  } catch(err){
+    console.error('[openBulkChatModal] エラー:', err);
+  }
+}
+
+function renderBulkChatImages(){
+  var el = document.getElementById('bulk-chat-images-list');
+  if(!el) return;
+  if(!bulkChatImages.length){ el.innerHTML = ''; return; }
+  el.innerHTML = bulkChatImages.map(function(url, i){
+    var isBase64 = /^data:image\//.test(url);
+    var label = isBase64 ?
+      '<span style="background:var(--teal-light);color:var(--teal);padding:2px 8px;border-radius:99px;font-size:.68rem;font-weight:700;">アップロード</span>' :
+      '<span style="background:var(--bg2);color:var(--ink3);padding:2px 8px;border-radius:99px;font-size:.68rem;">URL</span>';
+    var urlText = isBase64 ?
+      'Base64埋込 (' + Math.round(url.length / 1024) + ' KB)' :
+      url;
+    return '<div class="sub-item"><div class="sub-item-head">' +
+      '<img class="mail-img-thumb" src="' + esc(url) + '" alt="" onerror="this.style.opacity=.3;">' +
+      '<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;">' +
+        '<div>' + label + '</div>' +
+        '<div class="simple-item-text" style="font-family:monospace;font-size:.68rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink4);">' + esc(urlText) + '</div>' +
+      '</div>' +
+      '<div class="sub-item-actions"><button type="button" class="btn btn-danger btn-xs" onclick="removeBulkChatImage(' + i + ')">×</button></div>' +
+    '</div></div>';
+  }).join('');
+}
+
+function addBulkChatImage(){
+  if(bulkChatImages.length >= 3){ toast('err', '画像は最大3枚までです'); return; }
+  var url = document.getElementById('new-bulk-chat-img-url').value.trim();
+  if(!url) return;
+  if(!/^https?:\/\//.test(url)){ toast('err', 'URLは http:// または https:// で始まる必要があります'); return; }
+  bulkChatImages.push(url);
+  document.getElementById('new-bulk-chat-img-url').value = '';
+  renderBulkChatImages();
+}
+
+function removeBulkChatImage(i){
+  if(i < 0 || i >= bulkChatImages.length) return;
+  bulkChatImages.splice(i, 1);
+  renderBulkChatImages();
+}
+
+function pickBulkChatImageFile(){
+  if(bulkChatImages.length >= 3){ toast('err', '画像は最大3枚までです'); return; }
+  _pickImageFile(function(dataUrl){
+    openCropModal(dataUrl, {
+      title: '画像をトリミング',
+      maxW: 1200, maxH: 1200, quality: 0.85,
+      onApply: function(base64){
+        bulkChatImages.push(base64);
+        renderBulkChatImages();
+        toast('ok', '画像を追加しました');
+      }
+    });
+  });
+}
+
+function renderBulkChatEventChips(){
+  var el = document.getElementById('bulk-chat-ev-chips');
+  if(!el) return;
+  if(!mailAllEventsCache.length){
+    el.innerHTML = '<span style="font-size:.78rem;color:var(--ink4);">イベント読込中...</span>';
+    api('getStats', {}).then(function(s){
+      if(s && s.eventStats && s.eventStats.length){
+        mailAllEventsCache = s.eventStats.slice();
+        mailAllEventsCache.sort(function(a, b){ return new Date(b.Date || 0) - new Date(a.Date || 0); });
+      }
+      _renderBulkChatEventChipsInner(el);
+    }).catch(function(){
+      api('getEvents', {}).then(function(evs){
+        if(Array.isArray(evs) && evs.length){
+          mailAllEventsCache = evs.slice();
+          mailAllEventsCache.sort(function(a, b){ return new Date(b.Date || 0) - new Date(a.Date || 0); });
+        }
+        _renderBulkChatEventChipsInner(el);
+      }).catch(function(err){
+        el.innerHTML = '<span style="font-size:.78rem;color:var(--red);">取得失敗</span>';
+      });
+    });
+  } else {
+    _renderBulkChatEventChipsInner(el);
+  }
+}
+
+function _renderBulkChatEventChipsInner(el){
+  if(!mailAllEventsCache.length){
+    el.innerHTML = '<span style="font-size:.78rem;color:var(--ink4);">イベントがありません</span>';
+    return;
+  }
+  el.innerHTML = mailAllEventsCache.map(function(ev){
+    var selected = bulkChatSelectedEventIds.indexOf(ev.EventID) >= 0;
+    var dateStr = ev.Date ? String(ev.Date).substring(0, 10) : '';
+    return '<div class="mail-ev-chip' + (selected ? ' selected' : '') + '" onclick="toggleBulkChatEvent(\'' + esc(ev.EventID) + '\')">' +
+      esc(ev.EventName || ev.EventID) +
+      (dateStr ? '<span class="mail-ev-chip-date">' + esc(dateStr) + '</span>' : '') +
+    '</div>';
+  }).join('');
+}
+
+function toggleBulkChatEvent(eventId){
+  var idx = bulkChatSelectedEventIds.indexOf(eventId);
+  if(idx >= 0) bulkChatSelectedEventIds.splice(idx, 1);
+  else bulkChatSelectedEventIds.push(eventId);
+  renderBulkChatEventChips();
+  updateBulkChatRecipientPreview();
+}
+
+// 対象数プレビュー(クライアント側計算、完璧でないが目安)
+function updateBulkChatRecipientPreview(){
+  var el = document.getElementById('bulk-chat-recipient-count');
+  if(!el) return;
+  el.textContent = '計算中...';
+  // 全参加者と登録を取得
+  if(!mailAllParticipantsCache.length){
+    api('getParticipants', { query: '' }).then(function(ps){
+      mailAllParticipantsCache = ps || [];
+      _computeBulkChatRecipientCount(el);
+    }).catch(function(){ el.textContent = '取得失敗'; });
+  } else {
+    _computeBulkChatRecipientCount(el);
+  }
+}
+
+function _computeBulkChatRecipientCount(el){
+  if(!mailAllRegsCache.length && bulkChatSelectedEventIds.length){
+    // イベント指定時のみ registrations が必要
+    api('getAllRegistrations', {}).then(function(regs){
+      mailAllRegsCache = regs || [];
+      _doComputeBulkChatCount(el);
+    }).catch(function(){ el.textContent = '取得失敗'; });
+  } else {
+    _doComputeBulkChatCount(el);
+  }
+}
+
+function _doComputeBulkChatCount(el){
+  var ranks = [];
+  document.querySelectorAll('.bulk-chat-rank-cb:checked').forEach(function(cb){ ranks.push(cb.value); });
+  var op = document.getElementById('bulk-chat-events-op').value;
+  var num = document.getElementById('bulk-chat-events-num').value;
+  num = num !== '' ? Number(num) : null;
+
+  // イベント指定時: 該当イベント参加者のみ候補
+  var candidatePids = {};
+  if(bulkChatSelectedEventIds.length){
+    mailAllRegsCache.forEach(function(r){
+      if(bulkChatSelectedEventIds.indexOf(r.EventID) >= 0 && r.ParticipantID){
+        candidatePids[r.ParticipantID] = true;
+      }
+    });
+  } else {
+    mailAllParticipantsCache.forEach(function(p){
+      if(p.ParticipantID) candidatePids[p.ParticipantID] = true;
+    });
+  }
+
+  // フィルタ適用
+  var count = 0;
+  mailAllParticipantsCache.forEach(function(p){
+    if(!candidatePids[p.ParticipantID]) return;
+    if(ranks.length && ranks.indexOf(p.Rank || 'New') < 0) return;
+    if(op && num !== null && !isNaN(num)){
+      var total = Number(p.TotalEvents || 0);
+      if(op === 'gte' && !(total >= num)) return;
+      if(op === 'lte' && !(total <= num)) return;
+      if(op === 'eq' && !(total === num)) return;
+    }
+    count++;
+  });
+  el.textContent = count + '名';
+}
+
+async function sendBulkChat(){
+  var text = document.getElementById('bulk-chat-text').value.trim();
+  var alertEl = document.getElementById('bulk-chat-alert');
+  alertEl.innerHTML = '';
+
+  if(!text && !bulkChatImages.length){
+    alertEl.innerHTML = '<div class="alert alert-err">メッセージまたは画像のいずれかは必須です</div>';
+    return;
+  }
+
+  var ranks = [];
+  document.querySelectorAll('.bulk-chat-rank-cb:checked').forEach(function(cb){ ranks.push(cb.value); });
+  var op = document.getElementById('bulk-chat-events-op').value;
+  var numRaw = document.getElementById('bulk-chat-events-num').value;
+  var num = numRaw !== '' ? Number(numRaw) : null;
+
+  var filters = {};
+  if(ranks.length) filters.ranks = ranks;
+  if(op && num !== null && !isNaN(num)){
+    filters.eventsOp = op;
+    filters.eventsNum = num;
+  }
+
+  // プレビュー件数を取得してconfirm
+  var countEl = document.getElementById('bulk-chat-recipient-count');
+  var countText = countEl ? countEl.textContent : '不明';
+  if(!confirm(countText + ' にメッセージを一斉送信します。よろしいですか？')) return;
+
+  var btn = document.getElementById('bulk-chat-send-btn');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+  try {
+    var r = await api('sendBulkChat', {
+      text: text,
+      images: bulkChatImages.slice(),
+      filters: filters,
+      eventIds: bulkChatSelectedEventIds.slice(),
+      senderName: 'connec+a 運営'
+    });
+    alertEl.innerHTML = '<div class="alert alert-ok">' + (r.sent || 0) + ' / ' + (r.total || 0) + ' 件送信しました</div>';
+    toast('ok', '一斉送信完了: ' + (r.sent || 0) + '名');
+    setTimeout(function(){
+      closeModal('bulk-chat-modal');
+      loadChatAdmin(); // スレッド一覧を更新
+    }, 1500);
+  } catch(err){
+    var msg = err.message;
+    if(msg === 'IMAGES_TOO_LARGE'){ msg = '画像サイズが大きすぎます(合計45KB以内)'; }
+    alertEl.innerHTML = '<div class="alert alert-err">送信失敗: ' + esc(msg) + '</div>';
+  }
+  btn.disabled = false;
+  btn.textContent = '一斉送信';
 }
 
 // === PHOTOS ===
