@@ -5,6 +5,7 @@
 <title>connec+a Admin</title>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 :root{
@@ -247,6 +248,139 @@ tr:hover td{background:rgba(0,133,124,.02);}
   .todo-board{grid-template-columns:1fr;}
 }
 .toast{position:fixed;bottom:24px;right:24px;z-index:999;max-width:340px;}
+
+/* === [F4] EVENT MODAL V2 — 5セクション縦スクロール + ステップナビ === */
+/* モーダル全体: flexboxで縦3段(ヘッダー/本体/フッター)。ヘッダーとフッターはsticky */
+.modal-event-v2{max-width:720px;display:flex;flex-direction:column;max-height:92vh;padding:0;}
+.modal-head-v2{position:sticky;top:0;background:var(--white);z-index:12;border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;gap:12px;border-top-left-radius:var(--rx);border-top-right-radius:var(--rx);}
+.modal-head-v2 .modal-title{flex:1;font-size:1rem;font-weight:700;}
+.modal-head-v2 .draft-status{font-size:.72rem;color:var(--ink4);white-space:nowrap;}
+.modal-head-v2 .draft-status.saved{color:var(--green);}
+.modal-head-v2 .shortcut-hint{font-size:.68rem;color:var(--ink4);white-space:nowrap;}
+
+/* ステップナビ: 上部にsticky、スクロール連動でactive切替 */
+.step-nav{position:sticky;top:57px;background:var(--white);z-index:11;border-bottom:1px solid var(--border);display:flex;justify-content:space-around;padding:10px 16px;overflow-x:auto;gap:4px;}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-decoration:none;color:var(--ink4);min-width:54px;padding:4px;border:none;background:none;font-family:var(--font);}
+.step-dot .step-num{width:26px;height:26px;border-radius:50%;background:var(--bg2);color:var(--ink4);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;transition:background .2s,color .2s,box-shadow .2s;}
+.step-dot .step-label{font-size:.68rem;font-weight:600;transition:color .2s;}
+.step-dot.active .step-num{background:var(--teal);color:#fff;box-shadow:0 0 0 4px rgba(0,133,124,.15);}
+.step-dot.active .step-label{color:var(--teal);}
+.step-dot.completed .step-num{background:var(--teal-light);color:var(--teal);}
+.step-dot.has-error .step-num{background:rgba(246,88,88,.15);color:var(--red);}
+.step-dot:hover .step-num{box-shadow:0 0 0 3px rgba(0,0,0,.05);}
+.step-dot:focus{outline:2px solid var(--teal);outline-offset:2px;border-radius:4px;}
+
+/* 本体: スクロール領域 */
+.modal-body-v2{flex:1;overflow-y:auto;padding:16px 24px;scroll-behavior:smooth;}
+
+/* セクション: 上下ボーダーで仕切り、scroll-margin-topでsticky分のオフセット */
+.form-section{padding:18px 0;scroll-margin-top:110px;}
+.form-section:not(:last-child){border-bottom:1px solid var(--border);}
+.section-heading{font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:14px;padding-left:8px;border-left:3px solid var(--teal);line-height:1.3;}
+
+/* レイアウト: 2カラム・3カラムのグリッド(モバイルで1カラムに戻る) */
+.form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+/* 必須マーク */
+.required{color:var(--red);font-weight:700;margin-left:2px;}
+
+/* 「開始方法」ボタン群(F1複製ボタン以外は今回disabled) */
+.template-selector{background:var(--bg);padding:12px 14px;border-radius:var(--rs);margin-bottom:12px;}
+.template-selector-label{font-size:.74rem;color:var(--ink3);margin-bottom:8px;font-weight:600;}
+.tmpl-btn-group{display:flex;gap:6px;flex-wrap:wrap;}
+.tmpl-btn-group .btn:disabled,.tmpl-btn-group .btn[disabled]{opacity:.5;cursor:not-allowed;position:relative;}
+.tmpl-btn-group .btn[disabled]::after{content:'近日';position:absolute;top:-6px;right:-4px;background:var(--ink4);color:#fff;font-size:.58rem;padding:1px 5px;border-radius:99px;font-weight:700;}
+
+/* 上級設定(折りたたみ) */
+.form-advanced{margin-top:16px;padding-top:16px;border-top:1px dashed var(--border);}
+.form-advanced summary{cursor:pointer;user-select:none;padding:6px 0;font-weight:600;font-size:.86rem;color:var(--ink2);list-style:none;}
+.form-advanced summary::-webkit-details-marker{display:none;}
+.form-advanced summary::before{content:'▶';display:inline-block;margin-right:6px;transition:transform .2s;font-size:.7rem;color:var(--ink4);}
+.form-advanced[open] summary::before{transform:rotate(90deg);}
+
+/* フッター: stickyで常時表示 */
+.modal-foot-v2{position:sticky;bottom:0;background:var(--white);z-index:12;border-top:1px solid var(--border);padding:12px 20px;display:flex;gap:8px;justify-content:flex-end;align-items:center;border-bottom-left-radius:var(--rx);border-bottom-right-radius:var(--rx);}
+
+/* セクション5 プレビュープレースホルダー */
+.preview-placeholder-box{min-height:200px;border:2px dashed var(--border);border-radius:var(--rs);padding:30px 20px;text-align:center;background:var(--bg);color:var(--ink4);font-size:.86rem;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px;}
+.preview-placeholder-box svg{width:36px;height:36px;opacity:.4;stroke:var(--ink4);fill:none;stroke-width:1.5;}
+
+/* prefers-reduced-motion 対応 */
+@media (prefers-reduced-motion: reduce){
+  .modal-body-v2{scroll-behavior:auto;}
+  .step-dot .step-num,.step-dot .step-label,.form-advanced summary::before{transition:none;}
+}
+
+/* モバイル対応(運営はモバイル併用あり) */
+@media (max-width:768px){
+  .modal-event-v2{max-height:100vh;border-radius:0;}
+  .form-row-2,.form-row-3{grid-template-columns:1fr;gap:8px;}
+  .step-nav{padding:8px 12px;gap:2px;}
+  .step-dot{min-width:44px;}
+  .step-dot .step-label{font-size:.6rem;}
+  .step-dot .step-num{width:22px;height:22px;font-size:.7rem;}
+  .modal-head-v2 .shortcut-hint{display:none;}
+  .modal-body-v2{padding:12px 16px;}
+}
+
+/* === [Q1/Q3] QR SCAN PAGE V2 === */
+/* スキャンモードタブ: カメラ/スマホ転送/手動入力 */
+.scan-mode-tabs{display:flex;gap:2px;background:var(--bg);border-radius:6px;padding:2px;margin-bottom:4px;}
+.scan-tab{padding:6px 14px;font-size:.78rem;font-weight:600;color:var(--ink3);background:none;border:none;border-radius:4px;cursor:pointer;font-family:var(--font);display:flex;align-items:center;gap:5px;transition:background .15s,color .15s;}
+.scan-tab:hover{color:var(--ink);}
+.scan-tab.active{background:var(--white);color:var(--teal);box-shadow:var(--shadow-sm);}
+.scan-tab svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* スキャンパネル共通 */
+.scan-panel{max-width:600px;margin:0 auto;}
+
+/* カメラコンテナ */
+.camera-container{position:relative;width:100%;aspect-ratio:1;max-width:420px;margin:0 auto 12px;background:#000;border-radius:var(--r);overflow:hidden;}
+.camera-container video{width:100%;height:100%;object-fit:cover;display:block;}
+.camera-overlay{position:absolute;inset:0;pointer-events:none;}
+.scan-frame{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:65%;aspect-ratio:1;border:3px solid var(--teal);border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,.35);}
+.scan-line{position:absolute;top:18%;left:18%;width:64%;height:2px;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:scanLineMove 2.2s linear infinite;}
+@keyframes scanLineMove{0%{top:18%;}50%{top:80%;}100%{top:18%;}}
+@media (prefers-reduced-motion: reduce){.scan-line{animation:none;top:50%;}}
+
+/* カメラ状態表示 */
+.camera-status{text-align:center;padding:10px;font-size:.84rem;color:var(--ink3);margin-bottom:8px;min-height:36px;}
+.camera-status-ok{color:var(--green);}
+.camera-status-err{color:var(--red);}
+.camera-status-info{color:var(--ink4);}
+.camera-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px;}
+
+/* 確認ダイアログ(QR検知時の「この人でいいですか?」) */
+.qr-confirm-overlay{position:fixed;inset:0;background:rgba(26,26,46,.7);z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;}
+.qr-confirm-overlay.open{display:flex;}
+.qr-confirm-box{background:var(--white);border-radius:var(--rx);padding:20px;max-width:400px;width:100%;box-shadow:var(--shadow-lg);}
+.qr-confirm-avatar{width:56px;height:56px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:700;margin:0 auto 12px;}
+.qr-confirm-name{text-align:center;font-size:1.1rem;font-weight:700;margin-bottom:6px;}
+.qr-confirm-sub{text-align:center;font-size:.78rem;color:var(--ink4);margin-bottom:16px;}
+.qr-confirm-btns{display:flex;gap:8px;}
+.qr-confirm-btns .btn{flex:1;}
+
+/* === [Q3] フィードバック設定モーダル === */
+.settings-option{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px;cursor:pointer;user-select:none;}
+.settings-option:hover{background:var(--bg);}
+.settings-option input[type="checkbox"]{width:18px;height:18px;cursor:pointer;flex-shrink:0;}
+.settings-option-text{flex:1;}
+.settings-option-title{font-weight:600;font-size:.88rem;}
+.settings-option-desc{font-size:.74rem;color:var(--ink4);margin-top:2px;}
+
+/* ショートカット補助: 設定ボタン */
+.qr-settings-btn{padding:6px 10px;font-size:.74rem;font-weight:600;color:var(--ink3);background:var(--bg);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-family:var(--font);display:inline-flex;align-items:center;gap:4px;}
+.qr-settings-btn:hover{background:var(--bg2);}
+.qr-settings-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* モバイル対応 */
+@media (max-width:768px){
+  .scan-mode-tabs{flex-wrap:wrap;}
+  .scan-tab{flex:1;min-width:0;font-size:.72rem;padding:8px 4px;}
+  .camera-container{max-width:100%;}
+}
+
 </style>
 </head>
 <body>
@@ -328,11 +462,62 @@ tr:hover td{background:rgba(0,133,124,.02);}
         <div id="participants-area"><div class="spinner"></div></div>
       </div>
 
-      <!-- QR SCAN -->
+      <!-- QR SCAN [Q1/Q3] 3モード切替(カメラ/スマホ転送/手動入力)+ フィードバック設定 -->
       <div id="pg-qrscan" class="page">
-        <div class="page-header"><div class="page-title">QR照会</div></div>
-        <div class="card" style="margin-bottom:16px;"><div class="card-body"><div style="display:flex;gap:8px;"><input id="manual-qr" class="form-control" type="text" placeholder="チケットID / QRデータを入力" onkeydown="if(event.key==='Enter')lookupQr(this.value.trim())"><button class="btn btn-primary" onclick="lookupQr(document.getElementById('manual-qr').value.trim())">照会</button></div></div></div>
-        <div id="qr-waiting" style="text-align:center;padding:30px;color:var(--ink4);">スキャンをお待ちしています</div>
+        <div class="page-header">
+          <div class="page-title">QR照会</div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+            <div class="scan-mode-tabs" id="scan-mode-tabs">
+              <button class="scan-tab active" data-mode="camera" type="button" onclick="switchScanMode('camera')">
+                <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                カメラ
+              </button>
+              <button class="scan-tab" data-mode="phone" type="button" onclick="switchScanMode('phone')">
+                <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+                スマホ転送
+              </button>
+              <button class="scan-tab" data-mode="manual" type="button" onclick="switchScanMode('manual')">
+                <svg viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/></svg>
+                手動入力
+              </button>
+            </div>
+            <button class="qr-settings-btn" type="button" onclick="openScanSettings()" title="スキャン設定（音・バイブ）">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+              設定
+            </button>
+          </div>
+        </div>
+
+        <!-- カメラモード -->
+        <div class="scan-panel" id="scan-camera" style="display:none;">
+          <div class="camera-container">
+            <video id="qr-video" playsinline autoplay muted></video>
+            <canvas id="qr-canvas" style="display:none;"></canvas>
+            <div class="camera-overlay">
+              <div class="scan-frame"></div>
+              <div class="scan-line"></div>
+            </div>
+          </div>
+          <div class="camera-status" id="camera-status">カメラ起動準備中...</div>
+          <div class="camera-actions">
+            <button class="btn btn-outline btn-sm" type="button" onclick="toggleCameraFacing()">カメラ切替</button>
+            <button class="btn btn-outline btn-sm" type="button" onclick="stopCameraScan()">停止</button>
+            <button class="btn btn-outline btn-sm" type="button" onclick="startCameraScan()">再起動</button>
+          </div>
+        </div>
+
+        <!-- スマホ転送モード(既存機能) -->
+        <div class="scan-panel" id="scan-phone" style="display:none;">
+          <div class="alert alert-info">スマホアプリでスキャンすると、このページに自動で通知されます。</div>
+          <div id="qr-waiting" style="text-align:center;padding:30px;color:var(--ink4);">スキャンをお待ちしています</div>
+        </div>
+
+        <!-- 手動入力モード -->
+        <div class="scan-panel" id="scan-manual" style="display:none;">
+          <div class="card" style="margin-bottom:16px;"><div class="card-body"><div style="display:flex;gap:8px;"><input id="manual-qr" class="form-control" type="text" placeholder="チケットID / QRデータを入力" onkeydown="if(event.key==='Enter')lookupQr(this.value.trim())"><button class="btn btn-primary" type="button" onclick="lookupQr(document.getElementById('manual-qr').value.trim())">照会</button></div></div></div>
+        </div>
+
+        <!-- 結果表示(全モード共通) -->
         <div class="qr-detail" id="qr-detail">
           <div class="qr-header"><div class="qr-avatar" id="qr-avatar">?</div><div><div style="font-size:1.1rem;font-weight:700;" id="qr-name">—</div><div style="font-size:.78rem;color:var(--ink4);" id="qr-rank">—</div></div></div>
           <div id="qr-rows"></div>
@@ -460,38 +645,163 @@ tr:hover td{background:rgba(0,133,124,.02);}
 </div>
 
 <!-- ===== MODALS ===== -->
-<!-- Event Modal -->
-<div class="modal-bg" id="ev-modal" onclick="if(event.target===this)closeModal('ev-modal')"><div class="modal" style="max-width:680px;"><div class="modal-head"><div class="modal-title" id="ev-modal-title">イベント作成</div><button class="modal-close" onclick="closeModal('ev-modal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="modal-body">
-  <div id="ev-modal-alert"></div>
-  <div class="tab-bar"><button class="tab-btn active" onclick="switchEvTab('basic',this)">基本</button><button class="tab-btn" onclick="switchEvTab('venue',this)">会場</button><button class="tab-btn" onclick="switchEvTab('regsettings',this)">登録設定</button><button class="tab-btn" onclick="switchEvTab('advanced',this)">詳細</button></div>
-  <div class="tab-pane active" id="evtab-basic">
-    <div class="form-group"><label class="form-label">イベント名</label><input id="f-name" class="form-control" type="text"></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label class="form-label">日時</label><input id="f-date" class="form-control" type="datetime-local"></div><div class="form-group"><label class="form-label">定員</label><input id="f-capacity" class="form-control" type="number" value="50"></div></div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><div class="form-group"><label class="form-label">参加費</label><input id="f-price" class="form-control" type="number" value="0"></div><div class="form-group"><label class="form-label">支払い方式</label><select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay/現金</option></select></div></div>
-    <div class="form-group"><label class="form-label">担当部署</label><select id="f-dept" class="form-control"><option value="">未指定</option></select></div>
-    <div class="form-group"><label class="form-label">説明</label><textarea id="f-desc" class="form-control" rows="2"></textarea></div>
-    <div class="form-group" id="ev-status-row" style="display:none;"><label class="form-label">ステータス</label><select id="f-status" class="form-control"><option value="OPEN">受付中</option><option value="CLOSED">終了</option></select></div>
-  </div>
-  <div class="tab-pane" id="evtab-venue">
-    <div class="form-group"><label class="form-label">会場名</label><input id="f-location" class="form-control" type="text"></div>
-    <div class="form-group"><label class="form-label">Google Maps 検索</label><div style="display:flex;gap:8px;"><input class="form-control" id="ev-venue-q" placeholder="住所・場所名"><button class="btn btn-outline btn-sm" onclick="searchVenue()">検索</button></div><div class="map-wrap" id="ev-map">会場を検索</div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="ev-lat" placeholder="緯度" style="text-align:center;" oninput="updateMap()"><input class="form-control" id="ev-lng" placeholder="経度" style="text-align:center;" oninput="updateMap()"></div><div style="margin-top:6px;font-size:.72rem;color:var(--ink4);">※ 検索すると会場名に住所が自動入力されます</div></div>
-    <div class="form-group" style="margin-top:16px;"><label class="form-label">最寄り駅</label><div id="ev-stations"></div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="new-station-name" placeholder="駅名（例：渋谷駅）" style="flex:2;"><input class="form-control" id="new-station-walk" placeholder="徒歩分" type="number" style="flex:1;max-width:80px;"><button class="btn btn-outline btn-sm" onclick="addStation()">追加</button></div></div>
-    <div class="form-group"><label class="form-label">アクセス備考</label><textarea id="ev-access-note" class="form-control" rows="2" placeholder="バス停からのアクセスなど"></textarea></div>
-  </div>
-  <div class="tab-pane" id="evtab-regsettings">
-    <div class="form-group"><label class="form-label">流入経路オプション</label><div id="ref-tags"></div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="new-ref" placeholder="新しい流入経路" style="max-width:200px;"><button class="btn btn-outline btn-sm" onclick="addRef()">追加</button></div></div>
-    <div class="form-group"><label class="form-label">カスタム質問</label><div id="cq-list"></div><div style="display:flex;gap:6px;margin-top:8px;"><button class="btn btn-outline btn-sm" onclick="addCQ('text')">テキスト</button><button class="btn btn-outline btn-sm" onclick="addCQ('single')">単一選択</button><button class="btn btn-outline btn-sm" onclick="addCQ('multiple')">複数選択</button></div></div>
-  </div>
-  <div class="tab-pane" id="evtab-advanced">
-    <div class="form-group"><label class="form-label">登録後メッセージ（初回）</label><textarea class="form-control" id="ev-msg-first" rows="2" placeholder="Discord招待リンクなど"></textarea></div>
-    <div class="form-group"><label class="form-label">登録後メッセージ（リピーター）</label><textarea class="form-control" id="ev-msg-return" rows="2"></textarea></div>
-    <div class="form-group"><label class="form-label">参加制限（複数選択可）</label><div><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="japanese_only" onchange="toggleRestrictDetail()"> 日本人のみ</label><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="school_only" onchange="toggleRestrictDetail()"> 日本語学校生のみ</label><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="region" onchange="toggleRestrictDetail()"> エリア表示（対象地域の参加者におすすめ表示）</label></div></div>
-    <div class="form-group" id="restrict-region-wrap" style="display:none;">
-      <label class="form-label">対象都道府県（複数選択可）</label>
-      <div id="restrict-pref-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:180px;overflow-y:auto;padding:8px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);"></div>
+<!-- [F4] Event Modal V2: 5セクション縦スクロール + ステップナビ -->
+<div class="modal-bg" id="ev-modal" onclick="if(event.target===this)closeModal('ev-modal')">
+  <div class="modal modal-event-v2">
+    <!-- ヘッダー(sticky) -->
+    <div class="modal-head modal-head-v2">
+      <div class="modal-title" id="ev-modal-title">イベント作成</div>
+      <div class="draft-status" id="draft-status" aria-live="polite"></div>
+      <span class="shortcut-hint" title="キーボードショートカット: Cmd+Enter 保存 / Esc 閉じる / Alt+1〜5 セクション移動">⌘+Enter 保存</span>
+      <button class="modal-close" onclick="closeModal('ev-modal')" aria-label="閉じる"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+
+    <!-- ステップナビ(sticky) -->
+    <nav class="step-nav" id="step-nav" aria-label="イベント作成ステップ">
+      <button class="step-dot active" data-section="s-basic" type="button" aria-label="1. 基本情報へ移動">
+        <span class="step-num">1</span><span class="step-label">基本</span>
+      </button>
+      <button class="step-dot" data-section="s-venue" type="button" aria-label="2. 会場へ移動">
+        <span class="step-num">2</span><span class="step-label">会場</span>
+      </button>
+      <button class="step-dot" data-section="s-participant" type="button" aria-label="3. 参加者向けへ移動">
+        <span class="step-num">3</span><span class="step-label">参加者</span>
+      </button>
+      <button class="step-dot" data-section="s-target" type="button" aria-label="4. 対象・制限へ移動">
+        <span class="step-num">4</span><span class="step-label">対象</span>
+      </button>
+      <button class="step-dot" data-section="s-preview" type="button" aria-label="5. 確認・プレビューへ移動">
+        <span class="step-num">5</span><span class="step-label">確認</span>
+      </button>
+    </nav>
+
+    <!-- 本体(スクロール) -->
+    <div class="modal-body modal-body-v2" id="ev-modal-body">
+      <div id="ev-modal-alert"></div>
+
+      <!-- 開始方法(F2/F9は今回スコープ外のためdisabled、F1複製は一覧カードから利用可能) -->
+      <div class="template-selector">
+        <div class="template-selector-label">開始方法</div>
+        <div class="tmpl-btn-group">
+          <button class="btn btn-outline btn-sm" type="button" disabled title="将来実装予定">テンプレートから</button>
+          <button class="btn btn-outline btn-sm" type="button" disabled title="将来実装予定">複製から</button>
+          <button class="btn btn-outline btn-sm" type="button" disabled title="将来実装予定">下書きから</button>
+        </div>
+        <div style="font-size:.7rem;color:var(--ink4);margin-top:6px;">※ 既存イベントの複製は、イベント一覧ページの「複製」ボタンから行えます</div>
+      </div>
+
+      <!-- セクション1: 基本情報 -->
+      <section class="form-section" id="s-basic">
+        <h3 class="section-heading">1. 基本情報</h3>
+        <div class="form-group"><label class="form-label">イベント名<span class="required">*</span></label><input id="f-name" class="form-control" type="text"></div>
+        <div class="form-row-3">
+          <div class="form-group"><label class="form-label">日時<span class="required">*</span></label><input id="f-date" class="form-control" type="datetime-local"></div>
+          <div class="form-group"><label class="form-label">定員</label><input id="f-capacity" class="form-control" type="number" value="50"></div>
+          <div class="form-group"><label class="form-label">参加費</label><input id="f-price" class="form-control" type="number" value="0"></div>
+        </div>
+        <div class="form-row-2">
+          <div class="form-group"><label class="form-label">支払い方式</label><select id="f-paytype" class="form-control"><option value="FREE">無料</option><option value="PAYPAY">PayPay</option><option value="CASH">現金</option><option value="PAYPAY_OR_CASH">PayPay/現金</option></select></div>
+          <div class="form-group"><label class="form-label">担当部署</label><select id="f-dept" class="form-control"><option value="">未指定</option></select></div>
+        </div>
+        <div class="form-group"><label class="form-label">説明</label><textarea id="f-desc" class="form-control" rows="2"></textarea></div>
+        <div class="form-group" id="ev-status-row" style="display:none;"><label class="form-label">ステータス</label><select id="f-status" class="form-control"><option value="OPEN">受付中</option><option value="CLOSED">終了</option></select></div>
+      </section>
+
+      <!-- セクション2: 会場 -->
+      <section class="form-section" id="s-venue">
+        <h3 class="section-heading">2. 会場</h3>
+        <div class="form-group"><label class="form-label">会場名</label><input id="f-location" class="form-control" type="text"></div>
+        <div class="form-group"><label class="form-label">Google Maps 検索</label><div style="display:flex;gap:8px;"><input class="form-control" id="ev-venue-q" placeholder="住所・場所名"><button class="btn btn-outline btn-sm" type="button" onclick="searchVenue()">検索</button></div><div class="map-wrap" id="ev-map">会場を検索</div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="ev-lat" placeholder="緯度" style="text-align:center;" oninput="updateMap()"><input class="form-control" id="ev-lng" placeholder="経度" style="text-align:center;" oninput="updateMap()"></div><div style="margin-top:6px;font-size:.72rem;color:var(--ink4);">※ 検索すると会場名に住所が自動入力されます</div></div>
+        <div class="form-group"><label class="form-label">最寄り駅</label><div id="ev-stations"></div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="new-station-name" placeholder="駅名（例：渋谷駅）" style="flex:2;"><input class="form-control" id="new-station-walk" placeholder="徒歩分" type="number" style="flex:1;max-width:80px;"><button class="btn btn-outline btn-sm" type="button" onclick="addStation()">追加</button></div></div>
+        <div class="form-group"><label class="form-label">アクセス備考</label><textarea id="ev-access-note" class="form-control" rows="2" placeholder="バス停からのアクセスなど"></textarea></div>
+      </section>
+
+      <!-- セクション3: 参加者向け設定 -->
+      <section class="form-section" id="s-participant">
+        <h3 class="section-heading">3. 参加者向け設定</h3>
+        <div class="form-group"><label class="form-label">流入経路オプション</label><div id="ref-tags"></div><div style="display:flex;gap:8px;margin-top:8px;"><input class="form-control" id="new-ref" placeholder="新しい流入経路" style="max-width:200px;"><button class="btn btn-outline btn-sm" type="button" onclick="addRef()">追加</button></div></div>
+        <div class="form-group"><label class="form-label">カスタム質問</label><div id="cq-list"></div><div style="display:flex;gap:6px;margin-top:8px;"><button class="btn btn-outline btn-sm" type="button" onclick="addCQ('text')">テキスト</button><button class="btn btn-outline btn-sm" type="button" onclick="addCQ('single')">単一選択</button><button class="btn btn-outline btn-sm" type="button" onclick="addCQ('multiple')">複数選択</button></div></div>
+      </section>
+
+      <!-- セクション4: 対象・制限 -->
+      <section class="form-section" id="s-target">
+        <h3 class="section-heading">4. 対象・制限</h3>
+        <div class="form-group"><label class="form-label">参加制限（複数選択可）</label><div><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="japanese_only" onchange="toggleRestrictDetail()"> 日本人のみ</label><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="school_only" onchange="toggleRestrictDetail()"> 日本語学校生のみ</label><label style="display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;font-size:.84rem;"><input type="checkbox" class="ev-restrict-cb" value="region" onchange="toggleRestrictDetail()"> エリア表示（対象地域の参加者におすすめ表示）</label></div></div>
+        <div class="form-group" id="restrict-region-wrap" style="display:none;">
+          <label class="form-label">対象都道府県（複数選択可）</label>
+          <div id="restrict-pref-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:180px;overflow-y:auto;padding:8px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);"></div>
+        </div>
+      </section>
+
+      <!-- セクション5: 確認・プレビュー(F6本実装は将来、現状はプレースホルダー) -->
+      <section class="form-section" id="s-preview">
+        <h3 class="section-heading">5. 確認・プレビュー</h3>
+        <div class="preview-placeholder-box">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div><strong>参加者視点のプレビュー</strong></div>
+          <div style="font-size:.76rem;">この機能は近日実装予定です。現時点では保存前に下書き確認はできません。<br>基本情報・会場・制限などを各セクションで確認してから保存してください。</div>
+        </div>
+        <!-- 上級設定(登録後メッセージを移動) -->
+        <details class="form-advanced" id="ev-advanced">
+          <summary>上級設定（登録後メッセージ）</summary>
+          <div class="form-group"><label class="form-label">登録後メッセージ（初回）</label><textarea class="form-control" id="ev-msg-first" rows="2" placeholder="Discord招待リンクなど"></textarea></div>
+          <div class="form-group"><label class="form-label">登録後メッセージ（リピーター）</label><textarea class="form-control" id="ev-msg-return" rows="2"></textarea></div>
+        </details>
+      </section>
+    </div>
+
+    <!-- フッター(sticky) -->
+    <div class="modal-foot modal-foot-v2">
+      <button class="btn btn-outline" type="button" onclick="closeModal('ev-modal')">キャンセル</button>
+      <button class="btn btn-primary" type="button" onclick="saveEvent()" id="ev-save-btn">保存</button>
     </div>
   </div>
-</div><div class="modal-foot"><button class="btn btn-outline" onclick="closeModal('ev-modal')">キャンセル</button><button class="btn btn-primary" onclick="saveEvent()" id="ev-save-btn">保存</button></div></div></div>
+</div>
+
+<!-- [Q1] QR検知時の確認ダイアログ(音/バイブで気づいた後、この人でいいか確認) -->
+<div class="qr-confirm-overlay" id="qr-confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="qr-confirm-name" onclick="if(event.target===this)closeQrConfirm()">
+  <div class="qr-confirm-box">
+    <div class="qr-confirm-avatar" id="qr-confirm-avatar">?</div>
+    <div class="qr-confirm-name" id="qr-confirm-name">—</div>
+    <div class="qr-confirm-sub" id="qr-confirm-sub">—</div>
+    <div class="qr-confirm-btns">
+      <button class="btn btn-outline" type="button" onclick="closeQrConfirm()">キャンセル</button>
+      <button class="btn btn-primary" type="button" id="qr-confirm-ok" onclick="confirmQrLookup()">この人で照会</button>
+    </div>
+    <div style="text-align:center;margin-top:10px;font-size:.68rem;color:var(--ink4);">Enter で照会 / Esc でキャンセル</div>
+  </div>
+</div>
+
+<!-- [Q3] スキャン設定モーダル(音・バイブのON/OFF) -->
+<div class="modal-bg" id="scan-settings-modal" onclick="if(event.target===this)closeModal('scan-settings-modal')">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-head">
+      <div class="modal-title">スキャン設定</div>
+      <button class="modal-close" onclick="closeModal('scan-settings-modal')" aria-label="閉じる"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <label class="settings-option">
+        <input type="checkbox" id="scan-sound-cb">
+        <div class="settings-option-text">
+          <div class="settings-option-title">音でフィードバック</div>
+          <div class="settings-option-desc">スキャン成功時に高音、失敗時に低音を鳴らします</div>
+        </div>
+      </label>
+      <label class="settings-option">
+        <input type="checkbox" id="scan-vibrate-cb">
+        <div class="settings-option-text">
+          <div class="settings-option-title">バイブレーションでフィードバック</div>
+          <div class="settings-option-desc">対応端末(スマホ・タブレット)で振動します</div>
+        </div>
+      </label>
+      <div style="padding:10px 0;"><button class="btn btn-ghost btn-sm" type="button" onclick="testScanFeedback('ok')">成功音テスト</button> <button class="btn btn-ghost btn-sm" type="button" onclick="testScanFeedback('err')">失敗音テスト</button></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" type="button" onclick="closeModal('scan-settings-modal')">キャンセル</button>
+      <button class="btn btn-primary" type="button" onclick="saveScanSettingsFromModal()">保存</button>
+    </div>
+  </div>
+</div>
 
 <!-- News Modal -->
 <div class="modal-bg" id="news-modal" onclick="if(event.target===this)closeModal('news-modal')"><div class="modal"><div class="modal-head"><div class="modal-title" id="news-modal-title">ニュース投稿</div><button class="modal-close" onclick="closeModal('news-modal')"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="modal-body">
@@ -572,7 +882,7 @@ function doLogin(){if(document.getElementById('pw-input').value===PW){localStora
 function doLogout(){localStorage.removeItem('ca_auth');location.reload();}
 document.getElementById('pw-input').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 if(localStorage.getItem('ca_auth')==='1'){document.getElementById('login-page').style.display='none';document.getElementById('app').style.display='block';initApp();}
-function initApp(){loadDashboard();updateChatBadge();startAutoRefresh();updateClock();}
+function initApp(){loadDashboard();updateChatBadge();startAutoRefresh();updateClock();initEventModalShortcuts();}
 
 // === UTILS ===
 async function api(a,p){p=p||{};const r=await fetch(GAS,{method:'POST',redirect:'follow',headers:{'Content-Type':'text/plain'},body:JSON.stringify(Object.assign({action:a},p))});const j=await r.json();if(!j.success)throw new Error(j.error||'Error');return j.data;}
@@ -584,6 +894,41 @@ function toast(t,m){const el=document.getElementById('toast');el.innerHTML='<div
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 function updateClock(){const el=document.getElementById('topbar-time');if(el)el.textContent=new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});setTimeout(updateClock,30000);}
 function insertVar(textareaId,varStr){const ta=document.getElementById(textareaId);if(!ta)return;const s=ta.selectionStart,e=ta.selectionEnd;ta.value=ta.value.substring(0,s)+varStr+ta.value.substring(e);ta.focus();ta.selectionStart=ta.selectionEnd=s+varStr.length;}
+
+// === DATE UTILITIES ===
+// [B1 修正] Google Sheets から返る日時を <input type="datetime-local"> が受け入れる "YYYY-MM-DDTHH:mm" 形式に変換する。
+// 対応形式:
+//   1. 既に正しい形式: "2026-04-23T15:00"  → そのまま返す
+//   2. ISO 文字列: "2026-04-23T15:00:00.000Z" → 先頭16文字を返す
+//   3. スペース区切り: "2026-04-23 15:00" → T置換して返す
+//   4. Date オブジェクト / Date の toString() 形式 "Thu Apr 23 2026 15:00:00 GMT+0900" → new Date() で解釈
+//   5. 解釈不能: 警告を出して空文字列を返す(呼び出し側で「日時を入力してください」とする)
+function toDatetimeLocal(raw){
+  if(!raw) return '';
+  // Case 1: 既に datetime-local 形式(厳密チェック)
+  if(typeof raw === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(raw)){
+    return raw;
+  }
+  var d;
+  if(raw instanceof Date){
+    d = raw;
+  } else if(typeof raw === 'string'){
+    // スペース区切りの場合は ISO 風に置換してから Date に渡す
+    var normalized = raw.indexOf('T') === -1 && raw.indexOf(' ') !== -1
+      ? raw.replace(' ', 'T')
+      : raw;
+    d = new Date(normalized);
+  } else {
+    d = new Date(raw);
+  }
+  if(isNaN(d.getTime())){
+    console.warn('[toDatetimeLocal] 日時変換に失敗:', raw);
+    return '';
+  }
+  var pad = function(n){ return String(n).padStart(2, '0'); };
+  return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate())
+       + 'T' + pad(d.getHours()) + ':' + pad(d.getMinutes());
+}
 
 // === LS HELPERS ===
 function getAllNews(){return lsGet('cpa_news')||[];}
@@ -620,9 +965,11 @@ function switchTab(tab){
   document.querySelectorAll('.s-item').forEach(s=>s.classList.remove('active'));
   const pg=document.getElementById('pg-'+tab);if(pg){pg.style.display='block';pg.classList.add('active');}
   document.querySelectorAll('.s-item').forEach(s=>{if(s.getAttribute('onclick')==="switchTab('"+tab+"')")s.classList.add('active');});
-  const L={dashboard:loadDashboard,events:loadEvents,registrations:()=>{loadEvFilter();loadRegistrations();},participants:()=>searchParticipants(''),qrscan:startPolling,mail:initMail,news:loadNewsAdmin,templates:loadTmplMgr,chat:loadChatAdmin,photos:loadPhotoOpts,survey:()=>{loadSurveyOpts();loadSurveyStats();},todo:()=>{loadTodoEvFilter();loadTodo();},schedule:loadSchedule,departments:loadDepts};
+  // [Q1] qrscan: startPolling 直呼び出しから initScanPageMode(3モード初期化) に変更
+  const L={dashboard:loadDashboard,events:loadEvents,registrations:()=>{loadEvFilter();loadRegistrations();},participants:()=>searchParticipants(''),qrscan:initScanPageMode,mail:initMail,news:loadNewsAdmin,templates:loadTmplMgr,chat:loadChatAdmin,photos:loadPhotoOpts,survey:()=>{loadSurveyOpts();loadSurveyStats();},todo:()=>{loadTodoEvFilter();loadTodo();},schedule:loadSchedule,departments:loadDepts};
   if(L[tab])L[tab]();
-  if(tab!=='qrscan')stopPolling();
+  // [Q1] qrscan離脱時は全スキャン停止(カメラ・ポーリング両方)
+  if(tab!=='qrscan')stopAllScanning();
 }
 
 // === AUTO-REFRESH ===
@@ -653,22 +1000,20 @@ var editEvId=null,evCQ=[],evRefs=['SNS','友人紹介','Web検索','チラシ','
 var allEventsCache=[];
 async function loadEvents(){
   const a=document.getElementById('events-area');a.innerHTML='<div class="spinner"></div>';
-  try{const evs=await api('getEvents');allEventsCache=evs||[];if(!evs.length){a.innerHTML='<div class="alert alert-info">イベントなし</div>';return;}a.innerHTML='<div class="ev-list">'+evs.map(ev=>'<div class="ev-card"><div class="ev-card-info"><div class="ev-card-name">'+esc(ev.EventName)+'</div><div class="ev-card-meta">'+esc(ev.Date)+' &middot; '+esc(ev.Location||'—')+' &middot; '+(Number(ev.Price)===0?'無料':'¥'+Number(ev.Price).toLocaleString())+' &middot; 登録 '+esc(ev.registrationCount)+'/'+esc(ev.Capacity)+'</div></div><div class="ev-card-actions">'+(ev.Status==='OPEN'||!ev.Status?'<span class="badge badge-green">受付中</span>':'<span class="badge badge-gray">終了</span>')+'<button class="btn btn-outline btn-sm" onclick=\'openEditEv('+JSON.stringify(ev).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+')\'> 編集</button></div></div>').join('')+'</div>';}
+  try{const evs=await api('getEvents');allEventsCache=evs||[];if(!evs.length){a.innerHTML='<div class="alert alert-info">イベントなし</div>';return;}a.innerHTML='<div class="ev-list">'+evs.map(ev=>'<div class="ev-card"><div class="ev-card-info"><div class="ev-card-name">'+esc(ev.EventName)+'</div><div class="ev-card-meta">'+esc(ev.Date)+' &middot; '+esc(ev.Location||'—')+' &middot; '+(Number(ev.Price)===0?'無料':'¥'+Number(ev.Price).toLocaleString())+' &middot; 登録 '+esc(ev.registrationCount)+'/'+esc(ev.Capacity)+'</div></div><div class="ev-card-actions">'+(ev.Status==='OPEN'||!ev.Status?'<span class="badge badge-green">受付中</span>':'<span class="badge badge-gray">終了</span>')+'<button class="btn btn-outline btn-sm" onclick=\'duplicateEvent('+JSON.stringify(ev).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+')\'>複製</button><button class="btn btn-outline btn-sm" onclick=\'openEditEv('+JSON.stringify(ev).replace(/\\/g,"\\\\").replace(/'/g,"\\'")+')\'> 編集</button></div></div>').join('')+'</div>';}
   catch(err){a.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}
 }
-function switchEvTab(t,btn){document.querySelectorAll('#ev-modal .tab-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');document.querySelectorAll('#ev-modal .tab-pane').forEach(p=>{p.classList.remove('active');p.style.display='none';});const el=document.getElementById('evtab-'+t);if(el){el.style.display='block';el.classList.add('active');}}
-function openCreateEventModal(){editEvId=null;evCQ=[];evRefs=['SNS','友人紹介','Web検索','チラシ','その他'];selectedPrefs=[];evStations=[];document.getElementById('ev-modal-title').textContent='イベント作成';['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-date').value='';document.getElementById('f-price').value='0';document.getElementById('f-capacity').value='50';document.getElementById('f-paytype').value='FREE';document.getElementById('ev-status-row').style.display='none';document.querySelectorAll('.ev-restrict-cb').forEach(function(cb){cb.checked=false;});document.getElementById('restrict-region-wrap').style.display='none';populateDeptSelect('f-dept');renderRefTags();renderCQList();renderStations();document.getElementById('ev-access-note').value='';document.getElementById('ev-map').innerHTML='会場を検索';switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';document.getElementById('ev-modal').classList.add('open');}
+// [F4] 旧タブ構造は廃止。後方互換のため関数は残すが何もしない(no-op)。
+// 既存の openCreateEventModal / openEditEv などから呼ばれているが、新UIでは不要。
+function switchEvTab(t,btn){/* no-op: 5セクション縦スクロール構造に変更済み */}
+function openCreateEventModal(){editEvId=null;evCQ=[];evRefs=['SNS','友人紹介','Web検索','チラシ','その他'];selectedPrefs=[];evStations=[];document.getElementById('ev-modal-title').textContent='イベント作成';['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('f-date').value='';document.getElementById('f-price').value='0';document.getElementById('f-capacity').value='50';document.getElementById('f-paytype').value='FREE';document.getElementById('ev-status-row').style.display='none';document.querySelectorAll('.ev-restrict-cb').forEach(function(cb){cb.checked=false;});document.getElementById('restrict-region-wrap').style.display='none';populateDeptSelect('f-dept');renderRefTags();renderCQList();renderStations();document.getElementById('ev-access-note').value='';document.getElementById('ev-map').innerHTML='会場を検索';switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';document.getElementById('ev-modal').classList.add('open');resetEvModalScroll();initStepNav();}
 function openEditEv(ev){editEvId=ev.EventID;document.getElementById('ev-modal-title').textContent='イベント編集';
   // Clear all fields first
   ['f-name','f-location','f-desc','ev-venue-q','ev-lat','ev-lng','ev-msg-first','ev-msg-return','ev-access-note'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   // Populate from event data
   document.getElementById('f-name').value=ev.EventName||'';
-  var dateVal=(ev.Date||'').toString();
-  // Handle various date formats: "2024-12-31T15:00:00.000Z", "2024-12-31 15:00", etc.
-  if(dateVal.includes('T')&&dateVal.includes('Z'))dateVal=dateVal.slice(0,16);// ISO → datetime-local
-  else if(dateVal.includes('T'))dateVal=dateVal.slice(0,16);
-  else dateVal=dateVal.replace(' ','T');
-  document.getElementById('f-date').value=dateVal;
+  // [B1 修正] toDatetimeLocal() で全ての日時形式(Date型 toString 含む)を統一的に扱う
+  document.getElementById('f-date').value=toDatetimeLocal(ev.Date);
   document.getElementById('f-location').value=ev.Location||'';
   document.getElementById('f-price').value=ev.Price||0;
   document.getElementById('f-capacity').value=ev.Capacity||50;
@@ -694,8 +1039,197 @@ function openEditEv(ev){editEvId=ev.EventID;document.getElementById('ev-modal-ti
   document.getElementById('ev-access-note').value=ev.accessNote||'';
   // Dept
   populateDeptSelect('f-dept');
-  renderRefTags();renderCQList();switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';document.getElementById('ev-modal').classList.add('open');}
-async function saveEvent(){const al=document.getElementById('ev-modal-alert');al.innerHTML='';const name=document.getElementById('f-name').value.trim(),date=document.getElementById('f-date').value;if(!name||!date){al.innerHTML='<div class="alert alert-err">イベント名・日時は必須</div>';return;}const btn=document.getElementById('ev-save-btn');btn.disabled=true;btn.textContent='...';const d={eventName:name,date:date.replace('T',' '),location:document.getElementById('f-location').value.trim(),price:Number(document.getElementById('f-price').value)||0,paymentType:document.getElementById('f-paytype').value,capacity:Number(document.getElementById('f-capacity').value)||50,description:document.getElementById('f-desc')?.value?.trim()||'',lat:document.getElementById('ev-lat').value.trim(),lng:document.getElementById('ev-lng').value.trim(),customQuestions:evCQ,referralOptions:evRefs,msgFirst:document.getElementById('ev-msg-first').value.trim(),msgReturn:document.getElementById('ev-msg-return').value.trim(),restriction:getSelectedRestrictions(),restrictionRegions:selectedPrefs,nearestStations:evStations,accessNote:document.getElementById('ev-access-note')?.value?.trim()||''};try{if(editEvId){d.eventId=editEvId;d.Status=document.getElementById('f-status').value;await api('updateEvent',{event:d});}else{const c=await api('createEvent',{event:d});const nid=c?.EventID||c?.eventId||'EVT_'+Date.now();const sch=getSch();sch.push({id:genId(),title:name,date:date.slice(0,10),time:date.slice(11,16)||'',category:'event',assignee:'',memo:d.location});saveSch(sch);}closeModal('ev-modal');loadEvents();loadDashboard();toast('ok','保存しました');}catch(err){al.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}btn.disabled=false;btn.textContent='保存';}
+  renderRefTags();renderCQList();switchEvTab('basic',document.querySelector('#ev-modal .tab-btn'));document.getElementById('ev-modal-alert').innerHTML='';document.getElementById('ev-modal').classList.add('open');resetEvModalScroll();initStepNav();}
+async function saveEvent(){const al=document.getElementById('ev-modal-alert');al.innerHTML='';const name=document.getElementById('f-name').value.trim(),date=document.getElementById('f-date').value;
+// [B1 修正] エラーを具体化して、編集時に日時が空になっている場合のヒントを表示
+if(!name||!date){
+  var errMsg='';
+  if(!name&&!date){errMsg='イベント名と日時を入力してください';}
+  else if(!name){errMsg='イベント名を入力してください';}
+  else {errMsg='日時を入力してください（編集時に空欄になっている場合は、再度日時を選択してください）';}
+  al.innerHTML='<div class="alert alert-err">'+errMsg+'</div>';
+  // 該当フィールドにフォーカスを移動
+  var targetId=!name?'f-name':'f-date';
+  var target=document.getElementById(targetId);
+  if(target){target.focus();try{target.scrollIntoView({behavior:'smooth',block:'center'});}catch(e){}}
+  return;
+}
+const btn=document.getElementById('ev-save-btn');btn.disabled=true;btn.textContent='...';const d={eventName:name,date:date.replace('T',' '),location:document.getElementById('f-location').value.trim(),price:Number(document.getElementById('f-price').value)||0,paymentType:document.getElementById('f-paytype').value,capacity:Number(document.getElementById('f-capacity').value)||50,description:document.getElementById('f-desc')?.value?.trim()||'',lat:document.getElementById('ev-lat').value.trim(),lng:document.getElementById('ev-lng').value.trim(),customQuestions:evCQ,referralOptions:evRefs,msgFirst:document.getElementById('ev-msg-first').value.trim(),msgReturn:document.getElementById('ev-msg-return').value.trim(),restriction:getSelectedRestrictions(),restrictionRegions:selectedPrefs,nearestStations:evStations,accessNote:document.getElementById('ev-access-note')?.value?.trim()||''};try{if(editEvId){d.eventId=editEvId;d.Status=document.getElementById('f-status').value;await api('updateEvent',{event:d});}else{const c=await api('createEvent',{event:d});const nid=c?.EventID||c?.eventId||'EVT_'+Date.now();const sch=getSch();sch.push({id:genId(),title:name,date:date.slice(0,10),time:date.slice(11,16)||'',category:'event',assignee:'',memo:d.location});saveSch(sch);}closeModal('ev-modal');loadEvents();loadDashboard();toast('ok','保存しました');}catch(err){al.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}btn.disabled=false;btn.textContent='保存';}
+
+// [F1 複製機能] 既存イベントを元に新規作成モーダルを開き、全フィールドを事前入力する。
+// 日時は元イベント +7日、イベント名末尾に「(コピー)」を付加。元イベントへの影響なし(editEvId を null のままにするため、保存時は createEvent が呼ばれる)。
+function duplicateEvent(ev){
+  // ステップ1: 新規作成モーダルを開く(全state初期化済み、editEvId=null)
+  openCreateEventModal();
+  // ステップ2: 日時を +7日して設定
+  var originalDate = ev.Date ? new Date(toDatetimeLocal(ev.Date).replace('T',' ')) : null;
+  if(originalDate && !isNaN(originalDate.getTime())){
+    originalDate.setDate(originalDate.getDate() + 7);
+    document.getElementById('f-date').value = toDatetimeLocal(originalDate);
+  }
+  // ステップ3: テキスト・数値系フィールドのコピー
+  document.getElementById('f-name').value = (ev.EventName || '') + ' (コピー)';
+  document.getElementById('f-location').value = ev.Location || '';
+  document.getElementById('f-price').value = ev.Price || 0;
+  document.getElementById('f-capacity').value = ev.Capacity || 50;
+  document.getElementById('f-paytype').value = ev.PaymentType || 'FREE';
+  document.getElementById('f-desc').value = ev.Description || '';
+  document.getElementById('ev-lat').value = ev.Lat || '';
+  document.getElementById('ev-lng').value = ev.Lng || '';
+  if(ev.Lat && ev.Lng) updateMap();
+  // ステップ4: 配列・オブジェクト系のコピー(JSONディープクローンで参照を切る)
+  evCQ = JSON.parse(JSON.stringify(ev.customQuestions || []));
+  evRefs = (ev.referralOptions || ['SNS','友人紹介','Web検索','チラシ','その他']).slice();
+  document.getElementById('ev-msg-first').value = ev.msgFirst || '';
+  document.getElementById('ev-msg-return').value = ev.msgReturn || '';
+  // ステップ5: 参加制限のコピー(文字列/配列混在に対応)
+  var restrictions = ev.restriction || ['none'];
+  if(typeof restrictions === 'string'){
+    try { restrictions = JSON.parse(restrictions); }
+    catch(e) { restrictions = [restrictions]; }
+  }
+  if(!Array.isArray(restrictions)) restrictions = [restrictions];
+  restrictions.forEach(function(r){
+    var cb = document.querySelector('.ev-restrict-cb[value="' + r + '"]');
+    if(cb) cb.checked = true;
+  });
+  selectedPrefs = (ev.restrictionRegions || []).slice();
+  toggleRestrictDetail();
+  // ステップ6: 駅・アクセス備考のコピー
+  evStations = JSON.parse(JSON.stringify(ev.nearestStations || []));
+  renderStations();
+  document.getElementById('ev-access-note').value = ev.accessNote || '';
+  // ステップ7: UI再描画
+  renderRefTags();
+  renderCQList();
+  // ステップ8: モーダルタイトル変更とフォーカス
+  document.getElementById('ev-modal-title').textContent = '新規作成（複製元: ' + (ev.EventName || '—') + '）';
+  var nameEl = document.getElementById('f-name');
+  nameEl.focus();
+  // 末尾にカーソル移動(「(コピー)」部分をすぐ編集できるように)
+  nameEl.setSelectionRange(nameEl.value.length, nameEl.value.length);
+  toast('ok', '「' + (ev.EventName || '—') + '」を複製しました');
+}
+
+// === [F4] EVENT MODAL V2 — ステップナビ制御・スクロール・ショートカット ===
+// IntersectionObserver: 現在ビューポート中央にあるセクションを検知してステップドットをactiveにする
+var stepObserver = null;
+
+// モーダルオープン時にスクロールを先頭に戻し、ステップドットを1番目にリセット
+function resetEvModalScroll(){
+  var body = document.getElementById('ev-modal-body');
+  if(body) body.scrollTop = 0;
+  // ドットのactive/completed状態リセット
+  var dots = document.querySelectorAll('#step-nav .step-dot');
+  dots.forEach(function(d, i){
+    d.classList.remove('active', 'completed', 'has-error');
+    if(i === 0) d.classList.add('active');
+  });
+}
+
+// IntersectionObserver でセクションスクロール検知 + ドットクリックでジャンプ
+function initStepNav(){
+  if(stepObserver) stepObserver.disconnect();
+  var scrollContainer = document.getElementById('ev-modal-body');
+  var sections = document.querySelectorAll('.modal-event-v2 .form-section');
+  var dots = document.querySelectorAll('#step-nav .step-dot');
+  if(!scrollContainer || !sections.length || !dots.length) return;
+
+  // ドットクリックでセクションへスクロール
+  dots.forEach(function(dot){
+    // 重複リスナー防止のため既存を削除してから登録
+    dot.onclick = function(e){
+      e.preventDefault();
+      var target = document.getElementById(dot.dataset.section);
+      if(target){
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+  });
+
+  // セクション監視(ビューポート中央 35%〜45% の領域で検知)
+  stepObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        var targetId = entry.target.id;
+        var activeIdx = -1;
+        dots.forEach(function(dot, i){
+          if(dot.dataset.section === targetId) activeIdx = i;
+        });
+        dots.forEach(function(dot, i){
+          dot.classList.toggle('active', i === activeIdx);
+          // activeより前のドットは「完了」表示
+          dot.classList.toggle('completed', i < activeIdx);
+        });
+      }
+    });
+  }, {
+    root: scrollContainer,
+    rootMargin: '-35% 0px -55% 0px',
+    threshold: 0
+  });
+  sections.forEach(function(s){ stepObserver.observe(s); });
+}
+
+// === [F4] キーボードショートカット ===
+// モーダルが開いている時のみ有効。document レベルで一度だけ登録する(initApp で呼ぶ)。
+var _evModalShortcutsInited = false;
+function initEventModalShortcuts(){
+  if(_evModalShortcutsInited) return;
+  _evModalShortcutsInited = true;
+  document.addEventListener('keydown', function(e){
+    // [修正] QR確認ダイアログが開いていたら、そちらを優先処理
+    var qrConfirm = document.getElementById('qr-confirm-overlay');
+    if(qrConfirm && qrConfirm.classList.contains('open')){
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        if(e.isComposing) return;
+        confirmQrLookup(); // 「この人で照会」相当
+        return;
+      }
+      if(e.key === 'Escape'){
+        e.preventDefault();
+        closeQrConfirm(); // キャンセル
+        return;
+      }
+      return; // 他のショートカットは処理しない
+    }
+
+    var modal = document.getElementById('ev-modal');
+    if(!modal || !modal.classList.contains('open')) return;
+    // Cmd/Ctrl + S: 下書き保存(F9未実装のため現状は no-op、将来有効化される)
+    if((e.metaKey || e.ctrlKey) && e.key === 's'){
+      e.preventDefault();
+      // F9 実装時に saveDraft() 呼び出しをここに追加する
+      // 現状はトースト通知でフィードバックだけ返す(「下書き機能は近日実装」は出さない、静かに無視)
+      return;
+    }
+    // Cmd/Ctrl + Enter: 保存
+    if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){
+      e.preventDefault();
+      // IME変換中(isComposing)は保存しない
+      if(e.isComposing) return;
+      saveEvent();
+      return;
+    }
+    // Esc: 閉じる
+    if(e.key === 'Escape'){
+      e.preventDefault();
+      closeModal('ev-modal');
+      return;
+    }
+    // Alt + 1〜5: セクションジャンプ
+    if(e.altKey && /^[1-5]$/.test(e.key)){
+      e.preventDefault();
+      var sectionIds = ['s-basic', 's-venue', 's-participant', 's-target', 's-preview'];
+      var target = document.getElementById(sectionIds[parseInt(e.key, 10) - 1]);
+      if(target){
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  });
+}
+
 function searchVenue(){var q=document.getElementById('ev-venue-q').value.trim();if(!q)return;document.getElementById('ev-map').innerHTML='<iframe src="https://www.google.com/maps/embed/v1/search?key='+MK+'&q='+encodeURIComponent(q)+'&zoom=15" allowfullscreen></iframe>';if(!document.getElementById('f-location').value.trim())document.getElementById('f-location').value=q;}
 function updateMap(){const lat=document.getElementById('ev-lat').value.trim(),lng=document.getElementById('ev-lng').value.trim();if(!lat||!lng)return;document.getElementById('ev-map').innerHTML='<iframe src="https://www.google.com/maps/embed/v1/place?key='+MK+'&q='+lat+','+lng+'&zoom=16" allowfullscreen></iframe>';}
 function renderRefTags(){const a=document.getElementById('ref-tags');if(!a)return;a.innerHTML=evRefs.map((r,i)=>'<span class="dept-tag" style="background:var(--teal-light);color:var(--teal);">'+esc(r)+' <span style="cursor:pointer;margin-left:4px;" onclick="evRefs.splice('+i+',1);renderRefTags()">×</span></span>').join('');}
@@ -710,7 +1244,376 @@ function saveCQ(){const label=document.getElementById('cq-label').value.trim();i
 var pollTimer=null,lastQr=null;
 function startPolling(){stopPolling();pollTimer=setInterval(async()=>{try{const d=await api('getLastScan');if(d&&d.qr&&d.qr!==lastQr){lastQr=d.qr;await lookupQr(d.qr);}}catch(e){}},2000);}
 function stopPolling(){if(pollTimer){clearInterval(pollTimer);pollTimer=null;}}
-async function lookupQr(qr){if(!qr)return;document.getElementById('qr-waiting').style.display='none';document.getElementById('qr-detail').classList.remove('show');try{const d=await api('getRegistrationDetail',{qrData:qr});const{registration:reg,participant:p,event:ev}=d;document.getElementById('qr-detail').classList.add('show');document.getElementById('qr-avatar').textContent=(p?p.Name:'?').charAt(0);document.getElementById('qr-name').textContent=p?p.Name:'不明';document.getElementById('qr-rank').textContent=(p?p.Rank:'—')+' ランク';document.getElementById('qr-rows').innerHTML='<div style="display:grid;gap:8px;margin-bottom:12px;">'+[['メール',p?p.Email:'—'],['イベント',ev?ev.EventName:reg.EventID],['支払い',payBadge(reg.PaymentStatus)],['入場',ciBadge(reg.CheckinStatus)],['参加回数',p?p.TotalEvents:'—']].map(([k,v])=>'<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.84rem;"><span style="color:var(--ink4);">'+k+'</span><span style="font-weight:600;">'+v+'</span></div>').join('')+'</div>';const act=document.getElementById('qr-actions');act.innerHTML='';if(!isCI(reg.CheckinStatus)){const b=document.createElement('button');b.className='btn btn-primary';b.textContent='チェックイン';b.addEventListener('click',async()=>{b.disabled=true;try{await api('checkin',{qrData:qr});toast('ok','チェックイン完了');lookupQr(qr);}catch(e){toast('err',e.message);}b.disabled=false;});act.appendChild(b);}document.getElementById('qr-alert').innerHTML='';}catch(err){document.getElementById('qr-waiting').style.display='block';document.getElementById('qr-waiting').innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}}
+// [Q1改修] lookupQr: 失敗時にフィードバック音(低音)を鳴らし、qr-waitingが存在する場合のみ操作する(カメラモード時は存在しない)
+async function lookupQr(qr){if(!qr)return;var waitEl=document.getElementById('qr-waiting');if(waitEl)waitEl.style.display='none';document.getElementById('qr-detail').classList.remove('show');try{const d=await api('getRegistrationDetail',{qrData:qr});const{registration:reg,participant:p,event:ev}=d;document.getElementById('qr-detail').classList.add('show');document.getElementById('qr-avatar').textContent=(p?p.Name:'?').charAt(0);document.getElementById('qr-name').textContent=p?p.Name:'不明';document.getElementById('qr-rank').textContent=(p?p.Rank:'—')+' ランク';document.getElementById('qr-rows').innerHTML='<div style="display:grid;gap:8px;margin-bottom:12px;">'+[['メール',p?p.Email:'—'],['イベント',ev?ev.EventName:reg.EventID],['支払い',payBadge(reg.PaymentStatus)],['入場',ciBadge(reg.CheckinStatus)],['参加回数',p?p.TotalEvents:'—']].map(([k,v])=>'<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.84rem;"><span style="color:var(--ink4);">'+k+'</span><span style="font-weight:600;">'+v+'</span></div>').join('')+'</div>';const act=document.getElementById('qr-actions');act.innerHTML='';if(!isCI(reg.CheckinStatus)){const b=document.createElement('button');b.className='btn btn-primary';b.textContent='チェックイン';b.addEventListener('click',async()=>{b.disabled=true;try{await api('checkin',{qrData:qr});toast('ok','チェックイン完了');lookupQr(qr);}catch(e){toast('err',e.message);}b.disabled=false;});act.appendChild(b);}document.getElementById('qr-alert').innerHTML='';}catch(err){/* [Q3] 失敗時の低音フィードバック */playScanFeedback('err');if(waitEl){waitEl.style.display='block';waitEl.innerHTML='<div class="alert alert-err">'+esc(err.message)+'</div>';}else{toast('err','照会失敗: '+err.message);}}}
+
+// === [Q1/Q3] CAMERA QR SCAN & FEEDBACK ===
+
+// --- Scan設定(音・バイブ) ---
+function getScanSettings(){
+  var s = lsGet('cpa_scan_settings');
+  // 初期値: モバイルではバイブON、PCでは音ON
+  if(!s){
+    var isMobile = /iPhone|iPad|Android|Mobile/.test(navigator.userAgent);
+    return { sound: !isMobile, vibrate: isMobile };
+  }
+  return s;
+}
+function saveScanSettings(s){ lsSet('cpa_scan_settings', s); }
+
+// Web Audio APIでビープ音生成(外部ファイル不要)
+// type: 'ok' 成功時(高音ピコッ 1200Hz), 'err' 失敗時(低音ピッ 400Hz)
+var _audioCtx = null;
+function playScanBeep(type){
+  try {
+    // [修正] _audioCtx が closed 状態になっている場合は再作成
+    if(!_audioCtx || _audioCtx.state === 'closed'){
+      _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    var ctx = _audioCtx;
+    // iOS Safariはユーザー操作後でないとresume必要
+    if(ctx.state === 'suspended') ctx.resume();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    if(type === 'err'){
+      osc.frequency.value = 400; // 低音
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.12);
+    } else {
+      osc.frequency.value = 1200; // 高音
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    }
+  } catch(e){
+    console.warn('[Audio] ビープ生成失敗:', e);
+    // 連続失敗を避けるため次回は新しいContextで再試行
+    _audioCtx = null;
+  }
+}
+
+function playScanFeedback(type){
+  var s = getScanSettings();
+  if(s.sound) playScanBeep(type || 'ok');
+  if(s.vibrate && navigator.vibrate){
+    // 成功は短振動1回、失敗は短振動2回
+    navigator.vibrate(type === 'err' ? [60, 60, 60] : 100);
+  }
+}
+
+function testScanFeedback(type){
+  // 設定モーダル上でのテスト再生(現在のチェック状態を反映)
+  var tmpSound = document.getElementById('scan-sound-cb').checked;
+  var tmpVibrate = document.getElementById('scan-vibrate-cb').checked;
+  if(tmpSound) playScanBeep(type);
+  if(tmpVibrate && navigator.vibrate) navigator.vibrate(type === 'err' ? [60, 60, 60] : 100);
+}
+
+function openScanSettings(){
+  var s = getScanSettings();
+  document.getElementById('scan-sound-cb').checked = !!s.sound;
+  document.getElementById('scan-vibrate-cb').checked = !!s.vibrate;
+  document.getElementById('scan-settings-modal').classList.add('open');
+}
+
+function saveScanSettingsFromModal(){
+  saveScanSettings({
+    sound: document.getElementById('scan-sound-cb').checked,
+    vibrate: document.getElementById('scan-vibrate-cb').checked
+  });
+  closeModal('scan-settings-modal');
+  toast('ok', 'スキャン設定を保存しました');
+}
+
+// --- カメラスキャン本体 ---
+var cameraStream = null;
+var cameraScanning = false;
+var cameraFacing = 'environment'; // 背面カメラ優先
+var lastScannedCode = null;
+var lastScanTime = 0;
+var pendingQrData = null; // 確認ダイアログ表示中の仮QRデータ
+
+function setCameraStatus(msg, type){
+  var el = document.getElementById('camera-status');
+  if(!el) return;
+  el.textContent = msg;
+  el.className = 'camera-status camera-status-' + (type || 'info');
+}
+
+async function startCameraScan(){
+  // 既に起動中なら一度停止
+  if(cameraScanning) stopCameraScan();
+
+  if(typeof jsQR === 'undefined'){
+    setCameraStatus('jsQRライブラリの読み込みに失敗しました', 'err');
+    return;
+  }
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+    setCameraStatus('このブラウザはカメラをサポートしていません', 'err');
+    // 自動でスマホ転送モードに切替提案
+    setTimeout(function(){
+      if(confirm('カメラが使えません。スマホ転送モードに切り替えますか?')){
+        switchScanMode('phone');
+      }
+    }, 300);
+    return;
+  }
+
+  setCameraStatus('カメラ起動中...', 'info');
+  try {
+    cameraStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: cameraFacing, width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    var video = document.getElementById('qr-video');
+    video.srcObject = cameraStream;
+    video.setAttribute('playsinline', true);
+    // iOS Safariでは明示的にplay()が必要
+    try { await video.play(); } catch(e){ /* autoplay attrあるので多くは不要 */ }
+    cameraScanning = true;
+    setCameraStatus('QRコードをカメラに向けてください', 'ok');
+    requestAnimationFrame(tickCameraScan);
+  } catch(err){
+    console.error('[Camera] エラー:', err);
+    cameraScanning = false;
+    var msg = 'カメラ起動失敗: ' + err.message;
+    if(err.name === 'NotAllowedError') msg = 'カメラのアクセスが拒否されました。ブラウザの設定を確認してください';
+    else if(err.name === 'NotFoundError') msg = 'カメラが見つかりませんでした';
+    else if(err.name === 'NotReadableError') msg = 'カメラが他のアプリで使用中です';
+    setCameraStatus(msg, 'err');
+    // カメラNGならスマホ転送モードへの切替を提案
+    setTimeout(function(){
+      if(confirm(msg + '\n\nスマホ転送モードに切り替えますか?')){
+        switchScanMode('phone');
+      }
+    }, 300);
+  }
+}
+
+function tickCameraScan(){
+  if(!cameraScanning) return;
+  var video = document.getElementById('qr-video');
+  var canvas = document.getElementById('qr-canvas');
+  if(!video || !canvas){ return; }
+  if(video.readyState === video.HAVE_ENOUGH_DATA){
+    var ctx = canvas.getContext('2d', { willReadFrequently: true });
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    try {
+      var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      var code = jsQR(imageData.data, imageData.width, imageData.height, {
+        inversionAttempts: 'dontInvert'
+      });
+      if(code && code.data){
+        var now = Date.now();
+        // 2秒クールダウン: 同じコードの連続検知を無視
+        if(code.data !== lastScannedCode || (now - lastScanTime) > 2000){
+          lastScannedCode = code.data;
+          lastScanTime = now;
+          onCameraQrDetected(code.data);
+        }
+      }
+    } catch(e){ /* 毎フレームのエラーはログ抑制 */ }
+  }
+  requestAnimationFrame(tickCameraScan);
+}
+
+// [Q1] QR検知: 1.音/バイブ 2.確認ダイアログ表示 3.ユーザー承認で lookupQr 実行
+// [修正] API二重呼び出しを解消: onCameraQrDetectedで取得した詳細をキャッシュし、lookupQrで再利用
+// [修正] 確認ダイアログ表示中はスキャンを一時停止 → ダイアログ上書き/多重検知を防止
+var _pendingDetailCache = null;
+async function onCameraQrDetected(qrData){
+  // Step1: 音/バイブで気づかせる
+  playScanFeedback('ok');
+  // Step2: スキャンを一時停止(ダイアログ中の多重検知防止)
+  cameraScanning = false;
+  pendingQrData = qrData;
+  _pendingDetailCache = null;
+  // Step3: 登録情報を取得して確認ダイアログに表示
+  try {
+    var d = await api('getRegistrationDetail', { qrData: qrData });
+    _pendingDetailCache = d; // 確認後のlookupQrで再利用
+    var p = d && d.participant;
+    document.getElementById('qr-confirm-avatar').textContent = (p && p.Name) ? p.Name.charAt(0) : '?';
+    document.getElementById('qr-confirm-name').textContent = (p && p.Name) ? p.Name : '不明';
+    var ev = d && d.event;
+    document.getElementById('qr-confirm-sub').textContent = ev ? ev.EventName : qrData.substring(0, 30);
+  } catch(err){
+    // 登録が見つからなかった: 失敗音を追加、確認せず失敗扱い
+    playScanFeedback('err');
+    pendingQrData = null;
+    _pendingDetailCache = null;
+    toast('err', '登録が見つかりません: ' + err.message);
+    // スキャンを再開(次のQRを読む)
+    if(cameraStream) {
+      cameraScanning = true;
+      requestAnimationFrame(tickCameraScan);
+    }
+    return;
+  }
+  document.getElementById('qr-confirm-overlay').classList.add('open');
+  // デフォルトフォーカスを「この人で照会」ボタンへ
+  setTimeout(function(){
+    var btn = document.getElementById('qr-confirm-ok');
+    if(btn) btn.focus();
+  }, 50);
+}
+
+function closeQrConfirm(){
+  document.getElementById('qr-confirm-overlay').classList.remove('open');
+  pendingQrData = null;
+  _pendingDetailCache = null;
+  // スキャンを再開
+  if(cameraStream && !cameraScanning){
+    cameraScanning = true;
+    requestAnimationFrame(tickCameraScan);
+  }
+}
+
+function confirmQrLookup(){
+  var qr = pendingQrData;
+  var cached = _pendingDetailCache;
+  document.getElementById('qr-confirm-overlay').classList.remove('open');
+  pendingQrData = null;
+  _pendingDetailCache = null;
+  // [修正] キャッシュがあればそれを使って表示。APIの再呼び出しを回避
+  if(qr && cached){
+    renderQrDetailFromCache(qr, cached);
+  } else if(qr){
+    lookupQr(qr); // フォールバック: キャッシュない場合は通常呼び出し
+  }
+  // スキャンを再開(確認後もカメラモードを続けるため)
+  if(cameraStream && !cameraScanning){
+    cameraScanning = true;
+    requestAnimationFrame(tickCameraScan);
+  }
+}
+
+// [修正] 確認ダイアログ経由のlookup: 既にAPI叩いているので再利用する
+// 元のlookupQrからチェックイン処理ロジックだけを共有
+function renderQrDetailFromCache(qr, d){
+  var waitEl = document.getElementById('qr-waiting');
+  if(waitEl) waitEl.style.display = 'none';
+  document.getElementById('qr-detail').classList.remove('show');
+  try {
+    var reg = d.registration, p = d.participant, ev = d.event;
+    document.getElementById('qr-detail').classList.add('show');
+    document.getElementById('qr-avatar').textContent = (p ? p.Name : '?').charAt(0);
+    document.getElementById('qr-name').textContent = p ? p.Name : '不明';
+    document.getElementById('qr-rank').textContent = (p ? p.Rank : '—') + ' ランク';
+    document.getElementById('qr-rows').innerHTML = '<div style="display:grid;gap:8px;margin-bottom:12px;">' +
+      [['メール', p ? p.Email : '—'],
+       ['イベント', ev ? ev.EventName : reg.EventID],
+       ['支払い', payBadge(reg.PaymentStatus)],
+       ['入場', ciBadge(reg.CheckinStatus)],
+       ['参加回数', p ? p.TotalEvents : '—']].map(function(r){
+        return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:.84rem;"><span style="color:var(--ink4);">' + r[0] + '</span><span style="font-weight:600;">' + r[1] + '</span></div>';
+      }).join('') + '</div>';
+    var act = document.getElementById('qr-actions');
+    act.innerHTML = '';
+    if(!isCI(reg.CheckinStatus)){
+      var b = document.createElement('button');
+      b.className = 'btn btn-primary';
+      b.textContent = 'チェックイン';
+      b.addEventListener('click', async function(){
+        b.disabled = true;
+        try {
+          await api('checkin', { qrData: qr });
+          toast('ok', 'チェックイン完了');
+          lookupQr(qr); // チェックイン後の最新状態表示のためAPI呼ぶ(ここは必要)
+        } catch(e){
+          toast('err', e.message);
+        }
+        b.disabled = false;
+      });
+      act.appendChild(b);
+    }
+    document.getElementById('qr-alert').innerHTML = '';
+  } catch(err){
+    // キャッシュの形式が想定と違う等の異常系: 従来のlookupQr にフォールバック
+    console.warn('[renderQrDetailFromCache] エラー、lookupQrにフォールバック:', err);
+    lookupQr(qr);
+  }
+}
+
+function stopCameraScan(){
+  cameraScanning = false;
+  if(cameraStream){
+    cameraStream.getTracks().forEach(function(t){ t.stop(); });
+    cameraStream = null;
+  }
+  var video = document.getElementById('qr-video');
+  if(video) video.srcObject = null;
+  setCameraStatus('カメラ停止中', 'info');
+  // 次回起動時の再検知用にリセット
+  lastScannedCode = null;
+  // [修正] 確認ダイアログ関連のstateもクリーンアップ
+  pendingQrData = null;
+  _pendingDetailCache = null;
+  var overlay = document.getElementById('qr-confirm-overlay');
+  if(overlay) overlay.classList.remove('open');
+}
+
+function toggleCameraFacing(){
+  cameraFacing = cameraFacing === 'environment' ? 'user' : 'environment';
+  if(cameraScanning){
+    stopCameraScan();
+    setTimeout(startCameraScan, 200);
+  }
+}
+
+// --- モード切替(3モード共通のエントリポイント) ---
+var currentScanMode = null;
+function switchScanMode(mode){
+  // 同じモードなら何もしない
+  if(currentScanMode === mode) return;
+  // 前のモードをクリーンアップ
+  stopCameraScan();
+  stopPolling();
+  // タブのactive切替
+  document.querySelectorAll('#scan-mode-tabs .scan-tab').forEach(function(t){
+    t.classList.toggle('active', t.dataset.mode === mode);
+  });
+  // パネル表示切替
+  ['camera', 'phone', 'manual'].forEach(function(m){
+    var panel = document.getElementById('scan-' + m);
+    if(panel) panel.style.display = m === mode ? 'block' : 'none';
+  });
+  currentScanMode = mode;
+  // localStorage に記憶
+  try { localStorage.setItem('cpa_scan_mode', mode); } catch(e){}
+  // モード別起動処理
+  if(mode === 'camera') startCameraScan();
+  else if(mode === 'phone') startPolling();
+  else if(mode === 'manual'){
+    setTimeout(function(){ var el = document.getElementById('manual-qr'); if(el) el.focus(); }, 100);
+  }
+}
+
+// QRページを離れたらカメラ・ポーリングを停止(リソース節約)
+function stopAllScanning(){
+  stopCameraScan();
+  stopPolling();
+  currentScanMode = null;
+}
+
+// QRページを開く時の初期モード決定(localStorageに前回モードがあればそれ、なければカメラ)
+function initScanPageMode(){
+  var saved = null;
+  try { saved = localStorage.getItem('cpa_scan_mode'); } catch(e){}
+  var mode = saved || 'camera';
+  // 未初期化状態にして強制切替
+  currentScanMode = null;
+  switchScanMode(mode);
+}
 
 // === REGISTRATIONS ===
 // Prefecture data for region restriction
